@@ -113,7 +113,7 @@ For changed JavaScript entrypoints or modules, run:
 node --check path\to\file.js
 ```
 
-Generated zips and `tmp-*` publication folders are local build artifacts, not source.
+
 
 ## Docs
 

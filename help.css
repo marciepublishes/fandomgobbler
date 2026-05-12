@@ -1,0 +1,234 @@
+.help-page {
+  --help-max: 1180px;
+  width: auto;
+  min-width: 0;
+  max-width: none;
+  min-height: 100vh;
+  max-height: none;
+  overflow: auto;
+  background: var(--bg2);
+  color: var(--text);
+  scroll-behavior: smooth;
+}
+
+.help-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px clamp(18px, 5vw, 58px);
+  background: color-mix(in srgb, var(--bg) 94%, transparent);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+}
+
+.help-header h1 {
+  margin: 0;
+  font-family: "Arial Narrow", Arial, sans-serif;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.help-page-label {
+  margin: 5px 0 0 !important;
+  color: var(--text3) !important;
+  font-size: 12px !important;
+  font-weight: 750;
+  line-height: 1.2 !important;
+}
+
+.help-header p {
+  margin: 6px 0 0;
+  max-width: 680px;
+  color: var(--text3);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.help-dashboard-link {
+  flex: 0 0 auto;
+  border: 1px solid var(--border-md);
+  border-radius: 10px;
+  background: var(--bg2);
+  color: var(--text);
+  padding: 10px 12px;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.help-dashboard-link:hover {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+  color: var(--accent-text);
+}
+
+.help-shell {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  align-items: start;
+  gap: 18px;
+  width: min(var(--help-max), calc(100vw - 36px));
+  margin: 24px auto 56px;
+}
+
+.help-nav {
+  position: sticky;
+  top: 92px;
+  align-self: start;
+  display: grid;
+  gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  padding: 8px;
+}
+
+.help-nav a {
+  border-radius: 8px;
+  color: var(--text2);
+  padding: 8px 9px;
+  font-size: 12px;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.help-nav a:hover {
+  background: var(--accent-bg);
+  color: var(--accent-text);
+}
+
+.help-content {
+  min-width: 0;
+}
+
+.help-section {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  padding: clamp(18px, 3vw, 26px);
+  margin-bottom: 14px;
+  scroll-margin-top: 90px;
+}
+
+.help-intro {
+  border-color: color-mix(in srgb, var(--accent) 32%, var(--border));
+}
+
+.help-section h2 {
+  margin: 0 0 9px;
+  color: var(--text);
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.help-section h3 {
+  margin: 0 0 8px;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.help-section p {
+  margin: 0;
+  color: var(--text2);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.help-eyebrow {
+  margin: 0 0 8px !important;
+  color: var(--accent-text) !important;
+  font-size: 10px !important;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.help-section p + p {
+  margin-top: 10px;
+}
+
+.help-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.help-grid-three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.help-grid article {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg2);
+  padding: 13px;
+  min-width: 0;
+}
+
+.help-grid article ul {
+  margin: 8px 0 12px;
+  padding-left: 18px;
+  color: var(--text2);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.help-grid article li {
+  margin: 4px 0;
+}
+
+.help-grid article p + ul,
+.help-grid article ul + p {
+  margin-top: 8px;
+}
+
+.help-callout {
+  margin-top: 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 36%, var(--border));
+  border-radius: 8px;
+  background: var(--accent-bg);
+  color: var(--accent-text);
+  padding: 13px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.help-section code {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg2);
+  padding: 1px 5px;
+  font-size: 12px;
+}
+
+@media (max-width: 760px) {
+  .help-header {
+    position: static;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .help-shell {
+    grid-template-columns: 1fr;
+    width: min(100% - 24px, var(--help-max));
+    margin-top: 14px;
+  }
+
+  .help-nav {
+    position: static;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .help-grid,
+  .help-grid-three {
+    grid-template-columns: 1fr;
+  }
+}

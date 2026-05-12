@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FandomGobbler. Dashboard</title>
+  <link rel="icon" id="fg-favicon" type="image/png" href="icons/fg-icon48.png" />
+  <link rel="stylesheet" href="popup.css" />
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body class="dashboard-page">
+  <div class="app dashboard-app">
+    <header class="header dashboard-header">
+      <div class="logo">
+        <h1 class="title">FandomGobbler.</h1>
+        <p class="dashboard-kicker" id="dashboardEditionLabel">AO3 Edition</p>
+      </div>
+      <div class="header-right">
+        <span class="stats-pill" id="totalCount">0 works</span>
+        <button class="dashboard-icon-btn theme-toggle" id="extensionThemeToggle" title="Theme" type="button">
+          <svg class="ico theme-ico theme-ico-sunset" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="1.5" y1="11" x2="14.5" y2="11"/><path d="M5 11a3 3 0 0 1 6 0"/><line x1="8" y1="3" x2="8" y2="5.5"/><line x1="3.5" y1="5.8" x2="5.1" y2="7.4"/><line x1="12.5" y1="5.8" x2="10.9" y2="7.4"/>
+          </svg>
+          <svg class="ico theme-ico theme-ico-moon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M8 2a4 4 0 0 0 6 6 6 6 0 1 1-6-6Z"/>
+          </svg>
+          <svg class="ico theme-ico theme-ico-sun" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M8 1.5v2.2M8 12.3v2.2M1.5 8h2.2M12.3 8h2.2M3 3l1.6 1.6M11.4 11.4L13 13M13 3l-1.6 1.6M3 13l1.6-1.6"/><circle cx="8" cy="8" r="3.1"/>
+          </svg>
+        </button>
+        <button class="dashboard-icon-btn dashboard-visuals-toggle" id="dashboardVisualsToggle" title="Hide charts" aria-label="Hide charts" aria-pressed="false" type="button">
+          <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="9.5" width="2.5" height="4.5"/>
+            <rect x="6.75" y="6" width="2.5" height="8"/>
+            <rect x="11.5" y="2.5" width="2.5" height="11.5"/>
+          </svg>
+        </button>
+        <div class="dashboard-platform-menu">
+          <button class="dashboard-icon-btn dashboard-platform-btn" id="dashboardPlatformToggle" title="Change your reading platform" aria-label="Change your reading platform" aria-haspopup="true" aria-expanded="false" type="button">
+            <img class="dashboard-platform-icon" src="icons/settings-cog.png" alt="" aria-hidden="true" />
+          </button>
+          <div class="dashboard-platform-dropdown hidden" id="dashboardPlatformDropdown" role="menu" aria-label="Reading platform options">
+            <button class="dashboard-platform-option" data-platform="ao3" role="menuitemradio" aria-checked="false" type="button">AO3 Edition</button>
+            <button class="dashboard-platform-option" data-platform="ffnet" role="menuitemradio" aria-checked="false" type="button">FanFiction.net (beta)</button>
+            <button class="dashboard-platform-option dashboard-platform-option-disabled" data-platform="wattpad" data-coming-soon="true" role="menuitemradio" aria-checked="false" aria-disabled="true" type="button">Wattpad (coming soon)</button>
+            <button class="dashboard-platform-option dashboard-platform-option-disabled" data-platform="tumblr" data-coming-soon="true" role="menuitemradio" aria-checked="false" aria-disabled="true" type="button">Tumblr (coming soon)</button>
+            <hr class="dashboard-platform-divider" />
+            <div class="dashboard-platform-section-label">Companions</div>
+            <label class="dashboard-companion-toggle">
+              <input type="checkbox" id="companionCatToggle" />
+              <span class="dashboard-companion-label">
+                <img class="dashboard-companion-icon" src="icons/cat (1).png" alt="" aria-hidden="true" />
+                <span>Cat mode</span>
+              </span>
+            </label>
+            <label class="dashboard-companion-toggle">
+              <input type="checkbox" id="companionBroccoliToggle" />
+              <span class="dashboard-companion-label">
+                <img class="dashboard-companion-icon" src="icons/companion-broccoli.png" alt="" aria-hidden="true" />
+                <span>Broccoli mode</span>
+              </span>
+            </label>
+            <hr class="dashboard-platform-divider" />
+            <button class="dashboard-platform-option" id="customCursorOpenBtn" role="menuitem" type="button">Create Your Own Cursor</button>
+            <div class="dashboard-cursor-quick-list" id="customCursorQuickList"></div>
+            <hr class="dashboard-platform-divider" />
+            <button class="dashboard-platform-option" id="dashboardHelpBtn" role="menuitem" type="button">Help</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="dashboard-shell">
+      <div class="dashboard-platform-note" id="dashboardPlatformNote" hidden></div>
+      <div class="dashboard-grid" id="dashboardGrid">
+
+        <!-- Left column: tools & snapshot -->
+        <div class="dashboard-left">
+
+          <section class="dashboard-section">
+            <div class="section-head"><h2>Browse by&hellip;</h2></div>
+            <div class="snapshot-grid dashboard-snapshot-grid" id="dashboardSnapshotGrid"></div>
+            <div class="dashboard-insight-list">
+              <button class="dashboard-insight-card dashboard-insight-button" id="insightTopFandomLink" type="button" data-insight-filter-type="fandom"><span class="snapshot-label">Top Fandom</span><strong id="insightTopFandom">?</strong></button>
+              <button class="dashboard-insight-card dashboard-insight-button" id="insightTopRelationshipLink" type="button" data-insight-filter-type="relationship"><span class="snapshot-label">Top Relationship</span><strong id="insightTopRelationship">?</strong></button>
+              <div><span class="snapshot-label">Total Words</span><strong id="insightTotalWords">0</strong></div>
+              <button class="dashboard-insight-card dashboard-insight-button" data-dashboard-filter="subscribed" type="button"><span class="snapshot-label">Subscribed Works</span><strong id="insightSubscribedWorks">0</strong></button>
+            </div>
+          </section>
+
+          <section class="dashboard-section">
+            <div class="section-head"><h2>Smart Views</h2></div>
+            <div class="dashboard-smart-list" id="smartViews"></div>
+          </section>
+
+          <section class="dashboard-section dashboard-sheets-sync-card" id="dashboardSheetsSyncSection">
+            <div class="section-head section-head-collapsible">
+              <div class="section-head-copy">
+                <h2>Google Sheets Sync</h2>
+                <p>Sync your library across devices and browsers via your own Google Drive. Your data is tied to your Google Account alone, FG doesn't take it.</p>
+              </div>
+            </div>
+            <div class="insights-panel dashboard-sheets-sync-panel" id="sheetsSyncPanel">
+              <div class="sheets-sync-status-row">
+                <span class="sheets-sync-dot" id="sheetsSyncDot"></span>
+                <span class="sheets-sync-status-text" id="sheetsSyncStatus">Not connected.</span>
+              </div>
+              <div class="sheets-sync-email" id="sheetsSyncEmail"></div>
+              <div class="tool-grid sheets-sync-actions">
+                <button class="tool-btn tool-btn-wide sheets-sync-btn sheets-sync-connect" id="sheetsSyncConnectBtn" type="button">Connect Google Sheets</button>
+                <button class="tool-btn sheets-sync-btn hidden" id="sheetsSyncNowBtn" type="button">Sync Now</button>
+                <button class="tool-btn sheets-sync-btn hidden" id="sheetsSyncReAuthBtn" type="button">Re-authorize</button>
+                <button class="tool-btn tool-btn-wide sheets-sync-btn hidden" id="sheetsSyncDisconnectBtn" type="button">Disconnect</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="dashboard-section" id="relationshipGroupsSection">
+            <div class="section-head"><h2>Group Relationship Tags</h2></div>
+            <div class="dashboard-relationship-groups" id="relationshipGroupsPanel"></div>
+          </section>
+
+          <section class="dashboard-section" id="customCategoriesSection">
+            <div class="section-head">
+              <h2>Custom Categories</h2>
+              <button class="dashboard-section-toggle" id="customCategoriesCollapseToggle" type="button" aria-expanded="false" aria-label="Expand Custom Categories" title="Expand Custom Categories">
+                <span class="dashboard-section-toggle-chevron" aria-hidden="true">▾</span>
+              </button>
+            </div>
+            <div class="dashboard-section-collapsed-copy" id="customCategoriesCollapsedCopy">
+              Create your own categories for works to be sorted by.
+            </div>
+            <div class="category-manager" id="categoryManagerList"></div>
+            <button type="button" class="category-manager-add" id="newCatBtn">
+              <span class="pop-new-cat-plus">+</span> Add category
+            </button>
+          </section>
+
+          <section class="dashboard-section" id="hiddenRulesSection">
+            <div class="section-head">
+              <h2>Hidden Tags</h2>
+              <button class="dashboard-section-toggle" id="hiddenRulesCollapseToggle" type="button" aria-expanded="false" aria-label="Expand Hidden Tags" title="Expand Hidden Tags">
+                <span class="dashboard-section-toggle-chevron" aria-hidden="true">▾</span>
+              </button>
+            </div>
+            <div class="dashboard-section-collapsed-copy" id="hiddenRulesCollapsedCopy">
+              Hide AO3 stories by tags, by language, if it's a crossover, or by author while searching (doesn't apply to works you're tracking).
+            </div>
+            <div class="tool-meta" id="hiddenRulesMeta">Collapse AO3 listing blurbs by exact relationship tags, additional tags, language, crossover, or author.</div>
+            <div class="dashboard-hidden-rule-form">
+              <label class="dashboard-filter-field">
+                <span>Rule Type</span>
+                <select id="hiddenRuleType" class="library-sort-select">
+                  <option value="relationship">Relationship</option>
+                  <option value="freeform">Additional Tag</option>
+                  <option value="language">Language</option>
+                  <option value="author">Author / Pseud</option>
+                  <option value="crossover">Crossover</option>
+                </select>
+              </label>
+              <label class="dashboard-filter-field" id="hiddenRuleValueField">
+                <span>Exact Value</span>
+                <input id="hiddenRuleValue" type="text" class="dashboard-hidden-rule-input" placeholder="Add an exact match" />
+              </label>
+              <button class="tool-btn" id="addHiddenRuleBtn" type="button">Add rule</button>
+            </div>
+            <div class="dashboard-hidden-rule-prefs">
+              <label class="dashboard-filter-field">
+                <span>Crossover Threshold</span>
+                <input id="hiddenRuleCrossoverThreshold" type="number" min="2" max="20" class="dashboard-hidden-rule-input" />
+              </label>
+              <label class="dashboard-checkbox-row">
+                <input id="hiddenRuleShowReasons" type="checkbox" />
+                <span>Show matching reasons on collapsed works</span>
+              </label>
+            </div>
+            <div class="dashboard-hidden-rule-toolbar">
+              <button class="tool-btn" id="addCrossoverRuleBtn" type="button">Hide crossovers</button>
+            </div>
+            <div class="dashboard-hidden-rule-list" id="hiddenRuleList"></div>
+          </section>
+
+          <section class="dashboard-section" id="authorWatchSection">
+            <div class="section-head">
+              <h2>Author Watch</h2>
+              <button class="dashboard-section-toggle" id="authorWatchCollapseToggle" type="button" aria-expanded="false" aria-label="Expand Author Watch" title="Expand Author Watch">
+                <span class="dashboard-section-toggle-chevron" aria-hidden="true">▾</span>
+              </button>
+            </div>
+            <div class="dashboard-section-collapsed-copy" id="authorWatchCollapsedCopy">
+              Track authors and get notified when they post something new in a fandom of your choosing.
+            </div>
+            <div class="dashboard-author-actions">
+              <button class="tool-btn" id="refreshAuthorWatchesBtn" type="button">Refresh Author Watch</button>
+            </div>
+            <div class="tool-meta" id="authorWatchMeta">No author watches yet.</div>
+            <div class="dashboard-author-watch-list" id="authorWatchList"></div>
+            <div class="dashboard-author-watch-matches" id="authorWatchMatches"></div>
+          </section>
+
+          <section class="dashboard-section" id="libraryToolsSection">
+            <div class="section-head"><h2>Library Tools</h2></div>
+            <div class="dashboard-tool-list">
+              <button class="tool-btn" id="fetchBookmarksBtn" type="button">Fetch Bookmarks</button>
+              <button class="tool-btn" id="fetchMarkedForLaterBtn" type="button">Fetch Marked for Later</button>
+              <button class="tool-btn" id="refreshSubscriptionsBtn" type="button">Refresh Subscriptions</button>
+            </div>
+          </section>
+
+          <section class="dashboard-section">
+            <div class="section-head"><h2>Backup &amp; Import</h2></div>
+            <div class="dashboard-tool-list">
+              <button class="tool-btn" id="exportCSVDirect" type="button">Export CSV</button>
+              <button class="tool-btn" id="exportJSONDirect" type="button">Export JSON</button>
+              <button class="tool-btn" id="importCSVDirect" type="button">Import CSV</button>
+              <button class="tool-btn" id="importJSONDirect" type="button">Import JSON</button>
+            </div>
+            <div class="tool-meta dashboard-backup-meta" id="lastBackupStamp">No backup exported yet.</div>
+          </section>
+
+        </div>
+
+        <!-- Center column: Library -->
+        <section class="dashboard-section dashboard-library">
+          <div class="dashboard-library-head">
+            <div class="section-head">
+              <h2>Library</h2>
+              <p id="libraryResultMeta">0 works shown.</p>
+            </div>
+            <label class="library-sort-wrap dashboard-sort" for="dashboardLibrarySort" id="librarySortWrap">
+              <select id="dashboardLibrarySort" class="library-sort-select">
+                <option value="recently-added">Recently Added</option>
+                <option value="recently-updated">Most Recently Updated</option>
+                <option value="most-popular">Most Popular</option>
+                <option value="most-bookmarked">Most Bookmarked</option>
+                <option value="most-kudos">Most Kudos</option>
+                <option value="most-hits">Most Hits</option>
+                <option value="oldest-for-later">Oldest in For Later</option>
+                <option value="longest-unread">Longest Unread</option>
+                <option value="shortest-unread">Shortest Unread</option>
+                <option value="highest-rated">Highest Rated by Me</option>
+                <option value="random">Random</option>
+              </select>
+            </label>
+            <button class="tool-btn dashboard-filter-toggle" id="dashboardFilterToggle" type="button" aria-expanded="false">Show filters</button>
+          </div>
+
+          <div class="dashboard-search-row">
+            <div class="dashboard-search">
+              <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4"/><line x1="9.5" y1="9.5" x2="14" y2="14"/></svg>
+              <input id="dashboardSearch" type="search" placeholder="Search title, author, fandom, relationship, notes..." />
+            </div>
+          </div>
+
+          <div class="dashboard-active-filters hidden" id="dashboardActiveFilters"></div>
+
+          <div class="dashboard-filter-panel hidden" id="dashboardFilterPanel" aria-label="Library filters">
+            <div class="dashboard-filter-grid">
+              <label class="dashboard-filter-field">
+                <span>Fandom</span>
+                <select id="dashboardFandomFilter" class="library-sort-select">
+                  <option value="">Any fandom</option>
+                </select>
+              </label>
+              <label class="dashboard-filter-field">
+                <span>Author</span>
+                <select id="dashboardAuthorFilter" class="library-sort-select">
+                  <option value="">Any author</option>
+                </select>
+              </label>
+              <label class="dashboard-filter-field">
+                <span>Relationship</span>
+                <select id="dashboardRelationshipFilter" class="library-sort-select">
+                  <option value="">Any relationship</option>
+                </select>
+              </label>
+              <label class="dashboard-filter-field">
+                <span>Rating</span>
+                <select id="dashboardRatingFilter" class="library-sort-select">
+                  <option value="">Any rating</option>
+                  <option value="5">5 stars</option>
+                  <option value="4">4 stars</option>
+                  <option value="3">3 stars</option>
+                  <option value="2">2 stars</option>
+                  <option value="1">1 star</option>
+                  <option value="unrated">Unrated</option>
+                </select>
+              </label>
+              <label class="dashboard-filter-field">
+                <span>Metadata</span>
+                <select id="dashboardMetadataFilter" class="library-sort-select">
+                  <option value="">Any metadata</option>
+                  <option value="missing">Missing metadata</option>
+                  <option value="complete">Metadata complete</option>
+                  <option value="has-notes">Has notes</option>
+                  <option value="no-notes">No notes</option>
+                </select>
+              </label>
+              <label class="dashboard-filter-field">
+                <span>Subscription</span>
+                <select id="dashboardSubscriptionFilter" class="library-sort-select">
+                  <option value="">Any subscription</option>
+                  <option value="subscribed">Subscribed</option>
+                  <option value="not-subscribed">Not subscribed</option>
+                </select>
+              </label>
+              <label class="dashboard-filter-field">
+                <span>Group by</span>
+                <select id="dashboardGroupBy" class="library-sort-select">
+                  <option value="">No grouping</option>
+                  <option value="status">Status</option>
+                  <option value="fandom">Fandom</option>
+                  <option value="author">Author</option>
+                  <option value="rating">Rating</option>
+                  <option value="metadata">Metadata</option>
+                  <option value="subscription">Subscription</option>
+                </select>
+              </label>
+              <button class="tool-btn dashboard-clear-filters" id="clearLibraryFiltersBtn" type="button">Clear filters</button>
+            </div>
+          </div>
+
+          <div class="dashboard-tabs" id="dashboardTabs"></div>
+
+          <div class="dashboard-bulk-bar">
+            <label class="dashboard-select-all">
+              <input id="selectAllShown" type="checkbox" />
+              <span id="selectedCount">0 selected</span>
+            </label>
+            <div class="dashboard-bulk-actions hidden" id="dashboardBulkActions">
+              <button class="tool-btn" id="openSelectedBtn" type="button">Open selected AO3 pages</button>
+              <label class="dashboard-bulk-status">
+                <select id="bulkStatusSelect" class="library-sort-select">
+                  <option value="">Move selected...</option>
+                  <option value="want">For Later</option>
+                  <option value="progress">Reading</option>
+                  <option value="completed">Completed</option>
+                  <option value="rereading">Re-reading</option>
+                  <option value="onhold">On Hold</option>
+                  <option value="dnf">Did Not Finish</option>
+                  <option value="lost">Deleted</option>
+                </select>
+              </label>
+              <button class="tool-btn dashboard-danger-btn" id="removeSelectedBtn" type="button">Untrack selected</button>
+            </div>
+          </div>
+
+          <div class="dashboard-work-list" id="dashboardWorkList"></div>
+          <div class="dashboard-pagination" id="dashboardPagination"></div>
+          <div class="empty-state dashboard-empty hidden" id="dashboardEmpty">No matching works for this view.</div>
+          <div class="dashboard-detail-panel hidden" id="dashboardDetailPanel" aria-labelledby="dashboardDetailTitle">
+            <button class="dashboard-detail-back" id="dashboardDetailBack" type="button" title="Back to library" aria-label="Back to library">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>
+              <span>Back to Library</span>
+            </button>
+            <div id="dashboardDetailContent"></div>
+          </div>
+        </section>
+
+        <!-- Right column: Charts -->
+        <div class="dashboard-visuals">
+          <div class="dashboard-chart-board">
+            <div class="dashboard-chart-card dashboard-chart-card-status">
+              <div class="dashboard-chart-head">
+                <h3>Library View</h3>
+                <div class="dashboard-status-modes">
+                  <button class="dashboard-status-mode active" data-status-chart-mode="status" type="button">Default</button>
+                  <button class="dashboard-status-mode" data-status-chart-mode="category" type="button">Custom</button>
+                </div>
+              </div>
+              <div class="dashboard-donut-wrap">
+                <svg class="dashboard-donut" id="statusDonut" viewBox="0 0 120 120" role="img" aria-label="Tracked works by status or category"></svg>
+              </div>
+              <div class="dashboard-chart-legend" id="statusLegend"></div>
+            </div>
+
+            <div class="dashboard-chart-card">
+              <div class="dashboard-chart-head">
+                <h3>Added by Month</h3>
+                <span id="monthAddedTotal">0 works</span>
+              </div>
+              <div class="dashboard-month-bars" id="monthAddedChart"></div>
+            </div>
+
+            <div class="dashboard-chart-card">
+              <div class="dashboard-chart-head">
+                <h3>Top Fandoms</h3>
+                <span id="topFandomCount">0 fandoms</span>
+              </div>
+              <div class="dashboard-rank-bars" id="fandomChart"></div>
+            </div>
+
+            <div class="dashboard-chart-card">
+              <div class="dashboard-chart-head">
+                <h3>Top Authors</h3>
+                <span id="topAuthorCount">0 authors</span>
+              </div>
+              <div class="dashboard-rank-bars" id="authorChart"></div>
+            </div>
+
+            <div class="dashboard-chart-card">
+              <div class="dashboard-chart-head">
+                <h3>Top Pairings</h3>
+                <span id="topPairingCount">0 pairings</span>
+              </div>
+              <div class="dashboard-rank-bars" id="pairingChart"></div>
+            </div>
+
+            <div class="dashboard-chart-card dashboard-chart-card-ratings">
+              <div class="dashboard-chart-head">
+                <h3>Ratings</h3>
+                <span id="ratedWorksCount">0 rated</span>
+              </div>
+              <div class="dashboard-rating-bars" id="ratingChart"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <footer class="dashboard-nowbar" id="dashboardNowBar" aria-live="polite"></footer>
+
+    <div class="toast" id="toast"></div>
+
+    <div class="cat-overlay hidden" id="catOverlay">
+      <div class="cat-modal">
+        <div class="cat-header">
+          <span id="catModalTitle">New Category</span>
+          <button class="cat-close" id="catClose" type="button">&times;</button>
+        </div>
+        <div class="cat-body">
+          <input id="catNameInput" placeholder="Category name..." maxlength="30" type="text" />
+          <div class="cat-color-label">Color</div>
+          <div id="catPresets"></div>
+          <div class="cat-hex-row">
+            <span id="catSwatch"></span>
+            <input id="catHexInput" type="text" placeholder="#7c3aed" maxlength="7" />
+          </div>
+          <label class="cat-hide-pill-row" id="catHidePillRow">
+            <input id="catHidePill" type="checkbox" />
+            <span>Hide pill on listing pages</span>
+          </label>
+        </div>
+        <div class="cat-footer">
+          <button id="catDeleteBtn" class="hidden" type="button">Delete</button>
+          <button id="catCancelBtn" type="button">Cancel</button>
+          <button id="catSaveBtn" type="button">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bookmark-overlay hidden" id="bookmarkOverlay">
+      <div class="bookmark-modal">
+        <div class="bookmark-header">
+          <div class="bookmark-header-copy">
+            <div class="bookmark-title">Fetch AO3 Bookmarks</div>
+            <div class="bookmark-sub" id="bookmarkModalSub">Import untracked works from your logged-in AO3 bookmarks.</div>
+          </div>
+          <button class="bookmark-close" id="bookmarkClose" type="button">×</button>
+        </div>
+        <div class="bookmark-body">
+          <div class="bookmark-panel bookmark-panel-status">
+            <div class="bookmark-section-title">Fetch status</div>
+            <div class="bookmark-status" id="bookmarkFetchStatus">This fetch runs slowly on purpose so it does not hammer AO3.</div>
+            <div class="bookmark-progress hidden" id="bookmarkProgressWrap">
+              <div class="bookmark-progress-bar"><div class="bookmark-progress-fill" id="bookmarkProgressFill"></div></div>
+              <div class="bookmark-progress-meta" id="bookmarkProgressMeta">Ready to fetch.</div>
+            </div>
+          </div>
+          <div class="bookmark-panel bookmark-panel-options">
+            <label class="bookmark-quick-toggle">
+              <input id="bookmarkQuickMode" type="checkbox" />
+              <span>Only look for bookmarks added since the last fetch</span>
+            </label>
+          </div>
+          <div class="bookmark-review hidden" id="bookmarkReview">
+            <div class="bookmark-panel bookmark-panel-review">
+              <div class="bookmark-section-title">Review and import</div>
+              <div class="bookmark-review-summary" id="bookmarkReviewSummary"></div>
+              <label class="bookmark-import-field">
+                <span class="bookmark-import-label">Filter fetched bookmarks</span>
+                <input id="bookmarkReviewFilter" type="text" placeholder="Filter by title, author, or fandom" />
+              </label>
+              <div class="bookmark-import-controls">
+                <label class="bookmark-import-field bookmark-import-select">
+                  <span class="bookmark-import-label">Default category</span>
+                  <select id="bookmarkImportStatus">
+                    <option value="want">For Later</option>
+                    <option value="progress">Reading</option>
+                    <option value="completed">Completed</option>
+                    <option value="rereading">Re-reading</option>
+                    <option value="onhold">On Hold</option>
+                    <option value="dnf">Did Not Finish</option>
+                    <option value="">No default category</option>
+                  </select>
+                </label>
+                <label class="bookmark-import-field bookmark-import-select">
+                  <span class="bookmark-import-label">Custom category</span>
+                  <select id="bookmarkImportCustomCat"><option value="">None</option></select>
+                </label>
+              </div>
+              <div class="bookmark-section-title bookmark-preview-heading">Preview fetched works</div>
+              <div class="bookmark-preview-list" id="bookmarkPreviewList"></div>
+            </div>
+          </div>
+        </div>
+        <div class="bookmark-footer">
+          <div class="bookmark-footer-group">
+            <button class="bookmark-secondary" id="bookmarkCancelFetchBtn" type="button">Cancel Fetch</button>
+            <button class="bookmark-secondary hidden" id="bookmarkResumeFetchBtn" type="button">Resume Fetch</button>
+          </div>
+          <div class="bookmark-footer-group bookmark-footer-group-main">
+            <button class="bookmark-secondary" id="bookmarkCloseBtn" type="button">Close</button>
+            <button class="bookmark-primary hidden" id="bookmarkImportBtn" type="button">Import Bookmarks</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bookmark-overlay hidden" id="mflOverlay">
+      <div class="bookmark-modal">
+        <div class="bookmark-header">
+          <div class="bookmark-header-copy">
+            <div class="bookmark-title">Fetch Marked for Later</div>
+            <div class="bookmark-sub" id="mflModalSub">Use AO3's For Later on your phone like normal, then import them into your actual reading lists.</div>
+          </div>
+          <button class="bookmark-close" id="mflClose" type="button">×</button>
+        </div>
+        <div class="bookmark-body">
+          <div class="bookmark-panel bookmark-panel-status">
+            <div class="bookmark-section-title">Fetch status</div>
+            <div class="bookmark-status" id="mflFetchStatus">This fetch runs slowly on purpose so it does not hammer AO3.</div>
+            <div class="bookmark-progress hidden" id="mflProgressWrap">
+              <div class="bookmark-progress-bar"><div class="bookmark-progress-fill" id="mflProgressFill"></div></div>
+              <div class="bookmark-progress-meta" id="mflProgressMeta">Ready to fetch.</div>
+            </div>
+          </div>
+          <div class="bookmark-panel bookmark-panel-options">
+            <label class="bookmark-quick-toggle">
+              <input id="mflQuickMode" type="checkbox" />
+              <span>Only look for works added since the last fetch</span>
+            </label>
+          </div>
+          <div class="bookmark-review hidden" id="mflReview">
+            <div class="bookmark-panel bookmark-panel-review">
+              <div class="bookmark-section-title">Review and import</div>
+              <div class="bookmark-review-summary" id="mflReviewSummary"></div>
+              <label class="bookmark-import-field">
+                <span class="bookmark-import-label">Filter fetched works</span>
+                <input id="mflReviewFilter" type="text" placeholder="Filter by title, author, or fandom" />
+              </label>
+              <div class="bookmark-import-controls">
+                <label class="bookmark-import-field mfl-import-select">
+                  <span class="bookmark-import-label">Default category</span>
+                  <select id="mflImportStatus">
+                    <option value="want">For Later</option>
+                    <option value="progress">Reading</option>
+                    <option value="completed">Completed</option>
+                    <option value="rereading">Re-reading</option>
+                    <option value="onhold">On Hold</option>
+                    <option value="dnf">Did Not Finish</option>
+                    <option value="">No default category</option>
+                  </select>
+                </label>
+                <label class="bookmark-import-field mfl-import-select">
+                  <span class="bookmark-import-label">Custom category</span>
+                  <select id="mflImportCustomCat"><option value="">None</option></select>
+                </label>
+              </div>
+              <div class="bookmark-section-title bookmark-preview-heading">Preview fetched works</div>
+              <div class="bookmark-preview-list" id="mflPreviewList"></div>
+            </div>
+          </div>
+        </div>
+        <div class="bookmark-footer">
+          <div class="bookmark-footer-group">
+            <button class="bookmark-secondary" id="mflCancelFetchBtn" type="button">Cancel Fetch</button>
+            <button class="bookmark-secondary hidden" id="mflResumeFetchBtn" type="button">Resume Fetch</button>
+          </div>
+          <div class="bookmark-footer-group bookmark-footer-group-main">
+            <button class="bookmark-secondary" id="mflCloseBtn" type="button">Close</button>
+            <button class="bookmark-primary hidden" id="mflImportBtn" type="button">Import Works</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bookmark-overlay hidden" id="customCursorOverlay">
+      <div class="bookmark-modal custom-cursor-modal">
+        <div class="bookmark-header">
+          <div class="bookmark-header-copy">
+            <div class="bookmark-title">Create Your Own Cursor</div>
+            <div class="bookmark-sub">Upload a small image, save it, and use it as your FandomGobbler cursor.</div>
+          </div>
+          <button class="bookmark-close" id="customCursorClose" type="button">×</button>
+        </div>
+        <div class="bookmark-body">
+          <div class="bookmark-panel">
+            <div class="bookmark-section-title">New cursor</div>
+            <label class="bookmark-import-field">
+              <span class="bookmark-import-label">Cursor name</span>
+              <input id="customCursorName" type="text" maxlength="40" placeholder="Frank the Hotdog, tiny lemon, John Wick the Candle..." />
+            </label>
+            <label class="bookmark-import-field">
+              <span class="bookmark-import-label">Cursor image</span>
+              <input id="customCursorFile" type="file" accept=".png,.svg,.jpg,.jpeg,image/png,image/svg+xml,image/jpeg" />
+            </label>
+            <div class="tool-meta custom-cursor-help">PNG, SVG, JPG, or JPEG. Images are saved at cursor size. Max 100 KB and 5 saved cursors.</div>
+            <div class="tool-meta custom-cursor-error hidden" id="customCursorError"></div>
+            <button class="bookmark-primary custom-cursor-save" id="customCursorSave" type="button">Save Cursor</button>
+          </div>
+          <div class="bookmark-panel">
+            <div class="bookmark-section-title">Saved cursors</div>
+            <div class="custom-cursor-list" id="customCursorList"></div>
+          </div>
+        </div>
+        <div class="bookmark-footer">
+          <button class="bookmark-secondary" id="customCursorDefault" type="button">Return to Default Cursor</button>
+          <button class="bookmark-primary" id="customCursorDone" type="button">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <input type="file" id="importFileInput" accept=".csv,.json" style="display:none" />
+  <script src="modules/storage-keys/index.js"></script>
+  <script src="modules/google-sheets-sync/auth.js"></script>
+  <script src="modules/google-sheets-sync/api.js"></script>
+  <script src="modules/google-sheets-sync/schema.js"></script>
+  <script src="modules/google-sheets-sync/engine.js"></script>
+  <script src="modules/google-sheets-sync/popup-controller.js"></script>
+  <script src="modules/storage-adapter/index.js"></script>
+  <script src="modules/custom-cursor/core.js"></script>
+  <script src="modules/platforms/core.js"></script>
+  <script src="modules/ao3-page/core.js"></script>
+  <script src="modules/author-watches/core.js"></script>
+  <script src="modules/author-watches/popup-controller.js"></script>
+  <script src="modules/tracked-works/core.js"></script>
+  <script src="modules/bookmark-import/core.js"></script>
+  <script src="modules/bookmark-import/popup-controller.js"></script>
+  <script src="modules/marked-for-later-import/core.js"></script>
+  <script src="modules/marked-for-later-import/popup-controller.js"></script>
+  <script src="modules/sidebar/core.js"></script>
+  <script src="modules/custom-cats/popup-controller.js"></script>
+  <script src="modules/export-import/popup-controller.js"></script>
+  <script src="modules/subscription-refresh/popup-controller.js"></script>
+  <script src="modules/hidden-rules/core.js"></script>
+  <script src="modules/dashboard/relationship-core.js"></script>
+  <script src="modules/dashboard/charts-controller.js"></script>
+  <script src="modules/dashboard/work-detail-controller.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FandomGobbler.</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="app">
+
+    <header class="header">
+      <div class="logo">
+        <div class="logo-copy">
+          <h1 class="title" id="popupBrandTitle">FandomGobbler.</h1>
+        </div>
+      </div>
+    </header>
+
+    <div id="addCurrentBar" class="current-banner hidden">
+      <div class="current-banner-inner">
+        <div class="current-banner-text">
+          <span class="current-label">Currently on</span>
+          <span class="current-title" id="currentWorkTitle"></span>
+        </div>
+        <div class="current-add-wrap">
+          <button class="current-add-btn" id="currentAddBtn" type="button">
+            <span id="currentAddBtnLabel">+ Add to list</span>
+            <span class="current-add-chevron">▾</span>
+          </button>
+          <div class="current-add-dropdown hidden" id="currentAddDropdown">
+            <button class="current-add-option" data-status="want" type="button">For Later</button>
+            <button class="current-add-option" data-status="progress" type="button">Reading</button>
+            <button class="current-add-option" data-status="completed" type="button">Completed</button>
+            <button class="current-add-option" data-status="rereading" type="button">Re-reading</button>
+            <button class="current-add-option" data-status="onhold" type="button">On Hold</button>
+            <button class="current-add-option" data-status="dnf" type="button">Did Not Finish</button>
+            <div class="current-add-divider"></div>
+            <button class="current-add-option current-add-remove" data-status="remove" type="button">Remove from tracker</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main class="popup-dashboard">
+
+      <section id="onboardingBanner" class="dashboard-section onboarding-banner" style="display:none">
+        <div class="onboarding-banner-head">
+          <h2 id="onboardingTitle">Welcome to FandomGobbler.</h2>
+          <button type="button" id="onboardingDismiss" class="onboarding-dismiss" aria-label="Dismiss getting started guide">&#x2715;</button>
+        </div>
+        <p id="onboardingIntro" class="onboarding-intro">You haven't tracked any works yet. Here's how to get started:</p>
+        <ol class="onboarding-steps" id="onboardingSteps"></ol>
+      </section>
+
+      <section class="mfl-notify-banner hidden" id="mflNotifyBanner">
+        <div class="mfl-notify-inner">
+          <span class="mfl-notify-msg" id="mflNotifyMsg"></span>
+          <div class="mfl-notify-actions">
+            <button class="mfl-notify-btn" id="mflNotifyImportBtn" type="button">Import now</button>
+            <button class="mfl-notify-dismiss" id="mflNotifyDismiss" type="button" aria-label="Dismiss">&#x2715;</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="mfl-notify-banner author-watch-notify-banner hidden" id="authorWatchNotifyBanner">
+        <div class="mfl-notify-inner">
+          <span class="mfl-notify-msg" id="authorWatchNotifyMsg"></span>
+          <div class="mfl-notify-actions">
+            <button class="mfl-notify-btn" id="authorWatchNotifyViewBtn" type="button">View alerts</button>
+            <button class="mfl-notify-dismiss" id="authorWatchNotifyDismiss" type="button" aria-label="Dismiss">&#x2715;</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="mfl-notify-banner deleted-work-notify-banner hidden" id="deletedWorkNotifyBanner">
+        <div class="mfl-notify-inner">
+          <span class="mfl-notify-msg" id="deletedWorkNotifyMsg"></span>
+          <div class="mfl-notify-actions">
+            <button class="mfl-notify-btn" id="deletedWorkNotifyViewBtn" type="button">View deleted works</button>
+            <button class="mfl-notify-dismiss" id="deletedWorkNotifyDismiss" type="button" aria-label="Dismiss">&#x2715;</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard-section dashboard-section-cta" id="dashboardCtaSection">
+        <button class="dashboard-cta-btn" id="goToDashboardBtn" type="button">
+          <span class="dashboard-cta-text">
+            <span class="dashboard-cta-title">Open Dashboard</span>
+            <span class="dashboard-cta-sub">Your full library, charts, insights, and author alerts all in one place. Switch between libraries on AO3, FFNet, Wattpad, and Tumblr from the dashboard.</span>
+          </span>
+          <span class="dashboard-cta-arrow" aria-hidden="true">→</span>
+        </button>
+      </section>
+
+      <section class="dashboard-section" id="readingSetupSection">
+        <div class="section-head">
+          <h2>Reading Setup</h2>
+          <p>Control your sidebar, themes, and reading experience on AO3.</p>
+        </div>
+        <div class="setup-grid">
+          <button class="setup-card setup-card-toggle" id="floatToggle" type="button">
+            <span class="setup-card-copy">
+              <span class="setup-card-title" id="floatTitle">Sidebar Button On</span>
+              <span class="setup-card-sub" id="floatTooltip">Opens your library, tracked works, and relevant actions on AO3 pages. Click once to hide the button.</span>
+            </span>
+          </button>
+          <button class="setup-card" id="floatResetBtn" type="button">
+            <span class="setup-card-copy">
+              <span class="setup-card-title">Reset Button Position</span>
+              <span class="setup-card-sub">Put the sidebar button back in its default corner. (Yes, you can drag it anywhere!)</span>
+            </span>
+          </button>
+          <button class="setup-card theme-toggle" id="themeToggle" title="Theme" type="button">
+            <svg class="ico theme-ico theme-ico-sunset" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="1.5" y1="11" x2="14.5" y2="11"/><path d="M5 11a3 3 0 0 1 6 0"/><line x1="8" y1="3" x2="8" y2="5.5"/><line x1="3.5" y1="5.8" x2="5.1" y2="7.4"/><line x1="12.5" y1="5.8" x2="10.9" y2="7.4"/>
+            </svg>
+            <svg class="ico theme-ico theme-ico-moon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M8 2a4 4 0 0 0 6 6 6 6 0 1 1-6-6Z"/>
+            </svg>
+            <svg class="ico theme-ico theme-ico-sun" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M8 1.5v2.2M8 12.3v2.2M1.5 8h2.2M12.3 8h2.2M3 3l1.6 1.6M11.4 11.4L13 13M13 3l-1.6 1.6M3 13l1.6-1.6"/><circle cx="8" cy="8" r="3.1"/>
+            </svg>
+            <span class="setup-card-copy">
+              <span class="setup-card-title">AO3 Theme</span>
+              <span class="setup-card-sub" id="themeModeLabel">Default AO3</span>
+            </span>
+          </button>
+          <button class="setup-card theme-toggle" id="extensionThemeToggle" title="Theme" type="button">
+            <svg class="ico theme-ico theme-ico-sunset" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="1.5" y1="11" x2="14.5" y2="11"/><path d="M5 11a3 3 0 0 1 6 0"/><line x1="8" y1="3" x2="8" y2="5.5"/><line x1="3.5" y1="5.8" x2="5.1" y2="7.4"/><line x1="12.5" y1="5.8" x2="10.9" y2="7.4"/>
+            </svg>
+            <svg class="ico theme-ico theme-ico-moon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M8 2a4 4 0 0 0 6 6 6 6 0 1 1-6-6Z"/>
+            </svg>
+            <svg class="ico theme-ico theme-ico-sun" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M8 1.5v2.2M8 12.3v2.2M1.5 8h2.2M12.3 8h2.2M3 3l1.6 1.6M11.4 11.4L13 13M13 3l-1.6 1.6M3 13l1.6-1.6"/><circle cx="8" cy="8" r="3.1"/>
+            </svg>
+            <span class="setup-card-copy">
+              <span class="setup-card-title">Extension Theme</span>
+              <span class="setup-card-sub" id="extensionThemeModeLabel">Default AO3</span>
+            </span>
+          </button>
+          <button class="setup-card setup-card-toggle" id="themeSyncToggle" type="button">
+            <span class="setup-card-copy">
+              <span class="setup-card-title" id="themeSyncTitle">Theme Sync On</span>
+              <span class="setup-card-sub" id="themeSyncTooltip">AO3 Theme and Extension Theme can be changed separately. Click once to turn sync back on.</span>
+            </span>
+          </button>
+        </div>
+      </section>
+
+      <section class="dashboard-section" id="libraryToolsSection">
+        <div class="section-head section-head-collapsible">
+          <div class="section-head-copy">
+            <h2>Sort Library</h2>
+            <p>Choose how works are sorted in the sidebar (including custom categories).</p>
+          </div>
+        </div>
+        <div class="sort-library-panel">
+          <label class="library-sort-wrap library-sort-wrap-full" for="popupLibrarySort">
+            <select id="popupLibrarySort" class="library-sort-select">
+              <option value="recently-added">Recently Added</option>
+              <option value="recently-updated">Most Recently Updated</option>
+              <option value="most-popular">Most Popular</option>
+              <option value="most-bookmarked">Most Bookmarked</option>
+              <option value="most-kudos">Most Kudos</option>
+              <option value="most-hits">Most Hits</option>
+              <option value="oldest-for-later">Oldest in For Later</option>
+              <option value="longest-unread">Longest Unread</option>
+              <option value="shortest-unread">Shortest Unread</option>
+              <option value="highest-rated">Highest Rated by Me</option>
+              <option value="random">Random</option>
+            </select>
+          </label>
+          <div class="tool-meta" id="popupLibrarySortHint">Uses a logarithmic popularity score based on kudos, bookmarks, and hits.</div>
+        </div>
+      </section>
+
+      <section class="dashboard-section" id="authorWatchSection">
+        <div class="section-head section-head-collapsible">
+          <div class="section-head-copy">
+            <h2>Library Tools</h2>
+            <p>Back up your tracker data, fetch bookmarks, refresh subscriptions, and reset chapter progress for the current work.</p>
+          </div>
+          <button class="insights-toggle" id="libraryToolsToggle" type="button" aria-expanded="true" aria-label="Toggle Library Tools">
+            <span class="insights-toggle-chevron" aria-hidden="true">▾</span>
+          </button>
+        </div>
+        <div class="insights-panel" id="libraryToolsPanel">
+          <div class="tool-grid">
+            <button class="tool-btn" id="exportCSVDirect" type="button">Export CSV</button>
+            <button class="tool-btn" id="exportJSONDirect" type="button">Export JSON</button>
+            <button class="tool-btn" id="importCSVDirect" type="button">Import CSV</button>
+            <button class="tool-btn" id="importJSONDirect" type="button">Import JSON</button>
+            <button class="tool-btn" id="refreshSubscriptionsBtn" type="button">Refresh Subscriptions</button>
+            <button class="tool-btn tool-btn-wide" id="fetchBookmarksBtn" type="button">Fetch Bookmarks</button>
+            <button class="tool-btn tool-btn-wide" id="fetchMarkedForLaterBtn" type="button">Fetch Marked for Later</button>
+            <button class="tool-btn tool-btn-wide" id="resetCurrentChapterBtn" type="button">
+              <span class="setup-card-copy">
+                <span class="setup-card-title">Reset Chapter Count</span>
+                <span class="setup-card-sub" id="resetCurrentChapterMeta">Open a tracked AO3 work page to clear its saved chapter progress.</span>
+              </span>
+            </button>
+          </div>
+          <div class="tool-meta" id="lastBackupStamp">No backup exported yet.</div>
+        </div>
+      </section>
+
+      <section class="dashboard-section">
+        <div class="section-head section-head-collapsible">
+          <div class="section-head-copy">
+            <h2>Author Watch</h2>
+            <p>Alerts you when a watched author posts new work in a fandom you follow.</p>
+          </div>
+          <button class="insights-toggle" id="authorWatchesToggle" type="button" aria-expanded="false" aria-label="Toggle Author Watch">
+            <span class="insights-toggle-chevron" aria-hidden="true">▾</span>
+          </button>
+        </div>
+        <div class="insights-panel hidden" id="authorWatchesPanel">
+          <div class="author-watch-current" id="authorWatchCurrent"></div>
+          <div class="tool-grid author-watch-actions">
+            <button class="tool-btn tool-btn-wide" id="refreshAuthorWatchesBtn" type="button">Refresh Author Watch</button>
+          </div>
+          <div class="tool-meta" id="authorWatchMeta">No author watches yet.</div>
+          <div class="author-watch-list" id="authorWatchList"></div>
+          <div class="author-watch-matches" id="authorWatchMatches"></div>
+        </div>
+      </section>
+
+      <section class="dashboard-section" id="sheetsSyncSection">
+        <div class="section-head section-head-collapsible">
+          <div class="section-head-copy">
+            <h2>Google Sheets Sync</h2>
+            <p>Sync your library across devices and browsers via your own Google Drive. Your data is tied to your Google Account alone, FG doesn't take it.</p>
+          </div>
+          <button class="insights-toggle" id="sheetsSyncToggle" type="button" aria-expanded="false" aria-label="Toggle Google Sheets Sync">
+            <span class="insights-toggle-chevron" aria-hidden="true">▾</span>
+          </button>
+        </div>
+        <div class="insights-panel hidden" id="sheetsSyncPanel">
+          <div class="sheets-sync-status-row">
+            <span class="sheets-sync-dot" id="sheetsSyncDot"></span>
+            <span class="sheets-sync-status-text" id="sheetsSyncStatus">Not connected.</span>
+          </div>
+          <div class="sheets-sync-email" id="sheetsSyncEmail"></div>
+          <div class="tool-grid sheets-sync-actions">
+            <button class="tool-btn tool-btn-wide sheets-sync-btn sheets-sync-connect" id="sheetsSyncConnectBtn" type="button">Connect Google Sheets</button>
+            <button class="tool-btn sheets-sync-btn hidden" id="sheetsSyncNowBtn" type="button">Sync Now</button>
+            <button class="tool-btn sheets-sync-btn hidden" id="sheetsSyncReAuthBtn" type="button">Re-authorize</button>
+            <button class="tool-btn sheets-sync-btn hidden" id="sheetsSyncDisconnectBtn" type="button">Disconnect</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard-section">
+        <div class="section-head section-head-collapsible">
+          <div class="section-head-copy">
+            <h2>Custom Categories</h2>
+            <p>Create and edit custom shelves for the sidebar.</p>
+          </div>
+          <button class="insights-toggle" id="categoriesToggle" type="button" aria-expanded="true" aria-label="Toggle Categories">
+            <span class="insights-toggle-chevron" aria-hidden="true">▾</span>
+          </button>
+        </div>
+        <div class="insights-panel" id="categoriesPanel">
+          <div class="category-manager" id="categoryManagerList"></div>
+          <button type="button" class="category-manager-add" id="newCatBtn">
+            <span class="pop-new-cat-plus">+</span> Add category
+          </button>
+        </div>
+      </section>
+
+
+    </main>
+
+    <div class="toast" id="toast"></div>
+
+    <div class="notes-overlay hidden" id="notesOverlay">
+      <div class="notes-modal">
+        <div class="notes-header">
+          <div class="notes-title-wrap">
+            <span class="notes-work-title" id="notesWorkTitle"></span>
+          </div>
+          <button class="notes-close" id="notesClose" type="button">×</button>
+        </div>
+        <div class="notes-body">
+          <div class="rating-row">
+            <span class="rating-label">Rating</span>
+            <div class="stars" id="starsInput">
+              <button class="star" data-val="1" type="button"><svg class="ico ico-star-filled" viewBox="0 0 16 16" fill="currentColor"><polygon points="8,1.5 10,6 15,6.5 11.5,10 12.5,15 8,12.5 3.5,15 4.5,10 1,6.5 6,6"/></svg></button>
+              <button class="star" data-val="2" type="button"><svg class="ico ico-star-filled" viewBox="0 0 16 16" fill="currentColor"><polygon points="8,1.5 10,6 15,6.5 11.5,10 12.5,15 8,12.5 3.5,15 4.5,10 1,6.5 6,6"/></svg></button>
+              <button class="star" data-val="3" type="button"><svg class="ico ico-star-filled" viewBox="0 0 16 16" fill="currentColor"><polygon points="8,1.5 10,6 15,6.5 11.5,10 12.5,15 8,12.5 3.5,15 4.5,10 1,6.5 6,6"/></svg></button>
+              <button class="star" data-val="4" type="button"><svg class="ico ico-star-filled" viewBox="0 0 16 16" fill="currentColor"><polygon points="8,1.5 10,6 15,6.5 11.5,10 12.5,15 8,12.5 3.5,15 4.5,10 1,6.5 6,6"/></svg></button>
+              <button class="star" data-val="5" type="button"><svg class="ico ico-star-filled" viewBox="0 0 16 16" fill="currentColor"><polygon points="8,1.5 10,6 15,6.5 11.5,10 12.5,15 8,12.5 3.5,15 4.5,10 1,6.5 6,6"/></svg></button>
+            </div>
+            <button class="clear-rating" id="clearRating" type="button">Clear</button>
+          </div>
+          <div class="notes-field">
+            <label class="notes-field-label" for="notesTextarea">Notes</label>
+            <textarea id="notesTextarea" placeholder="What's this fic about? Any thoughts, warnings to remember, favorite moments..." rows="5"></textarea>
+          </div>
+        </div>
+        <div class="notes-footer">
+          <button class="notes-save" id="notesSave" type="button">Save</button>
+          <button class="notes-cancel" id="notesCancel" type="button">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cat-overlay hidden" id="catOverlay">
+      <div class="cat-modal">
+        <div class="cat-header">
+          <span id="catModalTitle">New Category</span>
+          <button class="cat-close" id="catClose" type="button">×</button>
+        </div>
+        <div class="cat-body">
+          <input id="catNameInput" placeholder="Category name..." maxlength="30" type="text" />
+          <div class="cat-color-label">Color</div>
+          <div id="catPresets"></div>
+          <div class="cat-hex-row">
+            <span id="catSwatch"></span>
+            <input id="catHexInput" type="text" placeholder="#7c3aed" maxlength="7" />
+          </div>
+          <label class="cat-hide-pill-row" id="catHidePillRow">
+            <input id="catHidePill" type="checkbox" />
+            <span>Hide pill on listing pages</span>
+          </label>
+        </div>
+        <div class="cat-footer">
+          <button id="catDeleteBtn" class="hidden" type="button">Delete</button>
+          <button id="catCancelBtn" type="button">Cancel</button>
+          <button id="catSaveBtn" type="button">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bookmark-overlay hidden" id="bookmarkOverlay">
+      <div class="bookmark-modal">
+        <div class="bookmark-header">
+          <div class="bookmark-header-copy">
+            <div class="bookmark-title">Fetch AO3 Bookmarks</div>
+            <div class="bookmark-sub" id="bookmarkModalSub">Import untracked works from your logged-in AO3 bookmarks.</div>
+          </div>
+          <button class="bookmark-close" id="bookmarkClose" type="button">×</button>
+        </div>
+        <div class="bookmark-body">
+          <div class="bookmark-panel bookmark-panel-status">
+            <div class="bookmark-section-title">Fetch status</div>
+            <div class="bookmark-status" id="bookmarkFetchStatus">This fetch runs slowly on purpose so it does not hammer AO3.</div>
+            <div class="bookmark-progress hidden" id="bookmarkProgressWrap">
+              <div class="bookmark-progress-bar">
+                <div class="bookmark-progress-fill" id="bookmarkProgressFill"></div>
+              </div>
+              <div class="bookmark-progress-meta" id="bookmarkProgressMeta">Ready to fetch.</div>
+            </div>
+          </div>
+          <div class="bookmark-panel bookmark-panel-options">
+            <label class="bookmark-quick-toggle">
+              <input id="bookmarkQuickMode" type="checkbox" />
+              <span>Only look for bookmarks added since the last fetch</span>
+            </label>
+          </div>
+          <div class="bookmark-review hidden" id="bookmarkReview">
+            <div class="bookmark-panel bookmark-panel-review">
+              <div class="bookmark-section-title">Review and import</div>
+              <div class="bookmark-review-summary" id="bookmarkReviewSummary"></div>
+              <label class="bookmark-import-field">
+                <span class="bookmark-import-label">Filter fetched bookmarks</span>
+                <input id="bookmarkReviewFilter" type="text" placeholder="Filter by title, author, or fandom" />
+              </label>
+              <div class="bookmark-import-controls">
+                <label class="bookmark-import-field bookmark-import-select">
+                  <span class="bookmark-import-label">Default category</span>
+                  <select id="bookmarkImportStatus">
+                    <option value="want">For Later</option>
+                    <option value="progress">Reading</option>
+                    <option value="completed">Completed</option>
+                    <option value="rereading">Re-reading</option>
+                    <option value="onhold">On Hold</option>
+                    <option value="dnf">Did Not Finish</option>
+                    <option value="">No default category</option>
+                  </select>
+                </label>
+                <label class="bookmark-import-field bookmark-import-select">
+                  <span class="bookmark-import-label">Custom category</span>
+                  <select id="bookmarkImportCustomCat">
+                    <option value="">None</option>
+                  </select>
+                </label>
+              </div>
+              <div class="bookmark-section-title bookmark-preview-heading">Preview fetched works</div>
+              <div class="bookmark-preview-list" id="bookmarkPreviewList"></div>
+            </div>
+          </div>
+        </div>
+        <div class="bookmark-footer">
+          <div class="bookmark-footer-group">
+            <button class="bookmark-secondary" id="bookmarkCancelFetchBtn" type="button">Cancel Fetch</button>
+            <button class="bookmark-secondary hidden" id="bookmarkResumeFetchBtn" type="button">Resume Fetch</button>
+          </div>
+          <div class="bookmark-footer-group bookmark-footer-group-main">
+            <button class="bookmark-secondary" id="bookmarkCloseBtn" type="button">Close</button>
+            <button class="bookmark-primary hidden" id="bookmarkImportBtn" type="button">Import Bookmarks</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bookmark-overlay hidden" id="mflOverlay">
+      <div class="bookmark-modal">
+        <div class="bookmark-header">
+          <div class="bookmark-header-copy">
+            <div class="bookmark-title">Fetch Marked for Later</div>
+            <div class="bookmark-sub" id="mflModalSub">Use AO3's For Later on your phone like normal, then open the extension on your laptop and import them into your actual reading lists.</div>
+          </div>
+          <button class="bookmark-close" id="mflClose" type="button">×</button>
+        </div>
+        <div class="bookmark-body">
+          <div class="bookmark-panel bookmark-panel-status">
+            <div class="bookmark-section-title">Fetch status</div>
+            <div class="bookmark-status" id="mflFetchStatus">This fetch runs slowly on purpose so it does not hammer AO3.</div>
+            <div class="bookmark-progress hidden" id="mflProgressWrap">
+              <div class="bookmark-progress-bar">
+                <div class="bookmark-progress-fill" id="mflProgressFill"></div>
+              </div>
+              <div class="bookmark-progress-meta" id="mflProgressMeta">Ready to fetch.</div>
+            </div>
+          </div>
+          <div class="bookmark-panel bookmark-panel-options">
+            <label class="bookmark-quick-toggle">
+              <input id="mflQuickMode" type="checkbox" />
+              <span>Only look for works added since the last fetch</span>
+            </label>
+          </div>
+          <div class="bookmark-review hidden" id="mflReview">
+            <div class="bookmark-panel bookmark-panel-review">
+              <div class="bookmark-section-title">Review and import</div>
+              <div class="bookmark-review-summary" id="mflReviewSummary"></div>
+              <label class="bookmark-import-field">
+                <span class="bookmark-import-label">Filter fetched works</span>
+                <input id="mflReviewFilter" type="text" placeholder="Filter by title, author, or fandom" />
+              </label>
+              <div class="bookmark-import-controls">
+                <label class="bookmark-import-field mfl-import-select">
+                  <span class="bookmark-import-label">Default category</span>
+                  <select id="mflImportStatus">
+                    <option value="want">For Later</option>
+                    <option value="progress">Reading</option>
+                    <option value="completed">Completed</option>
+                    <option value="rereading">Re-reading</option>
+                    <option value="onhold">On Hold</option>
+                    <option value="dnf">Did Not Finish</option>
+                    <option value="">No default category</option>
+                  </select>
+                </label>
+                <label class="bookmark-import-field mfl-import-select">
+                  <span class="bookmark-import-label">Custom category</span>
+                  <select id="mflImportCustomCat">
+                    <option value="">None</option>
+                  </select>
+                </label>
+              </div>
+              <div class="bookmark-section-title bookmark-preview-heading">Preview fetched works</div>
+              <div class="bookmark-preview-list" id="mflPreviewList"></div>
+            </div>
+          </div>
+        </div>
+        <div class="bookmark-footer">
+          <div class="bookmark-footer-group">
+            <button class="bookmark-secondary" id="mflCancelFetchBtn" type="button">Cancel Fetch</button>
+            <button class="bookmark-secondary hidden" id="mflResumeFetchBtn" type="button">Resume Fetch</button>
+          </div>
+          <div class="bookmark-footer-group bookmark-footer-group-main">
+            <button class="bookmark-secondary" id="mflCloseBtn" type="button">Close</button>
+            <button class="bookmark-primary hidden" id="mflImportBtn" type="button">Import Works</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <input type="file" id="importFileInput" accept=".csv,.json" style="display:none" />
+  <script src="modules/storage-keys/index.js"></script>
+  <script src="modules/google-sheets-sync/oauth-config.js"></script>
+  <script src="modules/google-sheets-sync/auth.js"></script>
+  <script src="modules/google-sheets-sync/api.js"></script>
+  <script src="modules/google-sheets-sync/schema.js"></script>
+  <script src="modules/google-sheets-sync/engine.js"></script>
+  <script src="modules/google-sheets-sync/popup-controller.js"></script>
+  <script src="modules/storage-adapter/index.js"></script>
+  <script src="modules/platforms/core.js"></script>
+  <script src="modules/author-watches/core.js"></script>
+  <script src="modules/author-watches/popup-controller.js"></script>
+  <script src="modules/tracked-works/core.js"></script>
+  <script src="modules/bookmark-import/core.js"></script>
+  <script src="modules/bookmark-import/popup-controller.js"></script>
+  <script src="modules/marked-for-later-import/core.js"></script>
+  <script src="modules/marked-for-later-import/popup-controller.js"></script>
+  <script src="modules/notes-modal/popup-controller.js"></script>
+  <script src="modules/custom-cats/popup-controller.js"></script>
+  <script src="modules/export-import/popup-controller.js"></script>
+  <script src="modules/subscription-refresh/popup-controller.js"></script>
+  <script src="modules/current-work/popup-controller.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+# Local agent/tool config
+.claude/
+
+# Secrets and local environment
+.env
+.env.*
+*.env
+*.secret
+*.secrets
+*.key
+*.pem
+*.p12
+*.pfx
+secrets/
+
+# Local editor and workspace settings
+.vscode/
+.idea/
+*.code-workspace
+
+# OS and filesystem metadata
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+desktop.ini
+
+# OneDrive/Windows local artifacts
+*.lnk
+~$*
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+*.rej
+*~
+*conflicted copy*
+*Conflicted Copy*
+
+# Logs and runtime diagnostics
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Generated browser-extension archives
+*.zip
+*.crx
+*.xpi
+
+# Temporary publication, staging, and comparison folders
+tmp-*/
+tmp-chrome-publication/
+tmp-firefox-publication/
+tmp-chrome-zip-compare/
+web-ext-artifacts/
+
+# Dependencies
+node_modules/
+
+# Build, coverage, and cache output
+dist/
+build/
+coverage/
+.nyc_output/
+.cache/
+.parcel-cache/

@@ -1,0 +1,50 @@
+// Single source of truth for all chrome.storage.local and localStorage keys.
+// Loaded before content.js and popup.js via manifest content_scripts and popup.html.
+// Consumers destructure from globalThis.AO3TrackerStorageKeys.
+
+globalThis.AO3TrackerStorageKeys = {
+  AO3_PAGE_THEME_KEY:         'ao3tracker_theme',
+  EXTENSION_THEME_KEY:        'ao3tracker_extension_theme',
+  THEME_SYNC_KEY:             'ao3tracker_theme_sync',
+  FFNET_SIDEBAR_THEME_KEY:    'fandomgobbler_ffnet_sidebar_theme',
+  DASHBOARD_THEME_KEY:        'fandomgobbler_dashboard_theme',
+  DASHBOARD_PLATFORM_KEY:     'fandomgobbler_platform',
+  DASHBOARD_AUTHOR_WATCH_COLLAPSED_KEY: 'fandomgobbler_dashboard_author_watch_collapsed',
+  DASHBOARD_CUSTOM_CATS_COLLAPSED_KEY:  'fandomgobbler_dashboard_custom_cats_collapsed',
+  DASHBOARD_HIDDEN_RULES_COLLAPSED_KEY: 'fandomgobbler_dashboard_hidden_rules_collapsed',
+  DASHBOARD_VISUALS_HIDDEN_KEY:         'fandomgobbler_dashboard_visuals_hidden',
+  LIBRARY_SORT_KEY:           'ao3tracker_library_sort',
+  AUTHOR_WATCHES_KEY:         'ao3tracker_author_watches',
+  AUTHOR_WATCH_MATCHES_KEY:   'ao3tracker_author_watch_matches',
+  RELATIONSHIP_GROUPS_KEY:    'ao3tracker_relationship_groups',
+  AUTHOR_WATCH_AUTO_DAY_KEY:  'ao3tracker_author_watch_auto_day',
+  AUTHOR_WATCH_AUTO_LOCK_KEY: 'ao3tracker_author_watch_auto_lock',
+  LOST_WORK_ACK_KEY:          'fandomgobbler_lost_work_acknowledged',
+  LAST_EXPORT_KEY:            'ao3tracker_last_export',
+  FAB_POSITION_KEY:           'ao3tracker_fab_position',
+  AO3_FLOATING_KEY:           'ao3tracker_floating',
+  WORK_META_COLLAPSE_KEY:     'ao3tracker_workmeta_collapsed',
+  BOOKMARK_SYNC_KEY:              'ao3tracker_bookmark_sync',
+  MARKED_FOR_LATER_SYNC_KEY:     'ao3tracker_marked_for_later_sync',
+  ONBOARDING_DISMISSED_KEY:      'ao3tracker_onboarding_dismissed',
+  AO3_PAGE_DARK_KEY:          'ao3_page_dark',
+  // localStorage key used by dark-early.js to avoid white flash on page load
+  AO3_DARK_LS_KEY:            'ao3tracker_dark',
+  // sessionStorage key — suppresses export reminder for the current browser session
+  EXPORT_BANNER_DISMISS_SESSION: 'aot_export_reminder_dismissed',
+  COMPANION_CAT_KEY:      'fandomgobbler_companion_cat',
+  COMPANION_BROCCOLI_KEY: 'fandomgobbler_companion_broccoli',
+  CUSTOM_CURSORS_KEY:     'fandomgobbler_custom_cursors',
+  CUSTOM_CURSOR_SELECTED_KEY: 'fandomgobbler_custom_cursor_selected',
+  AUTHOR_NOTES_KEY:       'fandomgobbler_author_notes',
+  MFL_PENDING_COUNT_KEY:        'fandomgobbler_mfl_pending_count',
+  HIDDEN_RULES_KEY:             'fandomgobbler_hidden_rules',
+  HIDDEN_RULE_PREFS_KEY:        'fandomgobbler_hidden_rule_prefs',
+  // Google Sheets sync
+  SHEETS_ENABLED_KEY:           'fandomgobbler_sheets_enabled',
+  SHEETS_SPREADSHEET_ID_KEY:    'fandomgobbler_sheets_id',
+  SHEETS_OWNER_EMAIL_KEY:       'fandomgobbler_sheets_owner',
+  SHEETS_SYNC_STATUS_KEY:       'fandomgobbler_sheets_status',
+  SHEETS_NEEDS_PUSH_KEY:        'fandomgobbler_sheets_needs_push',
+  SHEETS_PENDING_TOMBSTONES_KEY:'fandomgobbler_sheets_tombstones',
+};

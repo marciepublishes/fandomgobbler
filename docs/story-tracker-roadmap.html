@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FandomGobbler. Progression Map</title>
+  <style>
+    :root {
+      --bg: #fffaf0;
+      --paper: #fffdf8;
+      --ink: #2f2a24;
+      --muted: #6c645b;
+      --line: #e6dccd;
+      --accent: #b85c38;
+      --accent-soft: #f4dfd4;
+      --purple: #8f7bbf;
+      --purple-soft: #ece6f7;
+      --green: #5d8c71;
+      --green-soft: #dceadf;
+      --gold: #b58b2f;
+      --gold-soft: #f7eed1;
+      --blue: #5d7ea6;
+      --blue-soft: #dde8f4;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 36px;
+      font-family: "Georgia", "Garamond", serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, var(--bg), #f8f1e7);
+    }
+
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 34px 38px 40px;
+      box-shadow: 0 16px 36px rgba(84, 63, 44, 0.08);
+    }
+
+    h1, h2, h3 { margin: 0; }
+    h1 {
+      font-size: 32px;
+      line-height: 1.1;
+      color: #4e3b2f;
+      letter-spacing: 0.01em;
+    }
+    .subtitle {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.45;
+    }
+
+    .lead {
+      margin-top: 20px;
+      padding: 16px 18px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #fff3ea, #fffaf5);
+      border: 1px solid #eed9ca;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .section {
+      margin-top: 28px;
+    }
+
+    .section h2 {
+      font-size: 20px;
+      margin-bottom: 12px;
+      color: #5a4638;
+    }
+
+    .timeline-note {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .phase-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .phase-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 14px 16px;
+      background: #fffdfa;
+    }
+
+    .phase-card h3 {
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+
+    .phase-tag {
+      display: inline-block;
+      margin-bottom: 8px;
+      padding: 4px 9px;
+      font-size: 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .phase-1 .phase-tag { background: var(--accent-soft); color: var(--accent); }
+    .phase-2 .phase-tag { background: var(--gold-soft); color: #8a6816; }
+    .phase-3 .phase-tag { background: var(--purple-soft); color: #6f58a5; }
+
+    ul {
+      margin: 10px 0 0 18px;
+      padding: 0;
+    }
+
+    li {
+      margin: 6px 0;
+      line-height: 1.4;
+    }
+
+    .gantt {
+      margin-top: 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fffdfa;
+    }
+
+    .gantt-head,
+    .gantt-row {
+      display: grid;
+      grid-template-columns: 220px repeat(4, 1fr);
+    }
+
+    .gantt-head {
+      background: #f7efe4;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 700;
+      color: #6a594d;
+    }
+
+    .gantt-head div,
+    .gantt-row > div {
+      padding: 12px 14px;
+      border-right: 1px solid var(--line);
+    }
+
+    .gantt-head div:last-child,
+    .gantt-row > div:last-child {
+      border-right: none;
+    }
+
+    .gantt-row {
+      border-bottom: 1px solid var(--line);
+      min-height: 64px;
+    }
+
+    .gantt-row:last-child {
+      border-bottom: none;
+    }
+
+    .gantt-label {
+      display: flex;
+      align-items: center;
+      font-weight: 700;
+      color: #4d4137;
+      background: #fff;
+    }
+
+    .gantt-cell {
+      position: relative;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,0.02) 0, rgba(0,0,0,0.02) 1px, transparent 1px, transparent 100%);
+    }
+
+    .bar {
+      margin: 8px 0;
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.2;
+      box-shadow: inset 0 -1px 0 rgba(255,255,255,0.45);
+    }
+
+    .bar.phase1 { background: linear-gradient(90deg, #cf6d47, #de8a60); color: white; }
+    .bar.phase2 { background: linear-gradient(90deg, #c8a348, #dbc06e); color: #4f3c0e; }
+    .bar.phase3 { background: linear-gradient(90deg, #a28bd4, #b9a8df); color: #2f1f57; }
+
+    .deliverables {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .deliverables .box {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      padding: 14px 16px;
+    }
+
+    .deliverables h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #594639;
+    }
+
+    .footer {
+      margin-top: 26px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .page { box-shadow: none; border: none; border-radius: 0; max-width: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>FandomGobbler. Progression Map</h1>
+    <div class="subtitle">
+      Action plan for Phases 1–3: browser expansion, product stabilization, and core/adaptor refactor.
+    </div>
+
+    <div class="lead">
+      The strongest path is to make <strong>FandomGobbler.</strong> excellent everywhere before broadening further.
+      That means distributing first, stabilizing second, and modularizing third.
+    </div>
+
+    <section class="section">
+      <h2>Timeline Overview</h2>
+      <div class="timeline-note">
+        Recommended pace: about 4 months total. Fast enough to keep momentum, slow enough to preserve quality.
+      </div>
+
+      <div class="gantt">
+        <div class="gantt-head">
+          <div>Phase</div>
+          <div>Month 1</div>
+          <div>Month 2</div>
+          <div>Month 3</div>
+          <div>Month 4</div>
+        </div>
+
+        <div class="gantt-row">
+          <div class="gantt-label">Phase 1: Cross-Browser Release</div>
+          <div class="gantt-cell"><div class="bar phase1">Chrome + Edge publish</div></div>
+          <div class="gantt-cell"><div class="bar phase1">Firefox + Safari validation</div></div>
+          <div class="gantt-cell"></div>
+          <div class="gantt-cell"></div>
+        </div>
+
+        <div class="gantt-row">
+          <div class="gantt-label">Phase 2: Stabilize AO3 Product</div>
+          <div class="gantt-cell"></div>
+          <div class="gantt-cell"><div class="bar phase2">Real-user feedback pass</div></div>
+          <div class="gantt-cell"><div class="bar phase2">Bugfixes, docs, assets, trust</div></div>
+          <div class="gantt-cell"></div>
+        </div>
+
+        <div class="gantt-row">
+          <div class="gantt-label">Phase 3: Core + AO3 Adapter Refactor</div>
+          <div class="gantt-cell"></div>
+          <div class="gantt-cell"></div>
+          <div class="gantt-cell"><div class="bar phase3">Architecture planning</div></div>
+          <div class="gantt-cell"><div class="bar phase3">Core/adaptor separation</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Phase Breakdown</h2>
+      <div class="phase-grid">
+        <div class="phase-card phase-1">
+          <div class="phase-tag">4–8 weeks</div>
+          <h3>Phase 1: Release Everywhere</h3>
+          <ul>
+            <li>Ship Chrome update at 2.0.0 quality</li>
+            <li>Package and publish for Edge</li>
+            <li>Adapt and submit for Firefox</li>
+            <li>Test Safari feasibility, workflow, and parity</li>
+          </ul>
+        </div>
+
+        <div class="phase-card phase-2">
+          <div class="phase-tag">4–6 weeks</div>
+          <h3>Phase 2: Stabilize and Build Trust</h3>
+          <ul>
+            <li>Fix real user bugs from live usage</li>
+            <li>Improve backup confidence and reminders</li>
+            <li>Tighten docs, screenshots, and support copy</li>
+            <li>Add only low-risk, high-value polish</li>
+          </ul>
+        </div>
+
+        <div class="phase-card phase-3">
+          <div class="phase-tag">4–8 weeks</div>
+          <h3>Phase 3: Refactor for Growth</h3>
+          <ul>
+            <li>Separate tracker core from AO3-specific code</li>
+            <li>Define shared item and storage models</li>
+            <li>Isolate AO3 extraction and injection logic</li>
+            <li>Prepare for future FanFiction.net/Wattpad adapters</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Deliverables by Phase</h2>
+      <div class="deliverables">
+        <div class="box">
+          <h3>Phase 1 Deliverables</h3>
+          <ul>
+            <li>Chrome listing updated and approved</li>
+            <li>Edge listing live</li>
+            <li>Firefox version submitted or live</li>
+            <li>Safari feasibility report and shipping plan</li>
+          </ul>
+        </div>
+
+        <div class="box">
+          <h3>Phase 2 Deliverables</h3>
+          <ul>
+            <li>Post-launch bugfix release(s)</li>
+            <li>Polished listing copy and screenshots</li>
+            <li>Backup/export confidence improvements</li>
+            <li>Basic user help/support materials</li>
+          </ul>
+        </div>
+
+        <div class="box">
+          <h3>Phase 3 Deliverables</h3>
+          <ul>
+            <li>Documented tracker core responsibilities</li>
+            <li>Documented AO3 adapter responsibilities</li>
+            <li>Cleaner theme/storage/render boundaries</li>
+            <li>Technical base for Story Tracker expansion</li>
+          </ul>
+        </div>
+
+        <div class="box">
+          <h3>Guiding Rule</h3>
+          <ul>
+            <li>Distribute first</li>
+            <li>Stabilize second</li>
+            <li>Modularize third</li>
+            <li>Only then expand beyond AO3</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      Suggested long-term sequence after Phase 3: FanFiction.net, Wattpad, Tumblr, then broader reading targets
+      like blogs, Substack, longform articles, news, and research reads.
+    </div>
+  </div>
+</body>
+</html>

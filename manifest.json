@@ -1,0 +1,125 @@
+{
+  "manifest_version": 3,
+  "name": "FandomGobbler (formerly AO3 Story Tracker)",
+  "version": "3.17.52",
+  "description": "Track fanfiction across AO3, FanFiction.net, and more with categories, notes, ratings, imports, backups, and Google Sheets sync.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "notifications",
+    "identity",
+    "alarms"
+  ],
+  "oauth2": {
+    "client_id": "183882310762-9e7akv7d9lbk1rriu7vmn8d59k0fq22j.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/spreadsheets",
+      "https://www.googleapis.com/auth/drive.file"
+    ]
+  },
+  "host_permissions": [
+    "https://archiveofourown.org/*",
+    "https://www.fanfiction.net/*",
+    "https://accounts.google.com/*",
+    "https://oauth2.googleapis.com/*",
+    "https://www.googleapis.com/*",
+    "https://sheets.googleapis.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/fg-icon16.png",
+      "48": "icons/fg-icon48.png",
+      "128": "icons/fg-icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://archiveofourown.org/*"],
+      "js": ["dark-early.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://archiveofourown.org/*"],
+      "js": [
+        "modules/storage-keys/index.js",
+        "modules/custom-cursor/core.js",
+        "modules/theme-css/pill-layout.js",
+        "modules/theme-css/pill-default.js",
+        "modules/theme-css/dark.js",
+        "modules/theme-css/sol-light.js",
+        "modules/utils/index.js",
+        "modules/toast/index.js",
+        "modules/storage/index.js",
+        "modules/ui-utils/index.js",
+        "modules/tracked-works/core.js",
+        "modules/ao3-page/core.js",
+        "modules/author-watches/core.js",
+        "modules/author-watches/controller.js",
+        "modules/sidebar/core.js",
+        "modules/sidebar/card.js",
+        "modules/sidebar/controller.js",
+        "modules/hidden-rules/core.js",
+        "modules/listing-badges/core.js",
+        "modules/listing-badges/controller.js",
+        "modules/work-page/controller.js",
+        "modules/page-theme/controller.js",
+        "modules/notes-modal/controller.js",
+        "modules/cat-modal/controller.js",
+        "modules/export-import/controller.js",
+        "modules/availability-checker/controller.js",
+        "modules/chapter-progress/controller.js",
+        "modules/track-button/controller.js",
+        "modules/floating-ui/template.js",
+        "modules/floating-ui/controller.js",
+        "content.js"
+      ],
+      "css": ["content.css"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": ["https://www.fanfiction.net/*"],
+      "js": [
+        "modules/storage-keys/index.js",
+        "modules/custom-cursor/core.js",
+        "modules/utils/index.js",
+        "modules/toast/index.js",
+        "modules/storage-adapter/index.js",
+        "modules/platforms/core.js",
+        "modules/platform-sidebar/template.js",
+        "modules/tracked-works/core.js",
+        "modules/page-theme/controller.js",
+        "modules/notes-modal/controller.js",
+        "modules/ffnet/core.js",
+        "modules/ffnet/controller.js",
+        "ffnet-content.js"
+      ],
+      "css": ["content.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "dashboard.html",
+        "icons/settings-cog.png",
+        "icons/companion-cat.png",
+        "icons/noun-sleeping-cat-196644.svg",
+        "icons/companion-broccoli.png",
+        "icons/broccoli-svgrepo-com.svg"
+      ],
+      "matches": [
+        "https://archiveofourown.org/*",
+        "https://www.fanfiction.net/*"
+      ]
+    }
+  ],
+  "icons": {
+    "16": "icons/fg-icon16.png",
+    "48": "icons/fg-icon48.png",
+    "128": "icons/fg-icon128.png"
+  }
+}

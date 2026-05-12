@@ -1,0 +1,5054 @@
+/* ─── Inline Track Button ─────────────────────────────────────────────────── */
+#ao3tracker-btn { margin: 10px 0 10px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; text-align: center; }
+
+.ao3tracker-widget { display: inline-flex; align-items: center; gap: 8px; position: relative; }
+
+.ao3tracker-label {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: #fff; color: #2563eb; border: 1px solid rgba(37,99,235,0.3);
+  padding: 3px 9px; border-radius: 20px; font-size: 12px; font-weight: 600;
+  cursor: pointer; user-select: none; transition: all 0.15s; line-height: 1.45;
+}
+.ao3tracker-label:hover { background: #eff4ff; }
+
+.ao3tracker-dropdown {
+  display: none; position: absolute; top: calc(100% + 6px); left: 0;
+  background: #fff; border: 1px solid rgba(0,0,0,0.12); border-radius: 8px;
+  overflow: hidden; z-index: 9999; min-width: 160px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12); flex-direction: column;
+}
+.ao3tracker-dropdown.open { display: flex; }
+
+.ao3tracker-option {
+  background: none; border: none; color: #555550; font-size: 13px; font-weight: 500;
+  padding: 9px 14px; cursor: pointer; text-align: left; transition: background 0.12s;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.ao3tracker-option:hover { background: #f8f8f7; color: #1a1a18; }
+.ao3tracker-divider { height: 1px; background: rgba(0,0,0,0.08); margin: 2px 0; }
+.ao3tracker-remove { color: #dc2626 !important; }
+.ao3tracker-remove:hover { background: #fef2f2 !important; }
+
+.ao3tracker-status-badge {
+  font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.1); background: #f2f1ef; color: #99998f;
+}
+.ao3tracker-status-badge { display: none !important; }
+.ao3tracker-status-badge:empty { display: none; }
+.ao3tracker-status-badge[data-status="want"]      { color: #5b21b6; border-color: rgba(124,58,237,0.25); background: #f5f3ff; }
+.ao3tracker-status-badge[data-status="progress"]  { color: #0e7490; border-color: rgba(8,145,178,0.25); background: #ecfeff; }
+.ao3tracker-status-badge[data-status="completed"] { color: #047857; border-color: rgba(5,150,105,0.25); background: #ecfdf5; }
+.ao3tracker-status-badge[data-status="rereading"] { color: #b45309; border-color: rgba(217,119,6,0.25); background: #fffbeb; }
+
+/* ─── Mini Toast ──────────────────────────────────────────────────────────── */
+#ao3tracker-toast {
+  position: fixed; bottom: 24px; right: 24px; background: #1a1a18; color: #fff;
+  padding: 8px 16px; border-radius: 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 13px; font-weight: 500; z-index: 9999999; opacity: 0;
+  transform: translateY(10px); transition: all 0.2s ease; pointer-events: none;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+}
+#ao3tracker-toast.show { opacity: 1; transform: translateY(0); }
+#ao3tracker-toast.has-undo { pointer-events: auto; display: flex; align-items: center; gap: 10px; }
+.ao3tracker-toast-undo {
+  background: none; border: 1px solid rgba(255,255,255,0.4); color: #fff;
+  padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;
+  cursor: pointer; white-space: nowrap; flex-shrink: 0;
+}
+.ao3tracker-toast-undo:hover { background: rgba(255,255,255,0.15); }
+
+/* ─── Floating Button ─────────────────────────────────────────────────────── */
+#ao3tracker-fab {
+  position: fixed !important; bottom: 28px; right: 28px; width: 48px !important; height: 48px !important;
+  min-width: 0 !important; max-width: none !important; min-height: 0 !important; max-height: none !important;
+  box-sizing: border-box !important;
+  border-radius: 12px; background: #f8f6f1; border: 1px solid rgba(0,0,0,0.12);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15); cursor: pointer;
+  display: flex !important; align-items: center !important; justify-content: center !important;
+  padding: 0 !important; margin: 0 !important;
+  z-index: 999998;
+  touch-action: none;
+  user-select: none;
+  transition: transform 0.15s, box-shadow 0.15s, left 0.18s ease, top 0.18s ease, right 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+#ao3tracker-fab { cursor: grab; }
+#ao3tracker-fab:hover { transform: scale(1.08); box-shadow: 0 4px 18px rgba(0,0,0,0.2); }
+#ao3tracker-fab.aot-active { background: #d1ead4; }
+#ao3tracker-fab-label {
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  display: block;
+  color: #1a1a18;
+  transform: scale(1.12, 1.26);
+  transform-origin: 50% 60%;
+  pointer-events: none;
+}
+#ao3tracker-fab.aot-peek-left,
+#ao3tracker-fab.aot-peek-right {
+  opacity: 0.96;
+  box-shadow: 0 2px 14px rgba(37,99,235,0.22);
+}
+#ao3tracker-fab.aot-peek-left::after,
+#ao3tracker-fab.aot-peek-right::after {
+  content: '';
+  position: absolute;
+  top: 9px;
+  bottom: 9px;
+  width: 3px;
+  border-radius: 999px;
+  background: #2563eb;
+}
+#ao3tracker-fab.aot-peek-left::after { right: 3px; }
+#ao3tracker-fab.aot-peek-right::after { left: 3px; }
+#ao3tracker-fab.aot-peek-left:hover {
+  transform: translateX(8px);
+}
+#ao3tracker-fab.aot-peek-right:hover {
+  transform: translateX(-8px);
+}
+#ao3tracker-fab.aot-dragging {
+  cursor: grabbing;
+  transform: none !important;
+  transition: none !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.22);
+}
+
+/* Floating button when AO3 page dark mode is on (matches tracker palette, not cream) */
+[data-ao3-dark="1"] #ao3tracker-fab {
+  background: #073642;
+  border: 1px solid rgba(131,148,150,0.2);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+}
+[data-ao3-dark="1"] #ao3tracker-fab-label { color: #93a1a1; }
+[data-ao3-dark="1"] #ao3tracker-fab:hover {
+  background: #586e75;
+  border-color: rgba(38,139,210,0.45);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+}
+[data-ao3-dark="1"] #ao3tracker-fab.aot-active {
+  background: #586e75;
+  border-color: rgba(38,139,210,0.38);
+  box-shadow: 0 0 0 2px rgba(38,139,210,0.18), 0 4px 20px rgba(0,0,0,0.45);
+}
+[data-ao3-dark="1"] #ao3tracker-fab.aot-peek-left::after,
+[data-ao3-dark="1"] #ao3tracker-fab.aot-peek-right::after {
+  background: #2aa198;
+}
+
+/* ─── Docked tracker: push AO3 page left (split view) ─────────────────────── */
+:root {
+  --aot-dock-panel-width: 390px;
+  --aot-dock-edge-inset: 12px;
+  --aot-dock-reserve: calc(var(--aot-dock-panel-width) + var(--aot-dock-edge-inset));
+}
+body.aot-tracker-dock-open {
+  margin-right: var(--aot-dock-reserve) !important;
+  transition: margin-right 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+}
+/* Hide FAB while the docked sidebar is open — reopen only after close */
+body.aot-tracker-dock-open #ao3tracker-fab {
+  display: none !important;
+}
+body.aot-tracker-dock-open #ao3tracker-toast {
+  right: calc(var(--aot-dock-reserve) + 24px);
+  transition: right 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* Wide viewports: scroll #inner so the page scrollbar sits left of the dock (not nested against the panel) */
+@media (min-width: 901px) {
+  html:has(body.aot-tracker-dock-open:has(#inner)) {
+    overflow: hidden;
+    height: 100%;
+  }
+  body.aot-tracker-dock-open:has(#inner) {
+    margin-right: 0 !important;
+    overflow: hidden;
+    min-height: 100vh;
+    box-sizing: border-box;
+  }
+  body.aot-tracker-dock-open:has(#inner) #inner {
+    width: calc(100% - var(--aot-dock-reserve));
+    max-width: calc(100% - var(--aot-dock-reserve));
+    height: 100vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
+    scrollbar-gutter: stable;
+  }
+}
+
+/* Narrow viewports: overlay tracker again (no page squeeze) */
+@media (max-width: 900px) {
+  body.aot-tracker-dock-open {
+    margin-right: 0 !important;
+  }
+  body.aot-tracker-dock-open #ao3tracker-toast {
+    right: 24px !important;
+  }
+}
+
+/* ─── Work page: collapsible tracker row under author ─────────────────────── */
+.ao3t-work-meta {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  margin: 0.35em auto 0.85em;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.ao3t-work-meta-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: #99998f;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  cursor: pointer;
+  padding: 4px 3px 4px 6px;
+  line-height: 1;
+  outline: none;
+  box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.ao3t-work-meta-toggle::-moz-focus-inner {
+  border: 0;
+}
+.ao3t-work-meta-toggle:hover { color: #555550; }
+.ao3t-work-meta-toggle:focus,
+.ao3t-work-meta-toggle:focus-visible,
+.ao3t-work-meta-toggle:active {
+  outline: none;
+  box-shadow: none;
+}
+.ao3t-work-meta-toggle-svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+/* Serif bold “i” (tittle + stem) reads as a letter, not a plain stroke */
+.ao3t-work-meta-toggle-svg .ao3t-work-meta-toggle-i {
+  font-family: Georgia, 'Palatino Linotype', 'Book Antiqua', Palatino, 'Times New Roman', Times, serif !important;
+  font-style: normal;
+  letter-spacing: 0;
+}
+.ao3t-work-meta-chevron {
+  font-size: 10px;
+  font-weight: 600;
+  opacity: 0.85;
+  line-height: 1;
+  user-select: none;
+}
+.ao3t-work-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: min(100%, calc(100vw - 96px));
+  overflow: visible;
+  padding: 2px 0;
+}
+.ao3t-work-meta-collapsed .ao3t-work-meta-row {
+  display: none;
+}
+/* Row uses flex gap only — reset search/list margins so spacing matches between all pills */
+.ao3t-work-meta-row .ao3t-search-chap,
+.ao3t-work-meta-row .ao3t-search-stars {
+  margin-left: 0;
+}
+/* Work details row: shared pill scale (slightly larger than search/list so <button> matches links/spans) */
+.ao3t-work-meta-row .ao3t-search-badge,
+.ao3t-work-meta-row .ao3t-search-chap {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.45;
+  padding: 3px 9px;
+  border-radius: 20px;
+}
+
+/* In the work-page details row, status pills are display-only (not clickable). */
+.ao3t-work-meta-row .ao3t-search-badge {
+  cursor: default;
+}
+
+/* Same for custom category pills in that row (avoid text/ibeam cursor). */
+.ao3t-work-meta-row .ao3t-work-meta-cat {
+  cursor: default;
+  user-select: none;
+}
+/* Chapter reset button next to the chapter pill */
+.ao3t-work-meta-row .ao3t-chap-reset-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  margin: 0;
+  border-radius: 999px;
+  border: 1px solid #9dd8e8 !important;
+  background: #ecfeff;
+  color: #0e7490;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.ao3t-work-meta-row .ao3t-chap-reset-btn:hover {
+  background: #dff7fc;
+  border: 1px solid #7ccad8 !important;
+}
+.ao3t-work-meta-row .ao3t-chap-reset-btn:focus-visible {
+  outline: 2px solid #0891b2;
+  outline-offset: 2px;
+}
+.ao3t-reset-ico { width: 13px; height: 13px; display: block; }
+/* Custom category name pills on work page — same metrics as work-meta row badges/chapter pills */
+.ao3t-work-meta-cat {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 20px;
+  line-height: 1.45;
+  text-align: center;
+  white-space: nowrap;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--chip-color, #555550);
+  background: color-mix(in srgb, var(--chip-color, #555550) 10%, #fff);
+  border: 1px solid color-mix(in srgb, var(--chip-color, #555550) 25%, transparent);
+  box-sizing: border-box;
+}
+.ao3t-search-badge-lost {
+  color: #be123c;
+  background: #fff1f2;
+  border: 1px solid rgba(225, 29, 72, 0.25);
+}
+
+/* ─── Sidebar Container ───────────────────────────────────────────────────── */
+#ao3tracker-sidebar {
+  position: fixed; top: 0; right: -410px; width: var(--aot-dock-panel-width, 390px); height: 100vh;
+  z-index: 999997; transition: right 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex; align-items: stretch; pointer-events: none;
+}
+#ao3tracker-sidebar.aot-open { right: 0; pointer-events: all; }
+#ao3tracker-sidebar,
+#ao3tracker-sidebar * ,
+#ao3tracker-sidebar *::before,
+#ao3tracker-sidebar *::after {
+  box-sizing: border-box !important;
+}
+#ao3tracker-panel,
+#ao3tracker-panel * {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+#ao3tracker-sidebar :is(p, span, a, button, label, div, li, dt, dd, small, strong, em, h1, h2, h3, h4) {
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+/* Harden sidebar interactive controls against AO3 site skins without changing
+   the tracker's intended UI. These elements keep their existing local styles,
+   but we explicitly neutralize common AO3 button/link treatments. */
+#ao3tracker-panel :is(
+  #aot-export-btn,
+  #aot-fullscreen-btn,
+  #aot-close,
+  #aot-theme-toggle,
+  .aot-tabs-arrow,
+  .aot-tab,
+  .aot-export-opt,
+  .aot-cur-opt,
+  .aot-btn,
+  .aot-card-summary-toggle,
+  .aot-card-edit-notes,
+  .aot-card-flip
+) {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-image: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  vertical-align: middle !important;
+  text-indent: 0 !important;
+  box-sizing: border-box !important;
+}
+
+#ao3tracker-panel :is(
+  #aot-export-btn,
+  #aot-fullscreen-btn,
+  #aot-close,
+  #aot-theme-toggle,
+  .aot-tabs-arrow,
+  .aot-tab,
+  .aot-export-opt,
+  .aot-cur-opt,
+  .aot-btn,
+  .aot-card-summary-toggle,
+  .aot-card-edit-notes,
+  .aot-card-flip
+)::before,
+#ao3tracker-panel :is(
+  #aot-export-btn,
+  #aot-fullscreen-btn,
+  #aot-close,
+  #aot-theme-toggle,
+  .aot-tabs-arrow,
+  .aot-tab,
+  .aot-export-opt,
+  .aot-cur-opt,
+  .aot-btn,
+  .aot-card-summary-toggle,
+  .aot-card-edit-notes,
+  .aot-card-flip
+)::after {
+  text-shadow: none !important;
+  filter: none !important;
+  box-sizing: border-box !important;
+}
+
+#ao3tracker-panel :is(
+  #aot-export-btn,
+  #aot-fullscreen-btn,
+  #aot-close,
+  #aot-theme-toggle,
+  .aot-tabs-arrow,
+  .aot-tab,
+  .aot-export-opt,
+  .aot-cur-opt,
+  .aot-btn,
+  .aot-card-summary-toggle,
+  .aot-card-edit-notes,
+  .aot-card-flip
+):link,
+#ao3tracker-panel :is(
+  #aot-export-btn,
+  #aot-fullscreen-btn,
+  #aot-close,
+  #aot-theme-toggle,
+  .aot-tabs-arrow,
+  .aot-tab,
+  .aot-export-opt,
+  .aot-cur-opt,
+  .aot-btn,
+  .aot-card-summary-toggle,
+  .aot-card-edit-notes,
+  .aot-card-flip
+):visited,
+#ao3tracker-panel :is(
+  #aot-export-btn,
+  #aot-fullscreen-btn,
+  #aot-close,
+  #aot-theme-toggle,
+  .aot-tabs-arrow,
+  .aot-tab,
+  .aot-export-opt,
+  .aot-cur-opt,
+  .aot-btn,
+  .aot-card-summary-toggle,
+  .aot-card-edit-notes,
+  .aot-card-flip
+):active {
+  text-decoration: none !important;
+}
+
+#ao3tracker-panel :is(
+  #aot-export-btn .ico,
+  #aot-fullscreen-btn .ico,
+  #aot-close .ico,
+  #aot-theme-toggle .ico,
+  .aot-tab .ico,
+  .aot-cur-opt .ico,
+  .aot-card-edit-notes .ico,
+  .aot-card-flip .ico,
+  #aot-export-btn svg,
+  #aot-fullscreen-btn svg,
+  #aot-close svg,
+  #aot-theme-toggle svg,
+  .aot-tab svg,
+  .aot-cur-opt svg,
+  .aot-card-edit-notes svg,
+  .aot-card-flip svg
+) {
+  flex-shrink: 0 !important;
+  filter: none !important;
+  text-shadow: none !important;
+  vertical-align: middle !important;
+}
+
+/* Restore body scroll position when sidebar closes */
+body:not(.aot-tracker-dock-open) #inner {
+  height: auto;
+  overflow-y: visible;
+  overflow-x: visible;
+}
+
+/* ─── Panel ───────────────────────────────────────────────────────────────── */
+#ao3tracker-panel {
+  width: 380px; height: 600px; background: #fff; border-radius: 14px;
+  border: 1px solid rgba(0,0,0,0.12); box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  overflow: visible; display: flex; flex-direction: column; position: relative;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px; color: #1a1a18;
+}
+
+/* Tracker open: panel fills sidebar column (proportional to dock reserve / viewport height) */
+body.aot-tracker-dock-open #ao3tracker-sidebar {
+  align-items: stretch;
+  padding: 0;
+  box-sizing: border-box;
+}
+body.aot-tracker-dock-open #ao3tracker-panel {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  max-height: none;
+  box-sizing: border-box;
+  border-radius: 0;
+  border-top: none;
+  border-bottom: none;
+  border-right: none;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.18);
+}
+
+#ao3tracker-panel:not(.aot-dark):not(.aot-sol-light) #aot-search-bar {
+  background: #fff !important;
+  border-bottom-color: rgba(0,0,0,0.08) !important;
+}
+#ao3tracker-panel:not(.aot-dark):not(.aot-sol-light) #aot-search {
+  color: #1a1a18 !important;
+  background: #fff !important;
+  border-color: rgba(0,0,0,0.12) !important;
+}
+#ao3tracker-panel:not(.aot-dark):not(.aot-sol-light) #aot-search::placeholder {
+  color: #7b7a76 !important;
+}
+
+/* Dark theme (tracker sidebar) — Solarized Base03 / Base02 / Base0 / Base1 */
+#ao3tracker-panel.aot-dark {
+  --aot-page: #002b36;
+  --aot-panel: #073642;
+  --aot-surface: #073642;
+  --aot-control: #073642;
+  --aot-hover: #586e75;
+  background: var(--aot-page);
+  color: #839496;
+  border-color: rgba(131,148,150,0.14);
+  box-shadow: 0 10px 44px rgba(0,0,0,0.35);
+}
+body.aot-tracker-dock-open #ao3tracker-panel.aot-dark {
+  box-shadow: -8px 0 36px rgba(0, 0, 0, 0.45);
+}
+#ao3tracker-panel.aot-dark #aot-header,
+#ao3tracker-panel.aot-dark #aot-search-bar,
+#ao3tracker-panel.aot-dark #aot-tabs-wrap,
+#ao3tracker-panel.aot-dark #aot-current-bar {
+  background: var(--aot-panel) !important;
+  border-color: rgba(131,148,150,0.12) !important;
+}
+#ao3tracker-panel.aot-dark #aot-title { color: #839496; }
+#ao3tracker-panel.aot-dark #aot-title-formerly { color: rgba(131,148,150,0.5); }
+#ao3tracker-panel.aot-dark .aot-pill { background: rgba(147,161,161,0.08); color: rgba(147,161,161,0.88); }
+#ao3tracker-panel.aot-dark #aot-close { color: rgba(147,161,161,0.75); }
+#ao3tracker-panel.aot-dark #aot-close:hover { background: rgba(147,161,161,0.08); color: #839496; }
+#ao3tracker-panel.aot-dark #aot-export-btn { color: rgba(131,148,150,0.88); }
+#ao3tracker-panel.aot-dark #aot-fullscreen-btn { color: rgba(131,148,150,0.88); }
+#ao3tracker-panel.aot-dark #aot-export-btn:hover,
+#ao3tracker-panel.aot-dark #aot-export-btn:focus-visible,
+#ao3tracker-panel.aot-dark #aot-fullscreen-btn:hover,
+#ao3tracker-panel.aot-dark #aot-fullscreen-btn:focus-visible { background: rgba(147,161,161,0.1); color: #839496; }
+#ao3tracker-panel.aot-dark #aot-current-label { color: rgba(147,161,161,0.82) !important; }
+#ao3tracker-panel.aot-dark #aot-current-title { color: #839496 !important; }
+#ao3tracker-panel.aot-dark #aot-current-add-btn {
+  background: rgba(38,139,210,0.12) !important;
+  border-color: rgba(38,139,210,0.28) !important;
+  color: #268bd2 !important;
+}
+#ao3tracker-panel.aot-dark #aot-current-add-btn:hover { background: rgba(38,139,210,0.2) !important; border-color: rgba(38,139,210,0.32) !important; color: #2aa198 !important; }
+/* Solid fill when tracked — match popup .current-add-btn.has-status */
+#ao3tracker-panel.aot-dark #aot-current-add-btn.aot-has-status {
+  background: #268bd2 !important;
+  color: #fff !important;
+  border-color: #268bd2 !important;
+}
+#ao3tracker-panel.aot-dark #aot-current-add-btn.aot-has-status:hover {
+  background: #268bd2 !important;
+  color: #fff !important;
+  border-color: #268bd2 !important;
+  filter: brightness(1.08);
+}
+
+#ao3tracker-panel.aot-dark #aot-current-bar {
+  background: rgba(38,139,210,0.12) !important;
+  border-bottom-color: rgba(38,139,210,0.2) !important;
+}
+#ao3tracker-panel.aot-dark #aot-current-label {
+  color: #268bd2 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.07em !important;
+}
+#ao3tracker-panel.aot-dark #aot-current-title { color: #839496 !important; }
+
+#ao3tracker-panel.aot-dark .aot-tab { color: rgba(147,161,161,0.82); }
+#ao3tracker-panel.aot-dark .aot-tab:hover { color: #839496; }
+#ao3tracker-panel.aot-dark .aot-tab.aot-active { color: #268bd2; border-bottom-color: #268bd2; }
+#ao3tracker-panel.aot-dark .aot-cnt { background: rgba(131,148,150,0.1); color: rgba(147,161,161,0.82); }
+
+#ao3tracker-panel.aot-dark .aot-tabs-arrow-left { background: linear-gradient(to right, var(--aot-panel) 60%, transparent) !important; }
+#ao3tracker-panel.aot-dark .aot-tabs-arrow-right { background: linear-gradient(to left, var(--aot-panel) 60%, transparent) !important; }
+#ao3tracker-panel.aot-dark #aot-tabs { background: var(--aot-panel) !important; }
+
+#ao3tracker-panel.aot-dark #aot-search { color: #839496 !important; }
+#ao3tracker-panel.aot-dark #aot-search::placeholder { color: rgba(147,161,161,0.62) !important; }
+#ao3tracker-panel.aot-dark #aot-search-bar {
+  background: var(--aot-panel) !important;
+  border-bottom-color: rgba(131,148,150,0.1) !important;
+  padding: 8px 12px !important;
+}
+#ao3tracker-panel.aot-dark #aot-search {
+  color: #839496 !important;
+}
+#ao3tracker-panel.aot-dark #aot-search::placeholder { color: rgba(147,161,161,0.62) !important; }
+#ao3tracker-panel.aot-dark #aot-search-bar:focus-within {
+  outline: none !important;
+}
+
+/* Keep the status color stripe visible in dark mode */
+#ao3tracker-panel.aot-dark .aot-card[data-status="want"]      { border-left-color: #a78bfa !important; }
+#ao3tracker-panel.aot-dark .aot-card[data-status="progress"]  { border-left-color: #22d3ee !important; }
+#ao3tracker-panel.aot-dark .aot-card[data-status="completed"] { border-left-color: #34d399 !important; }
+#ao3tracker-panel.aot-dark .aot-card[data-status="rereading"] { border-left-color: #fbbf24 !important; }
+#ao3tracker-panel.aot-dark .aot-card[data-status="onhold"]    { border-left-color: #2aa198 !important; }
+#ao3tracker-panel.aot-dark .aot-card[data-status="dnf"]       { border-left-color: #9ca3af !important; }
+#ao3tracker-panel.aot-dark .aot-card[data-status="lost"]      { border-left-color: #fb7185 !important; }
+
+/* Theme toggle in sidebar header */
+#aot-theme-toggle.aot-theme-toggle {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: transparent;
+  border: none;
+  color: #555550;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  padding: 0;
+  flex-shrink: 0;
+}
+#aot-theme-toggle.aot-theme-toggle:hover { background: #f2f1ef; color: #1a1a18; }
+#aot-theme-toggle .aot-theme-ico { display: none; }
+#aot-theme-toggle:focus,
+#aot-theme-toggle:focus-visible { outline: none; box-shadow: none; }
+#ao3tracker-panel.aot-dark #aot-theme-toggle { background: transparent; border-color: transparent; color: rgba(131,148,150,0.88); }
+#ao3tracker-panel.aot-dark #aot-theme-toggle:hover { background: rgba(147,161,161,0.1); color: #839496; }
+/* AO3 page theme pill — reset site .actions / button rules so segments are not AO3 “submit” buttons */
+#aot-page-theme-switch .aot-page-theme-seg {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  margin: 0 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  outline: none !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+}
+#aot-page-theme-switch .aot-page-theme-seg:focus,
+#aot-page-theme-switch .aot-page-theme-seg:focus-visible,
+#aot-page-theme-switch .aot-page-theme-seg:active {
+  outline: none !important;
+}
+#login ul.actions #aot-page-theme-switch,
+#header ul.actions li.aot-page-dark-li #aot-page-theme-switch {
+  text-shadow: none !important;
+}
+/* Default AO3 page: force correct pill layout in all modes (AO3 site CSS can override flex on buttons) */
+#header .actions #aot-page-theme-switch,
+#header ul.actions #aot-page-theme-switch,
+#login .actions #aot-page-theme-switch,
+#login ul.actions #aot-page-theme-switch {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+#header .actions #aot-page-theme-switch .aot-page-theme-seg,
+#header ul.actions #aot-page-theme-switch .aot-page-theme-seg,
+#login .actions #aot-page-theme-switch .aot-page-theme-seg,
+#login ul.actions #aot-page-theme-switch .aot-page-theme-seg {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  display: inline-flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  white-space: nowrap !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+}
+
+/* AO3 page theme pill — collapsed: active icon only; hover/focus: sun | sunset | moon + labels */
+.aot-page-theme-switch {
+  position: relative;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: stretch;
+  flex-shrink: 0;
+  height: 22px;
+  max-width: 54px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: rgba(255, 255, 255, 0.92);
+  overflow: hidden;
+  vertical-align: middle;
+  box-sizing: border-box;
+  transition: max-width 0.32s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.aot-page-theme-switch:hover,
+.aot-page-theme-switch:focus-within {
+  max-width: 400px;
+  overflow: visible;
+  z-index: 100;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
+}
+.aot-page-theme-switch:not(:hover):not(:focus-within) {
+  justify-content: center;
+}
+.aot-page-theme-switch--header {
+  margin-left: 10px;
+}
+.aot-page-theme-seg {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+  min-height: 100%;
+  padding: 0 6px 0 4px;
+  margin: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  border-radius: 5px;
+  transition: background 0.12s ease, color 0.12s ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.aot-page-theme-seg:hover,
+.aot-page-theme-seg:focus-visible {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  outline: none;
+}
+.aot-page-theme-seg-ico {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.aot-page-theme-seg-ico svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+.aot-page-theme-seg-label {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  align-self: center;
+  flex: 0 1 auto;
+  transition: max-width 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+}
+.aot-page-theme-switch:hover .aot-page-theme-seg-label,
+.aot-page-theme-switch:focus-within .aot-page-theme-seg-label {
+  max-width: 26px;
+  opacity: 1;
+}
+/* Collapsed-state behavior now lives in injected AO3_PILL_LAYOUT_CSS in content.js.
+   Keeping the old active-segment fallback here caused the stale sun/sunset/moon pill logic
+   to fight the new preview glyph. */
+@media (hover: none), (pointer: coarse) {
+  .aot-page-theme-switch {
+    max-width: 400px !important;
+    overflow: visible !important;
+  }
+  .aot-page-theme-switch .aot-page-theme-seg {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    padding: 0 5px 0 3px !important;
+    width: auto !important;
+    min-width: 0 !important;
+    justify-content: flex-start !important;
+  }
+  .aot-page-theme-switch .aot-page-theme-seg-label {
+    max-width: 26px !important;
+    opacity: 1 !important;
+  }
+}
+/* Dark AO3 page: yellow icon tint + pill chrome */
+[data-ao3-dark="1"] .aot-page-theme-switch {
+  background: rgba(131, 148, 150, 0.15);
+  border-color: rgba(181, 137, 0, 0.4);
+  color: #b58900;
+}
+[data-ao3-dark="1"] .aot-page-theme-switch:hover,
+[data-ao3-dark="1"] .aot-page-theme-switch:focus-within {
+  background: rgba(131, 148, 150, 0.22);
+  border-color: rgba(181, 137, 0, 0.55);
+}
+[data-ao3-dark="1"] .aot-page-theme-seg:hover,
+[data-ao3-dark="1"] .aot-page-theme-seg:focus-visible {
+  background: rgba(131, 148, 150, 0.2);
+  color: #dcb678;
+}
+/* First item in work navigation: sit before Entire Work / Next Chapter / … */
+li.aot-page-dark-li {
+  list-style: none !important;
+  display: inline-block;
+  margin: 0 0.5em 0 0 !important;
+  padding: 0 !important;
+  vertical-align: middle;
+}
+/* Same list pattern beside About in #login ul.actions — match link row; allow hover label to spill out */
+#login ul.actions li.aot-page-dark-li--login {
+  overflow: visible !important;
+  position: relative;
+  z-index: 20;
+}
+#login li.aot-page-dark-li--login {
+  display: inline-block;
+  margin: 0 0.5em 0 1em !important;
+  padding: 0 !important;
+  vertical-align: bottom !important;
+  line-height: 1.15;
+}
+/* #login row: same pill layout / spacing / type as Solarized-light header (all page themes) */
+#login li.aot-page-dark-li--login #aot-page-theme-switch {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: stretch !important;
+  height: 22px !important;
+  max-width: 54px !important;
+  vertical-align: bottom !important;
+  box-sizing: border-box !important;
+  padding: 0 !important;
+  gap: 0 !important;
+  overflow: hidden !important;
+  transition: max-width 0.32s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease, border-color 0.15s ease, background 0.15s ease !important;
+}
+#login li.aot-page-dark-li--login #aot-page-theme-switch:hover,
+#login li.aot-page-dark-li--login #aot-page-theme-switch:focus-within {
+  max-width: 400px !important;
+  overflow: visible !important;
+  z-index: 100 !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
+}
+#login li.aot-page-dark-li--login #aot-page-theme-switch .aot-page-theme-seg {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 5px !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.01em !important;
+  white-space: nowrap !important;
+}
+[data-ao3-dark="1"] #login li.aot-page-dark-li--login #aot-page-theme-switch:hover,
+[data-ao3-dark="1"] #login li.aot-page-dark-li--login #aot-page-theme-switch:focus-within {
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35) !important;
+}
+/* Solarized-light #login: cream pill + ink type (matches injected #header .actions pill) */
+[data-ao3-sol-light="1"] #login li.aot-page-dark-li--login #aot-page-theme-switch {
+  background: rgba(253, 246, 227, 0.85) !important;
+  border: 1px solid rgba(88, 110, 117, 0.28) !important;
+  color: #586e75 !important;
+}
+[data-ao3-sol-light="1"] #login li.aot-page-dark-li--login #aot-page-theme-switch .aot-page-theme-seg,
+[data-ao3-sol-light="1"] #login li.aot-page-dark-li--login #aot-page-theme-switch .aot-page-theme-seg-label {
+  color: #586e75 !important;
+}
+[data-ao3-sol-light="1"] #login li.aot-page-dark-li--login #aot-page-theme-switch .aot-page-theme-seg:hover,
+[data-ao3-sol-light="1"] #login li.aot-page-dark-li--login #aot-page-theme-switch .aot-page-theme-seg:focus-visible {
+  color: #073642 !important;
+}
+/* Default AO3 header (red bar): white-fill pill with dark text for legibility */
+html:not([data-ao3-dark="1"]):not([data-ao3-sol-light="1"]) #login li.aot-page-dark-li--login #aot-page-theme-switch {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  color: #555550 !important;
+}
+html:not([data-ao3-dark="1"]):not([data-ao3-sol-light="1"]) #login li.aot-page-dark-li--login #aot-page-theme-switch .aot-page-theme-seg,
+html:not([data-ao3-dark="1"]):not([data-ao3-sol-light="1"]) #login li.aot-page-dark-li--login #aot-page-theme-switch .aot-page-theme-seg-label {
+  color: #555550 !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+}
+html:not([data-ao3-dark="1"]):not([data-ao3-sol-light="1"]) #login li.aot-page-dark-li--login #aot-page-theme-switch .aot-page-theme-seg:hover,
+html:not([data-ao3-dark="1"]):not([data-ao3-sol-light="1"]) #login li.aot-page-dark-li--login #aot-page-theme-switch .aot-page-theme-seg:focus-visible {
+  background: rgba(0, 0, 0, 0.07) !important;
+  color: #1a1a18 !important;
+}
+li.aot-page-dark-li #aot-page-theme-switch {
+  margin-left: 0;
+  vertical-align: middle;
+}
+/* Work-skin / chapter nav row: light background */
+li.aot-page-dark-li .aot-page-theme-switch {
+  background: rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #3d3d3d;
+  height: 24px;
+  max-width: 54px;
+}
+li.aot-page-dark-li .aot-page-theme-seg:hover,
+li.aot-page-dark-li .aot-page-theme-seg:focus-visible {
+  background: rgba(0, 0, 0, 0.08);
+  color: #111;
+}
+/* Sidebar theme toggle: default AO3 (sunset) → Solarized light (moon) → dark (sun) */
+#ao3tracker-panel:not(.aot-dark):not(.aot-sol-light) #aot-theme-toggle .aot-theme-ico-sunset { display: block; }
+#ao3tracker-panel.aot-sol-light #aot-theme-toggle .aot-theme-ico-moon { display: block; }
+#ao3tracker-panel.aot-dark #aot-theme-toggle .aot-theme-ico-sun { display: block; }
+
+#ao3tracker-panel.aot-dark #aot-list-wrap { background: var(--aot-page); }
+#ao3tracker-panel.aot-dark .aot-card {
+  background: var(--aot-surface);
+  border-top-color: rgba(131,148,150,0.12);
+  border-right-color: rgba(131,148,150,0.12);
+  border-bottom-color: rgba(131,148,150,0.12);
+}
+#ao3tracker-panel.aot-dark .aot-card:hover {
+  border-top-color: rgba(131,148,150,0.18);
+  border-right-color: rgba(131,148,150,0.18);
+  border-bottom-color: rgba(131,148,150,0.18);
+  box-shadow: 0 1px 8px rgba(0,0,0,0.32);
+}
+#ao3tracker-panel.aot-dark .aot-card-title,
+#ao3tracker-panel.aot-dark .aot-card-title a {
+  color: #e3dcc2 !important;
+}
+#ao3tracker-panel.aot-dark .aot-card-front .aot-card-title,
+#ao3tracker-panel.aot-dark .aot-card-front .aot-card-title a {
+  color: #e3dcc2 !important;
+}
+#ao3tracker-panel.aot-dark .aot-card-title a:hover { color: #268bd2 !important; }
+#ao3tracker-panel.aot-dark .aot-card-author,
+#ao3tracker-panel.aot-dark .aot-note-preview,
+#ao3tracker-panel.aot-dark .aot-card-date,
+#ao3tracker-panel.aot-dark .aot-wordcount {
+  color: rgba(147,161,161,0.85) !important;
+}
+
+/* Author line needs higher contrast than other meta in dark mode */
+#ao3tracker-panel.aot-dark .aot-card-author { color: rgba(131,148,150,0.92) !important; }
+/* Prevent visited links from turning unreadable */
+#ao3tracker-panel.aot-dark .aot-card-author .aot-author-link,
+#ao3tracker-panel.aot-dark .aot-card-author .aot-author-link:visited {
+  color: rgba(131,148,150,0.92) !important;
+}
+#ao3tracker-panel.aot-dark .aot-card-author .aot-author-link:hover,
+#ao3tracker-panel.aot-dark .aot-card-author .aot-author-link:active {
+  color: #268bd2 !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-btn {
+  background: var(--aot-control);
+  border-color: rgba(131,148,150,0.14);
+  color: rgba(131,148,150,0.95);
+}
+#ao3tracker-panel.aot-dark .aot-btn:hover { background: var(--aot-hover); color: #839496; }
+/* Card column: Remove keeps red (general .aot-btn dark rules would wash it out) */
+#ao3tracker-panel.aot-dark .aot-card-actions .aot-btn-remove {
+  color: #f87171 !important;
+  background: rgba(248, 113, 113, 0.12) !important;
+  border-color: rgba(248, 113, 113, 0.28) !important;
+}
+#ao3tracker-panel.aot-dark .aot-card-actions .aot-btn-remove:hover {
+  background: rgba(248, 113, 113, 0.2) !important;
+  color: #fecaca !important;
+  border-color: rgba(248, 113, 113, 0.38) !important;
+}
+
+#ao3tracker-panel.aot-dark #aot-export-dropdown {
+  background: var(--aot-panel);
+  border-color: rgba(131,148,150,0.14);
+}
+#ao3tracker-panel.aot-dark .aot-export-opt:hover { background: var(--aot-hover); color: #839496; }
+
+/* ─── Sol-light sidebar panel theme ──────────────────────────────────────── */
+#ao3tracker-panel.aot-sol-light {
+  --aot-page:    #fdf6e3;
+  --aot-panel:   #eee8d5;
+  --aot-surface: #eee8d5;
+  --aot-control: #eee8d5;
+  --aot-hover:   #d3cbb9;
+  background: var(--aot-page);
+  color: #586e75;
+  border-color: rgba(88,110,117,0.2);
+  box-shadow: 0 10px 44px rgba(88,110,117,0.18);
+}
+body.aot-tracker-dock-open #ao3tracker-panel.aot-sol-light {
+  box-shadow: -8px 0 36px rgba(88,110,117,0.22);
+}
+#ao3tracker-panel.aot-sol-light #aot-header,
+#ao3tracker-panel.aot-sol-light #aot-search-bar,
+#ao3tracker-panel.aot-sol-light #aot-tabs-wrap,
+#ao3tracker-panel.aot-sol-light #aot-current-bar {
+  background: var(--aot-panel) !important;
+  border-color: rgba(88,110,117,0.15) !important;
+}
+#ao3tracker-panel.aot-sol-light #aot-title { color: #586e75; }
+#ao3tracker-panel.aot-sol-light #aot-title-formerly { color: rgba(88,110,117,0.55); }
+#ao3tracker-panel.aot-sol-light .aot-pill { background: rgba(88,110,117,0.1); color: #586e75; }
+#ao3tracker-panel.aot-sol-light #aot-close { color: #586e75; }
+#ao3tracker-panel.aot-sol-light #aot-close:hover { background: var(--aot-hover); color: #586e75; }
+#ao3tracker-panel.aot-sol-light #aot-current-label { color: #93a1a1 !important; }
+#ao3tracker-panel.aot-sol-light #aot-current-title { color: #586e75 !important; }
+#ao3tracker-panel.aot-sol-light #aot-current-add-btn {
+  background: rgba(38,139,210,0.1) !important;
+  border-color: rgba(38,139,210,0.25) !important;
+  color: #268bd2 !important;
+}
+#ao3tracker-panel.aot-sol-light #aot-current-add-btn:hover { background: rgba(38,139,210,0.18) !important; color: #2aa198 !important; }
+#ao3tracker-panel.aot-sol-light #aot-current-add-btn.aot-has-status {
+  background: #268bd2 !important; color: #fdf6e3 !important; border-color: #268bd2 !important;
+}
+#ao3tracker-panel.aot-sol-light #aot-current-bar {
+  background: rgba(38,139,210,0.08) !important;
+  border-bottom-color: rgba(38,139,210,0.15) !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-tab { color: #93a1a1; }
+#ao3tracker-panel.aot-sol-light .aot-tab:hover { color: #586e75; }
+#ao3tracker-panel.aot-sol-light .aot-tab.aot-active { color: #268bd2; border-bottom-color: #268bd2; }
+#ao3tracker-panel.aot-sol-light .aot-cnt { background: rgba(88,110,117,0.1); color: #93a1a1; }
+#ao3tracker-panel.aot-sol-light .aot-tabs-arrow-left { background: linear-gradient(to right, var(--aot-panel) 60%, transparent) !important; }
+#ao3tracker-panel.aot-sol-light .aot-tabs-arrow-right { background: linear-gradient(to left, var(--aot-panel) 60%, transparent) !important; }
+#ao3tracker-panel.aot-sol-light #aot-tabs { background: var(--aot-panel) !important; }
+#ao3tracker-panel.aot-sol-light #aot-search { color: #586e75 !important; background: #fdf6e3 !important; border-color: rgba(88,110,117,0.25) !important; }
+#ao3tracker-panel.aot-sol-light #aot-search::placeholder { color: #93a1a1 !important; }
+#ao3tracker-panel.aot-sol-light #aot-search-bar { background: var(--aot-panel) !important; border-bottom-color: rgba(88,110,117,0.12) !important; padding: 8px 12px !important; }
+#ao3tracker-panel.aot-sol-light #aot-list-wrap { background: var(--aot-page); }
+#ao3tracker-panel.aot-sol-light .aot-card {
+  background: var(--aot-surface);
+  border-top-color: rgba(88,110,117,0.12);
+  border-right-color: rgba(88,110,117,0.12);
+  border-bottom-color: rgba(88,110,117,0.12);
+}
+#ao3tracker-panel.aot-sol-light .aot-card:hover { box-shadow: 0 1px 8px rgba(88,110,117,0.15); }
+#ao3tracker-panel.aot-sol-light .aot-card-title,
+#ao3tracker-panel.aot-sol-light .aot-card-title a { color: #586e75 !important; }
+#ao3tracker-panel.aot-sol-light .aot-card-title a:hover { color: #268bd2 !important; }
+#ao3tracker-panel.aot-sol-light .aot-card-author,
+#ao3tracker-panel.aot-sol-light .aot-note-preview,
+#ao3tracker-panel.aot-sol-light .aot-card-date,
+#ao3tracker-panel.aot-sol-light .aot-wordcount { color: #93a1a1 !important; }
+#ao3tracker-panel.aot-sol-light .aot-card-author .aot-author-link,
+#ao3tracker-panel.aot-sol-light .aot-card-author .aot-author-link:visited { color: #93a1a1 !important; }
+#ao3tracker-panel.aot-sol-light .aot-card-author .aot-author-link:hover { color: #268bd2 !important; }
+#ao3tracker-panel.aot-sol-light .aot-btn { background: var(--aot-control); border-color: rgba(88,110,117,0.18); color: #586e75; }
+#ao3tracker-panel.aot-sol-light .aot-btn:hover { background: var(--aot-hover); color: #073642; }
+#ao3tracker-panel.aot-sol-light #aot-export-dropdown { background: var(--aot-panel); border-color: rgba(88,110,117,0.18); }
+#ao3tracker-panel.aot-sol-light .aot-export-opt:hover { background: var(--aot-hover); color: #586e75; }
+#ao3tracker-panel.aot-sol-light #aot-theme-toggle { background: transparent; color: #586e75; }
+#ao3tracker-panel.aot-sol-light #aot-theme-toggle:hover { background: var(--aot-hover); color: #073642; }
+
+/* Sol-light FAB */
+[data-ao3-sol-light="1"] #ao3tracker-fab {
+  background: #eee8d5;
+  border: 1px solid rgba(88,110,117,0.25);
+  box-shadow: 0 4px 20px rgba(88,110,117,0.2);
+}
+[data-ao3-sol-light="1"] #ao3tracker-fab:hover {
+  background: #d3cbb9;
+  border-color: rgba(38,139,210,0.4);
+}
+[data-ao3-sol-light="1"] #ao3tracker-fab.aot-active {
+  background: #d3cbb9;
+  border-color: rgba(38,139,210,0.35);
+}
+
+/* Solarized-light page: warm border on pill in #login */
+#login li.aot-page-dark-li--login #aot-page-theme-switch[data-aot-page-theme="sol-light"] {
+  border-color: rgba(181, 137, 0, 0.45) !important;
+}
+
+/* ─── Header ──────────────────────────────────────────────────────────────── */
+#aot-header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px;
+  padding: 13px 14px 13px; border-bottom: 1px solid rgba(0,0,0,0.09);
+  background: #fff; flex-shrink: 0;
+  min-width: 0;
+}
+#aot-logo { display: flex; align-items: center; gap: 8px; flex: 1 1 auto; min-width: 0; }
+#aot-logo-icon { display: none; }
+#aot-logo-text { display: flex; flex-direction: column; min-width: 0; }
+#aot-title-formerly {
+  font-size: 9.5px;
+  font-weight: 400;
+  color: rgba(0,0,0,0.4);
+  letter-spacing: 0;
+  line-height: 1.2;
+  white-space: nowrap;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  margin-top: 1px;
+}
+#aot-title {
+  display: inline-block;
+  min-width: 0;
+  white-space: nowrap;
+  font-family: 'Arial Narrow', Arial, sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.01em !important;
+  line-height: 1.2;
+  transform: scale(1.12, 1.26) !important;
+  transform-origin: 0 60% !important;
+}
+.aot-title-kicker {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--aot-text2, #6b6b6b);
+  white-space: nowrap;
+  padding-top: 2px;
+}
+#aot-header-right { display: flex; align-items: center; gap: 2px; flex: 0 0 auto; min-width: 0; }
+.aot-pill {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 76px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: #f2f1ef; color: #99998f; font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 20px;
+}
+#aot-close {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #555550;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.12s;
+  flex-shrink: 0;
+}
+#aot-close:hover { background: #f2f1ef; color: #1a1a18; }
+
+#aot-fullscreen-btn {
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #99998f;
+  cursor: pointer;
+  transition: all 0.12s;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  line-height: 1;
+}
+#aot-fullscreen-btn:hover,
+#aot-fullscreen-btn:focus-visible {
+  background: rgba(37, 99, 235, 0.08);
+  color: #2563eb;
+}
+
+.aot-window-icon {
+  width: 15px;
+  height: 15px;
+  display: block;
+  object-fit: contain;
+  opacity: 0.78;
+  filter:
+    drop-shadow(0 0 0 currentColor)
+    drop-shadow(0.2px 0 0 currentColor)
+    drop-shadow(-0.2px 0 0 currentColor);
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+#aot-fullscreen-btn:hover .aot-window-icon,
+#aot-fullscreen-btn:focus-visible .aot-window-icon {
+  opacity: 1;
+}
+
+
+/* ─── Tabs ────────────────────────────────────────────────────────────────── */
+#aot-tabs-wrap {
+  position: relative;
+  border-bottom: 1px solid rgba(0,0,0,0.09);
+  background: #fff;
+  flex-shrink: 0;
+  min-height: 35px;
+}
+.aot-tabs-arrow {
+  position: absolute; top: 50%; bottom: auto; width: 24px; height: calc(100% - 1px); z-index: 2;
+  border: none; background: none; cursor: pointer;
+  color: #555550; font-size: 16px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s; padding: 0; transform: translateY(-50%);
+}
+.aot-tabs-arrow:hover { color: #2563eb; }
+.aot-tabs-arrow-left {
+  left: 0;
+  background: linear-gradient(to right, #fff 60%, transparent);
+  opacity: 0; pointer-events: none;
+}
+.aot-tabs-arrow-right {
+  right: 0;
+  background: linear-gradient(to left, #fff 60%, transparent);
+}
+#aot-tabs-wrap.can-scroll-left .aot-tabs-arrow-left { opacity: 1; pointer-events: all; }
+#aot-tabs-wrap.can-scroll-right .aot-tabs-arrow-right { opacity: 1; pointer-events: all; }
+#aot-tabs-wrap:not(.can-scroll-right) .aot-tabs-arrow-right { opacity: 0; pointer-events: none; }
+#aot-tabs {
+  display: flex; align-items: stretch; overflow-x: auto; background: #fff;
+  padding: 0 24px; scrollbar-width: none;
+  min-height: 35px;
+}
+#aot-tabs::-webkit-scrollbar { display: none; }
+.aot-tab {
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center; gap: 3px;
+  padding: 0 10px; min-height: 35px; border: none; background: none; color: #99998f;
+  font-size: 11px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent;
+  transition: all 0.15s; position: relative; top: 0; white-space: nowrap;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.2;
+  align-self: stretch;
+}
+.aot-tab:hover { color: #555550; }
+.aot-tab:focus,
+.aot-tab:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.aot-tab.aot-active { color: #2563eb; border-bottom-color: #2563eb; }
+.aot-cnt {
+  background: #f2f1ef; color: #99998f; font-size: 10px; font-weight: 600;
+  padding: 1px 4px; border-radius: 8px; min-width: 14px; text-align: center;
+  position: relative; left: 1px; top: 0.5px;
+}
+.aot-tab.aot-active .aot-cnt { background: #eff4ff; color: #1d4ed8; }
+
+/* ─── Search (match popup .filter-row + .search-wrap) ─────────────────────── */
+#aot-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #f8f8f7;
+  border-bottom: 1px solid rgba(0,0,0,0.09);
+  flex-shrink: 0;
+}
+#aot-search-bar .aot-srch-ico { display: inline-flex; align-items: center; justify-content: center; }
+#aot-sort-indicator {
+  padding: 0 12px 8px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #99998f;
+  background: transparent;
+}
+#aot-sort-indicator.aot-hidden { display: none; }
+#ao3tracker-panel.aot-dark #aot-sort-indicator { color: rgba(147,161,161,0.78); }
+#ao3tracker-panel.aot-sol-light #aot-sort-indicator { color: #93a1a1; }
+#aot-search {
+  flex: 1;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 7px;
+  outline: none;
+  color: #1a1a18;
+  font-size: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  padding: 5px 9px;
+  box-shadow: none;
+}
+#aot-search:focus,
+#aot-search:focus-visible {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37,99,235,0.2);
+}
+#aot-search::placeholder { color: #99998f; }
+/* Dark sidebar: filter strip + inner field (popup .filter-row + .search-wrap) */
+#ao3tracker-panel.aot-dark #aot-search-bar {
+  background: var(--aot-panel) !important;
+}
+#ao3tracker-panel.aot-dark #aot-search {
+  background: var(--aot-control) !important;
+  border: 1px solid rgba(131,148,150,0.14) !important;
+  border-radius: 7px !important;
+  padding: 5px 9px !important;
+  box-shadow: none !important;
+}
+#ao3tracker-panel.aot-dark #aot-search:focus,
+#ao3tracker-panel.aot-dark #aot-search:focus-visible {
+  border-color: rgba(38,139,210,0.38) !important;
+  box-shadow: 0 0 0 2px rgba(38,139,210,0.18) !important;
+}
+
+/* ─── List ────────────────────────────────────────────────────────────────── */
+#aot-list-wrap { flex: 1; overflow-y: auto; padding: 8px 10px; }
+#aot-list-wrap { scrollbar-width: thin; scrollbar-color: #c5c4bc #ffffff; }
+#aot-list-wrap::-webkit-scrollbar { width: 5px; }
+#aot-list-wrap::-webkit-scrollbar-thumb { background: #c5c4bc; border-radius: 3px; }
+#aot-list-wrap::-webkit-scrollbar-thumb:hover { background: #a9a89f; }
+#ao3tracker-panel.aot-dark #aot-list-wrap { scrollbar-color: #586e75 #073642; }
+#ao3tracker-panel.aot-dark #aot-list-wrap::-webkit-scrollbar-thumb {
+  background: var(--aot-hover);
+  border-radius: 3px;
+}
+#ao3tracker-panel.aot-sol-light #aot-list-wrap { scrollbar-color: #93a1a1 #fdf6e3; }
+#ao3tracker-panel.aot-sol-light #aot-list-wrap::-webkit-scrollbar-thumb { background: #93a1a1; border-radius: 3px; }
+#ao3tracker-panel.aot-sol-light #aot-list-wrap::-webkit-scrollbar-thumb:hover { background: #657b83; }
+
+.aot-empty { color: #99998f; font-size: 13px; text-align: center; padding: 30px 16px; line-height: 1.6; }
+
+/* ─── Sidebar Onboarding Banner ───────────────────────────────────────────── */
+.aot-sidebar-onboarding {
+  margin: 10px 12px 4px;
+  padding: 14px 16px;
+  border: 1px solid rgba(139,92,246,0.25);
+  border-radius: 12px;
+  background: rgba(139,92,246,0.05);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.aot-onboarding-head {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 6px;
+  margin-bottom: 6px;
+}
+.aot-onboarding-title {
+  font-size: 12px; font-weight: 700; flex: 1 1 auto;
+}
+.aot-onboarding-intro {
+  font-size: 11.5px; opacity: 0.75; margin-bottom: 8px; line-height: 1.4;
+}
+.aot-onboarding-dismiss {
+  flex-shrink: 0; background: none; border: none; cursor: pointer;
+  font-size: 13px; line-height: 1; padding: 1px 3px; border-radius: 3px;
+  opacity: 0.45; color: inherit;
+}
+.aot-onboarding-dismiss:hover { opacity: 0.85; background: rgba(0,0,0,0.08); }
+.aot-onboarding-list {
+  margin: 0; padding: 0 0 0 16px;
+  display: flex; flex-direction: column; gap: 7px;
+}
+.aot-onboarding-list li { font-size: 12px; line-height: 1.5; }
+.aot-onboarding-list strong { font-weight: 600; }
+#ao3tracker-panel.aot-dark .aot-sidebar-onboarding {
+  border-color: rgba(167,139,250,0.2);
+  background: rgba(139,92,246,0.08);
+}
+#ao3tracker-panel.aot-sol-light .aot-sidebar-onboarding {
+  border-color: rgba(108,113,196,0.22);
+  background: rgba(108,113,196,0.06);
+}
+
+#aot-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; }
+
+/* ─── Cards ───────────────────────────────────────────────────────────────── */
+.aot-card {
+  background: #fff; border: 1px solid rgba(0,0,0,0.09); border-radius: 10px;
+  padding: 10px 11px; display: grid; grid-template-columns: 1fr auto;
+  gap: 4px 8px; align-items: start; transition: border-color 0.15s, box-shadow 0.15s;
+}
+.aot-card:hover {
+  border-top-color: rgba(0,0,0,0.15);
+  border-right-color: rgba(0,0,0,0.15);
+  border-bottom-color: rgba(0,0,0,0.15);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.aot-card[data-status="want"]      { border-left: 3px solid #7c3aed; }
+.aot-card[data-status="progress"]  { border-left: 3px solid #0891b2; }
+.aot-card[data-status="completed"] { border-left: 3px solid #059669; }
+.aot-card[data-status="rereading"] { border-left: 3px solid #d97706; }
+
+.aot-card-meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+/* Match popup .work-title / .work-author */
+.aot-card-title { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.aot-card-title a,
+.aot-card-title a:link,
+.aot-card-title a:visited,
+.aot-card-title a:active {
+  color: inherit;
+  text-decoration: none !important;
+  border-bottom: none !important;
+}
+.aot-card-title a:hover,
+.aot-card-title a:focus-visible {
+  color: #2563eb;
+  text-decoration: none !important;
+}
+.aot-card-author { font-size: 12px; color: #99998f; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.aot-card-stars { font-size: 11px; color: #f59e0b; letter-spacing: 1px; }
+.aot-card-tags { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 2px; }
+.aot-tag { font-size: 10px; font-weight: 500; padding: 1px 5px; border-radius: 4px; color: #51637b; background: #f3f6fb; border: 1px solid rgba(125,146,173,0.18); white-space: nowrap; }
+.aot-note-preview { font-size: 10px; color: #99998f; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 190px; }
+.aot-card-date {
+  grid-column: 1 / -1;
+  font-size: 10px; color: #99998f;
+  margin: 0;
+  padding-top: 6px;
+  text-align: left;
+  line-height: 1.35;
+}
+
+.aot-card-actions {
+  display: flex; flex-direction: column; gap: 3px; align-items: flex-end;
+}
+
+.aot-btn {
+  background: #f8f8f7; border: 1px solid rgba(0,0,0,0.09); color: #555550;
+  font-size: 10px; font-weight: 500; padding: 3px 7px; border-radius: 5px;
+  cursor: pointer; white-space: nowrap; transition: all 0.12s; line-height: 1.5;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.aot-btn:hover { background: #f2f1ef; color: #1a1a18; }
+.aot-btn-notes    { color: #99998f; }
+.aot-btn-progress  { color: #0e7490; background: #ecfeff; border-color: rgba(8,145,178,0.2); }
+.aot-btn-completed { color: #047857; background: #ecfdf5; border-color: rgba(5,150,105,0.2); }
+.aot-btn-rereading { color: #b45309; background: #fffbeb; border-color: rgba(217,119,6,0.2); }
+.aot-btn-remove    { color: #dc2626; background: #fef2f2; border-color: rgba(220,38,38,0.15); }
+
+/* Light panel: card column — ghost pills like dark panel (transparent + label); Remove stays tinted; Labels keeps rainbow */
+#ao3tracker-panel:not(.aot-dark):not(.aot-sol-light) .aot-card-actions .aot-btn:not(.aot-btn-remove):not(.aot-btn-labels) {
+  background: transparent !important;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  color: #555550;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+}
+#ao3tracker-panel:not(.aot-dark):not(.aot-sol-light) .aot-card-actions .aot-btn:not(.aot-btn-remove):not(.aot-btn-labels):hover {
+  background: rgba(0, 0, 0, 0.045) !important;
+  color: #1a1a18;
+  border-color: rgba(0, 0, 0, 0.16);
+}
+#ao3tracker-panel .aot-card-back-actions .aot-btn-progress:hover {
+  color: #0e7490 !important;
+  background: #ecfeff !important;
+  border-color: rgba(8,145,178,0.2) !important;
+}
+#ao3tracker-panel .aot-card-back-actions .aot-btn-completed:hover {
+  color: #047857 !important;
+  background: #ecfdf5 !important;
+  border-color: rgba(5,150,105,0.2) !important;
+}
+#ao3tracker-panel .aot-card-back-actions .aot-btn-rereading:hover {
+  color: #b45309 !important;
+  background: #fffbeb !important;
+  border-color: rgba(217,119,6,0.2) !important;
+}
+#ao3tracker-panel .aot-card-back-actions .aot-btn-onhold:hover {
+  color: #0369a1 !important;
+  background: #f0f9ff !important;
+  border-color: rgba(14,165,233,0.2) !important;
+}
+#ao3tracker-panel .aot-card-back-actions .aot-btn-dnf:hover {
+  color: #4b5563 !important;
+  background: #f9fafb !important;
+  border-color: rgba(107,114,128,0.2) !important;
+}
+
+/* "Custom category" on cards — match popup .pop-labels-btn (rainbow text, solid border, no grey fill) */
+.aot-btn.aot-btn-labels {
+  background: transparent !important;
+  background-image: linear-gradient(90deg, #7c3aed, #db2777, #dc2626, #d97706, #16a34a, #0891b2, #2563eb) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  border: 1px solid rgba(124, 58, 237, 0.25) !important;
+  font-weight: 600;
+}
+.aot-btn.aot-btn-labels:hover {
+  opacity: 0.88;
+  background: transparent !important;
+  background-image: linear-gradient(90deg, #7c3aed, #db2777, #dc2626, #d97706, #16a34a, #0891b2, #2563eb) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+
+/* ─── Notes Modal ─────────────────────────────────────────────────────────── */
+#aot-notes-overlay {
+  position: absolute; inset: 0; background: rgba(0,0,0,0.3);
+  display: flex; align-items: center; justify-content: center; z-index: 100; padding: 16px;
+}
+#aot-notes-overlay.aot-hidden { display: none; }
+
+#aot-notes-modal {
+  background: #fff; border: 1px solid rgba(0,0,0,0.12); border-radius: 12px;
+  width: 100%; max-width: 100%;
+  max-height: min(520px, calc(100% - 8px));
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  /* overflow:hidden clipped textarea + resize grip against rounded corners */
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+#aot-notes-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px; border-bottom: 1px solid rgba(0,0,0,0.09);
+  flex-shrink: 0;
+}
+#aot-notes-title { font-size: 13px; font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#aot-notes-close {
+  background: none; border: none; color: #99998f; font-size: 13px;
+  cursor: pointer; padding: 2px 5px; border-radius: 4px;
+}
+#aot-notes-close:hover { background: #f2f1ef; color: #1a1a18; }
+
+#aot-notes-body {
+  padding: 13px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+#aot-rating-row { display: flex; align-items: center; gap: 10px; }
+.aot-field-label { font-size: 12px; font-weight: 600; color: #555550; min-width: 44px; }
+#aot-stars { display: flex; gap: 2px; }
+.aot-star {
+  background: none; border: none; cursor: pointer; padding: 0 1px; line-height: 1; transition: transform 0.1s;
+}
+.aot-star .ico { width: 20px; height: 20px; color: #d1d5db; transition: color 0.1s; }
+.aot-star:hover .ico, .aot-star.aot-star-on .ico { color: #f59e0b; }
+.aot-star:hover { transform: scale(1.1); }
+#aot-clear-rating {
+  background: none; border: none; font-size: 11px; color: #99998f;
+  cursor: pointer; padding: 2px 6px; border-radius: 4px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+#aot-clear-rating:hover { color: #dc2626; background: #fef2f2; }
+
+#aot-notes-field { display: flex; flex-direction: column; gap: 5px; }
+#aot-notes-text {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(0,0,0,0.15); border-radius: 7px;
+  padding: 8px 10px; font-size: 13px; color: #1a1a18; background: #f8f8f7;
+  resize: vertical; outline: none; line-height: 1.55; min-height: 88px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: border-color 0.15s;
+}
+#aot-notes-text:focus { border-color: #2563eb; background: #fff; }
+#aot-notes-text::placeholder { color: #99998f; }
+
+#aot-notes-footer {
+  display: flex; gap: 8px; justify-content: flex-end; align-items: center;
+  padding: 10px 14px 13px; border-top: 1px solid rgba(0,0,0,0.09);
+  flex-shrink: 0;
+}
+#aot-notes-save {
+  background: #2563eb; color: #fff; border: none; font-size: 13px; font-weight: 600;
+  padding: 7px 16px; border-radius: 6px; cursor: pointer; transition: opacity 0.12s;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  line-height: 1.2;
+  white-space: nowrap;
+  appearance: none;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+#aot-notes-save:hover { opacity: 0.88; }
+#aot-notes-cancel {
+  background: #f8f8f7; color: #555550; border: 1px solid rgba(0,0,0,0.15);
+  font-size: 13px; font-weight: 500; padding: 7px 13px; border-radius: 6px;
+  cursor: pointer; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  line-height: 1.2;
+  white-space: nowrap;
+  appearance: none;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+#aot-notes-cancel:hover { background: #f2f1ef; }
+
+/* Notes modal — dark tracker panel (matches extension popup + panel Solarized theme) */
+#ao3tracker-panel.aot-dark #aot-notes-overlay {
+  background: rgba(0, 0, 0, 0.55);
+}
+#ao3tracker-panel.aot-dark #aot-notes-modal {
+  background: var(--aot-panel);
+  border: 1px solid rgba(131, 148, 150, 0.22);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.55);
+}
+#ao3tracker-panel.aot-dark #aot-notes-header {
+  border-bottom-color: rgba(131, 148, 150, 0.14);
+}
+#ao3tracker-panel.aot-dark #aot-notes-title {
+  color: #839496;
+}
+#ao3tracker-panel.aot-dark #aot-notes-close {
+  color: rgba(147, 161, 161, 0.88);
+}
+#ao3tracker-panel.aot-dark #aot-notes-close:hover {
+  background: var(--aot-hover);
+  color: #93a1a1;
+}
+#ao3tracker-panel.aot-dark .aot-field-label {
+  color: rgba(147, 161, 161, 0.92);
+}
+#ao3tracker-panel.aot-dark .aot-star .ico {
+  color: #586e75;
+}
+#ao3tracker-panel.aot-dark .aot-star:hover .ico,
+#ao3tracker-panel.aot-dark .aot-star.aot-star-on .ico {
+  color: #f59e0b;
+}
+#ao3tracker-panel.aot-dark #aot-clear-rating {
+  color: rgba(147, 161, 161, 0.85);
+}
+#ao3tracker-panel.aot-dark #aot-clear-rating:hover {
+  color: #f87171;
+  background: rgba(248, 113, 113, 0.12);
+}
+#ao3tracker-panel.aot-dark #aot-notes-text {
+  background: #073642 !important;
+  border-color: rgba(131, 148, 150, 0.22) !important;
+  color: #839496 !important;
+}
+#ao3tracker-panel.aot-dark #aot-notes-text:focus {
+  border-color: #268bd2 !important;
+  background: #073642 !important;
+  box-shadow: 0 0 0 2px rgba(38, 139, 210, 0.28) !important;
+  outline: none !important;
+}
+#ao3tracker-panel.aot-dark #aot-notes-text::placeholder {
+  color: rgba(147, 161, 161, 0.55);
+}
+#ao3tracker-panel.aot-dark #aot-notes-footer {
+  border-top-color: rgba(131, 148, 150, 0.14);
+}
+#ao3tracker-panel.aot-dark #aot-notes-save {
+  background: #268bd2;
+  color: #fff;
+}
+#ao3tracker-panel.aot-dark #aot-notes-save:hover {
+  filter: brightness(1.06);
+  opacity: 1;
+}
+#ao3tracker-panel.aot-dark #aot-notes-cancel {
+  background: var(--aot-control);
+  color: #839496;
+  border-color: rgba(131, 148, 150, 0.22);
+}
+#ao3tracker-panel.aot-dark #aot-notes-cancel:hover {
+  background: var(--aot-hover);
+  color: #93a1a1;
+}
+
+/* Notes modal — sol-light sidebar panel */
+#ao3tracker-panel.aot-sol-light #aot-notes-overlay {
+  background: rgba(0, 0, 0, 0.28);
+}
+#ao3tracker-panel.aot-sol-light #aot-notes-modal {
+  background: #fdf6e3;
+  border: 1px solid rgba(88, 110, 117, 0.22);
+  box-shadow: 0 12px 48px rgba(88, 110, 117, 0.25);
+}
+#ao3tracker-panel.aot-sol-light #aot-notes-header {
+  border-bottom-color: rgba(88, 110, 117, 0.14);
+}
+#ao3tracker-panel.aot-sol-light #aot-notes-title {
+  color: #586e75;
+}
+#ao3tracker-panel.aot-sol-light #aot-notes-close {
+  color: #93a1a1;
+}
+#ao3tracker-panel.aot-sol-light #aot-notes-close:hover {
+  background: #eee8d5;
+  color: #586e75;
+}
+#ao3tracker-panel.aot-sol-light .aot-field-label {
+  color: #657b83;
+}
+#ao3tracker-panel.aot-sol-light .aot-star .ico {
+  color: #d3cbb9;
+}
+#ao3tracker-panel.aot-sol-light .aot-star:hover .ico,
+#ao3tracker-panel.aot-sol-light .aot-star.aot-star-on .ico {
+  color: #b58900;
+}
+#ao3tracker-panel.aot-sol-light #aot-clear-rating {
+  color: #93a1a1;
+}
+#ao3tracker-panel.aot-sol-light #aot-clear-rating:hover {
+  color: #dc322f;
+  background: rgba(220, 50, 47, 0.08);
+}
+#ao3tracker-panel.aot-sol-light #aot-notes-text {
+  background: #eee8d5 !important;
+  border-color: rgba(88, 110, 117, 0.22) !important;
+  color: #586e75 !important;
+}
+#ao3tracker-panel.aot-sol-light #aot-notes-text:focus {
+  border-color: #268bd2 !important;
+  background: #fdf6e3 !important;
+  box-shadow: 0 0 0 2px rgba(38, 139, 210, 0.18) !important;
+  outline: none !important;
+}
+#ao3tracker-panel.aot-sol-light #aot-notes-text::placeholder {
+  color: #93a1a1;
+}
+#ao3tracker-panel.aot-sol-light #aot-notes-footer {
+  border-top-color: rgba(88, 110, 117, 0.14);
+}
+#ao3tracker-panel.aot-sol-light #aot-notes-save {
+  background: #268bd2;
+  color: #fff;
+}
+#ao3tracker-panel.aot-sol-light #aot-notes-save:hover {
+  filter: brightness(1.06);
+  opacity: 1;
+}
+#ao3tracker-panel.aot-sol-light #aot-notes-cancel {
+  background: #eee8d5;
+  color: #586e75;
+  border-color: rgba(88, 110, 117, 0.22);
+}
+#ao3tracker-panel.aot-sol-light #aot-notes-cancel:hover {
+  background: #d3cbb9;
+  color: #073642;
+}
+
+/* ─── Export Reminder Banner ──────────────────────────────────────────────── */
+#aot-export-reminder.aot-hidden {
+  display: none !important;
+}
+#aot-export-reminder {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 12px;
+  background: #fefce8; border-bottom: 1px solid #fbbf24;
+  font-size: 11px; color: #92400e;
+  flex-shrink: 0;
+}
+#aot-reminder-msg {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.35;
+  color: #78350f !important;
+}
+#aot-reminder-export {
+  background: #f59e0b; border: none; border-radius: 999px;
+  color: #fff; font-size: 11px; font-weight: 600;
+  padding: 0 10px; min-height: 24px; min-width: 78px;
+  cursor: pointer; white-space: nowrap;
+  display: inline-flex; align-items: center; justify-content: center;
+  line-height: 1;
+  flex: 0 0 auto;
+}
+#aot-reminder-export:hover { background: #d97706; }
+#aot-reminder-dismiss {
+  background: none; border: none; color: #92400e;
+  font-size: 13px; cursor: pointer; padding: 0 2px; line-height: 1;
+  opacity: 0.6;
+}
+#aot-reminder-dismiss:hover { opacity: 1; }
+#ao3tracker-panel.aot-dark #aot-export-reminder {
+  background: rgba(251,191,36,0.1); border-bottom-color: rgba(251,191,36,0.3);
+  color: #fcd34d;
+}
+#ao3tracker-panel.aot-dark #aot-reminder-msg {
+  color: #fef3c7 !important;
+}
+#ao3tracker-panel.aot-dark #aot-reminder-dismiss { color: #fcd34d; }
+
+/* ─── MFL Pending Banner (sidebar) ──────────────────────────────────────── */
+#aot-mfl-banner.aot-hidden { display: none !important; }
+#aot-mfl-banner {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 12px;
+  background: rgba(42,161,152,0.1); border-bottom: 1px solid rgba(42,161,152,0.35);
+  font-size: 11px; color: #0d5c58;
+  flex-shrink: 0;
+}
+#aot-mfl-banner-msg { flex: 1 1 0; line-height: 1.4; }
+#aot-mfl-banner-dismiss {
+  background: none; border: none; color: rgba(42,161,152,0.6);
+  font-size: 13px; cursor: pointer; padding: 0 2px; line-height: 1;
+  opacity: 0.7;
+}
+#aot-mfl-banner-dismiss:hover { opacity: 1; }
+#ao3tracker-panel.aot-dark #aot-mfl-banner {
+  background: rgba(42,161,152,0.12); border-bottom-color: rgba(42,161,152,0.3);
+  color: #5fdbcf;
+}
+#ao3tracker-panel.aot-dark #aot-mfl-banner-msg { color: #b2f0ec !important; }
+#ao3tracker-panel.aot-dark #aot-mfl-banner-dismiss { color: #5fdbcf; }
+#ao3tracker-panel.aot-sol-light #aot-mfl-banner {
+  background: rgba(42,161,152,0.08); border-bottom-color: rgba(42,161,152,0.3);
+  color: #2aa198;
+}
+
+/* ─── Current Work Bar (sidebar) ──────────────────────────────────────────── */
+#aot-current-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; padding: 10px 14px;
+  background: #eff4ff; border-bottom: 1px solid rgba(37,99,235,0.12);
+  flex-shrink: 0;
+}
+#aot-current-info { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+#aot-current-label {
+  font-size: 10px; font-weight: 600; color: #1d4ed8;
+  text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px;
+}
+#aot-current-title {
+  font-size: 13px; font-weight: 500; color: #1a1a18;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;
+  transition: color 0.12s;
+}
+#aot-current-title:hover { color: #2563eb; text-decoration: underline; }
+#aot-current-add-wrap { position: relative; flex-shrink: 0; }
+#aot-current-add-btn {
+  display: flex; align-items: center; gap: 5px;
+  background: #fff; border: 1px solid rgba(37,99,235,0.3); color: #2563eb;
+  font-size: 12px; font-weight: 600; padding: 6px 11px; border-radius: 7px;
+  cursor: pointer; white-space: nowrap; transition: all 0.12s;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.2;
+  min-height: 30px;
+  appearance: none;
+}
+#aot-current-add-btn:hover { background: #eff6ff; border-color: #2563eb; color: #2563eb; }
+#aot-current-add-label {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+.aot-current-add-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  line-height: 1;
+  opacity: 0.7;
+  position: relative;
+  top: -0.5px;
+}
+/* Match popup .current-add-btn.has-status — solid accent when work is on a list */
+#aot-current-add-btn.aot-has-status {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+#aot-current-add-btn.aot-has-status:hover {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+  filter: brightness(1.06);
+}
+#aot-current-dropdown {
+  position: absolute; top: calc(100% + 5px); right: 0;
+  background: #fff; border: 1px solid rgba(0,0,0,0.12); border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12); overflow: hidden;
+  z-index: 100; min-width: 160px; display: flex; flex-direction: column;
+  padding: 0;
+  min-width: 170px;
+  border-radius: 9px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+}
+#aot-current-dropdown.aot-hidden { display: none; }
+.aot-cur-opt {
+  background: none; border: none; text-align: left; padding: 9px 13px;
+  font-size: 13px; font-weight: 500; color: #555550; cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  transition: background 0.1s;
+  line-height: 1.2;
+  min-height: 32px;
+  appearance: none;
+}
+.aot-cur-opt {
+  padding: 9px 14px;
+}
+.aot-cur-opt:hover:not(.aot-cur-opt-active) { background: #f8f8f7; color: #1a1a18; }
+.aot-cur-divider {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.08);
+  margin: 2px 0;
+}
+.aot-cur-opt-remove {
+  color: #dc2626 !important;
+}
+.aot-cur-opt-remove:hover {
+  background: #fef2f2 !important;
+  color: #b91c1c !important;
+}
+
+/* ── Lost ─────────────────────────────────────────────────────────────────── */
+.aot-card[data-status="lost"] { border-left: 3px solid #e11d48; opacity: 0.82; }
+.aot-btn-restore { color: #be123c; background: #fff1f2; border-color: rgba(225,29,72,0.2); }
+.aot-lost-notice { font-size: 10px; color: #be123c; margin-top: 2px; font-weight: 500; }
+.ao3tracker-status-badge[data-status="lost"] { color: #be123c; border-color: rgba(225,29,72,0.25); background: #fff1f2; }
+.aot-cnt-lost { background: #f2f1ef; color: #99998f; }
+.aot-tab[data-tab="lost"].aot-active { color: #e11d48; border-bottom-color: #e11d48; }
+
+/* ── DNF ──────────────────────────────────────────────────────────────────── */
+.aot-card[data-status="dnf"] { border-left: 3px solid #6b7280; }
+.aot-btn-dnf { color: #4b5563; background: #f9fafb; border-color: rgba(107,114,128,0.2); }
+.ao3tracker-status-badge[data-status="dnf"] { color: #4b5563; border-color: rgba(107,114,128,0.25); background: #f9fafb; }
+
+/* ── On Hold ──────────────────────────────────────────────────────────────── */
+.aot-card[data-status="onhold"] { border-left: 3px solid #0ea5e9; }
+.aot-btn-onhold { color: #0369a1; background: #f0f9ff; border-color: rgba(14,165,233,0.2); }
+.ao3tracker-status-badge[data-status="onhold"] { color: #0369a1; border-color: rgba(14,165,233,0.25); background: #f0f9ff; }
+
+/* ── Sidebar search status badges ─────────────────────────────────────────── */
+.aot-status-badge {
+  display: inline-block; font-size: 10px; font-weight: 600;
+  padding: 2px 7px; border-radius: 20px; margin: 2px 0 3px;
+}
+.aot-status-want      { color: #5b21b6; background: #f5f3ff; border: 1px solid rgba(124,58,237,0.2); }
+.aot-status-progress  { color: #0e7490; background: #ecfeff; border: 1px solid rgba(8,145,178,0.2); }
+.aot-status-completed { color: #047857; background: #ecfdf5; border: 1px solid rgba(5,150,105,0.2); }
+.aot-status-rereading { color: #b45309; background: #fffbeb; border: 1px solid rgba(217,119,6,0.2); }
+.aot-status-onhold    { color: #0369a1; background: #f0f9ff; border: 1px solid rgba(14,165,233,0.2); }
+.aot-status-dnf       { color: #4b5563; background: #f9fafb; border: 1px solid rgba(107,114,128,0.2); }
+
+/* ── Custom category options in current bar dropdown ──────────────── */
+.aot-cur-custom-divider { height: 1px; background: rgba(0,0,0,0.08); margin: 3px 0; }
+.aot-cur-opt-cat { display: flex; align-items: center; justify-content: flex-start; text-align: left; gap: 9px; }
+.aot-cur-cat-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; pointer-events: none; }
+.aot-cur-cat-label { display: inline-block; min-width: 0; pointer-events: none; }
+
+/* ── Already-tracked indicator in sidebar current bar dropdown (match popup .current-add-option-active) ─ */
+.aot-cur-opt-active {
+  color: #047857;
+  background: #ecfdf5;
+  font-weight: 600;
+  pointer-events: none;
+  opacity: 0.85;
+}
+.aot-cur-opt-active::after { content: none !important; }
+
+/* Dark mode: make the current dropdown match popup styling */
+#ao3tracker-panel.aot-dark #aot-current-dropdown {
+  background: var(--aot-panel);
+  border-color: rgba(131,148,150,0.14);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+}
+#ao3tracker-panel.aot-dark .aot-cur-opt { color: rgba(131,148,150,0.88); }
+#ao3tracker-panel.aot-dark .aot-cur-opt:hover:not(.aot-cur-opt-active) { background: var(--aot-hover); color: #839496; }
+#ao3tracker-panel.aot-dark .aot-cur-divider,
+#ao3tracker-panel.aot-dark .aot-cur-custom-divider { background: rgba(131,148,150,0.12); }
+#ao3tracker-panel.aot-dark .aot-cur-opt-remove { color: #f87171 !important; }
+#ao3tracker-panel.aot-dark .aot-cur-opt-remove:hover { background: rgba(248,113,113,0.12) !important; color: #fecaca !important; }
+#ao3tracker-panel.aot-dark .aot-cur-opt-active {
+  color: #047857;
+  background: #ecfdf5;
+  font-weight: 600;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+/* ── Sidebar export button & dropdown ────────────────────────────────────── */
+#aot-export-btn {
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  color: #555550;
+  width: 28px; height: 28px; border-radius: 7px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.12s; flex-shrink: 0;
+}
+#aot-export-btn:hover { background: rgba(37, 99, 235, 0.08); color: #2563eb; }
+#aot-export-btn:focus-visible { background: rgba(37, 99, 235, 0.1); color: #2563eb; box-shadow: 0 0 0 2px rgba(37,99,235,0.35); }
+
+#aot-header-right { position: relative; }
+
+#aot-export-dropdown {
+  position: absolute; top: calc(100% + 6px); right: 88px;
+  background: #fff; border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 9px; box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+  overflow: hidden; z-index: 300; min-width: 165px;
+  display: flex; flex-direction: column;
+}
+#aot-export-dropdown.aot-hidden { display: none; }
+
+.aot-export-section {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.07em; color: #99998f; padding: 8px 13px 3px;
+}
+.aot-export-divider { height: 1px; background: rgba(0,0,0,0.08); margin: 3px 0; }
+
+.aot-export-opt {
+  background: none; border: none; text-align: left;
+  padding: 8px 13px; font-size: 13px; font-weight: 500;
+  color: #555550; cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: background 0.1s;
+}
+.aot-export-opt:hover { background: #f8f8f7; color: #1a1a18; }
+
+/* ── SVG icon sizing (sidebar) ────────────────────────────────────────────── */
+.ico { width: 14px; height: 14px; display: inline-block; vertical-align: middle; flex-shrink: 0; }
+.aot-tab-ico { display: inline-flex; align-items: center; margin-right: 3px; position: relative; top: 1px; }
+.aot-tab-ico .ico { width: 12px; height: 12px; }
+#aot-logo-icon { font-size: 16px; }
+.aot-srch-ico .ico  { width: 12px; height: 12px; color: #99998f; }
+.aot-ico-btn .ico { width: 12px; height: 12px; }
+.aot-card-stars .ico-star-filled { color: #f59e0b; width: 12px; height: 12px; }
+.aot-card-stars .ico-star-empty  { color: #d1d5db; width: 12px; height: 12px; }
+.ico-star-filled, .ico-star-empty { width: 12px; height: 12px; }
+.aot-cur-opt .ico { width: 12px; height: 12px; }
+#aot-export-btn .ico,
+#aot-close .ico,
+#aot-theme-toggle .ico { width: 14px; height: 14px; }
+.ao3tracker-label .ico { width: 12px; height: 12px; vertical-align: middle; }
+
+/* Prevent SVG icons inside buttons from absorbing clicks */
+#ao3tracker-panel button .ico,
+#ao3tracker-panel button svg { pointer-events: none; }
+
+/* ── Search/listing page status badges ───────────────────────────────────── */
+/* vertical-align: bottom + line-height: 0: badge hangs at line-box bottom, “by” stays at baseline (middle raises baseline and pushes “by” up; inherit adds phantom strut height) */
+.ao3t-badge-wrap {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  vertical-align: bottom;
+  line-height: 0;
+  margin-left: 6px;
+}
+
+.ao3t-badge-dropdown {
+  display: none; flex-direction: column;
+  position: absolute; top: calc(100% + 4px); left: 0;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 9px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+  z-index: 9999;
+  min-width: 190px;
+  max-width: min(280px, calc(100vw - 32px));
+  overflow: hidden;
+  padding: 0;
+}
+.ao3t-badge-dropdown.open { display: flex; }
+
+.ao3t-badge-opt {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #555550;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: background 0.1s;
+  line-height: 1.3;
+}
+.ao3t-badge-opt:hover { background: #f8f8f7; color: #1a1a18; }
+.ao3t-badge-opt-active { color: #2563eb; background: #eff4ff; font-weight: 600; }
+
+.ao3t-search-badge {
+  display: inline-block;
+  font-size: 11px; font-weight: 600;
+  padding: 1px 7px; border-radius: 20px;
+  margin: 0 0 0 6px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  white-space: nowrap;
+  vertical-align: middle;
+  line-height: 1.6;
+  cursor: pointer;
+  user-select: none;
+}
+.ao3t-badge-wrap > .ao3t-search-badge {
+  margin-left: 0;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.ao3t-badge-wrap > .ao3t-search-badge:last-child { margin-right: 0; }
+.ao3t-search-badge-want      { color: #5b21b6; background: #f5f3ff; border: 1px solid rgba(124,58,237,0.25); }
+.ao3t-search-badge-progress  { color: #0e7490; background: #ecfeff; border: 1px solid rgba(8,145,178,0.25); }
+.ao3t-search-badge-completed { color: #047857; background: #ecfdf5; border: 1px solid rgba(5,150,105,0.25); }
+.ao3t-search-badge-rereading { color: #b45309; background: #fffbeb; border: 1px solid rgba(217,119,6,0.25); }
+.ao3t-search-badge-onhold    { color: #0369a1; background: #f0f9ff; border: 1px solid rgba(14,165,233,0.25); }
+.ao3t-search-badge-dnf       { color: #4b5563; background: #f9fafb; border: 1px solid rgba(107,114,128,0.25); }
+
+/* Custom category pills on search/list — match .ao3t-search-badge size (sidebar chips stay 10px) */
+.ao3t-badge-wrap .aot-custom-chip {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 20px;
+  line-height: 1.6;
+  margin-left: 0;
+  margin-right: 4px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.ao3t-badge-wrap .aot-custom-chip:last-child { margin-right: 0; }
+
+/* Stars on search/listing page badges */
+.ao3t-search-stars {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 4px;
+  white-space: nowrap;
+  line-height: 0;
+  padding: 4px 0;
+}
+.ao3t-badge-wrap > .ao3t-search-stars {
+  margin-left: 4px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.ao3t-star-svg {
+  width: 11px; height: 11px; display: inline-block; vertical-align: top;
+}
+
+/* Chapter progress — teal pill (work page details row + search/list); uniform border beats AO3 link border-bottom */
+/* color !important: AO3 #main h4 a etc. overrides plain .ao3t-search-chap on works search/list */
+.ao3t-search-chap {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #0e7490 !important;
+  background: #ecfeff;
+  border: 1px solid #9dd8e8 !important;
+  border-radius: 20px;
+  padding: 1px 7px;
+  white-space: nowrap;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  text-decoration: none !important;
+  box-shadow: none;
+  cursor: pointer;
+}
+.ao3t-search-chap:link,
+.ao3t-search-chap:visited,
+.ao3t-search-chap:active {
+  color: #0e7490 !important;
+  text-decoration: none !important;
+  border: 1px solid #9dd8e8 !important;
+  background: #ecfeff;
+}
+.ao3t-search-chap:hover {
+  background: #dff7fc;
+  border: 1px solid #7ccad8 !important;
+  color: #0e7490 !important;
+  text-decoration: none !important;
+}
+.ao3t-badge-wrap > .ao3t-search-chap {
+  margin-left: 0;
+  vertical-align: middle;
+}
+
+/* ── Custom categories ────────────────────────────────────────────────────── */
+
+/* Rainbow "Add category" inline tab button */
+.aot-new-cat-tab {
+  flex-shrink: 0;
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 0 10px;
+  min-height: 35px;
+  border: 1px solid transparent;
+  border-bottom: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 11px; font-weight: 600;
+  white-space: nowrap;
+  position: relative; top: 0;
+  align-self: stretch;
+  justify-content: center;
+  background: transparent;
+  /* Rainbow gradient text */
+  background-image: linear-gradient(90deg, #7c3aed, #db2777, #dc2626, #d97706, #16a34a, #0891b2, #2563eb);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: border-color 0.15s, opacity 0.15s;
+  margin-left: 2px;
+}
+.aot-new-cat-tab:hover { border-color: rgba(0,0,0,0.35); opacity: 0.85; }
+.aot-new-cat-plus { font-size: 13px; line-height: 1; }
+
+.aot-tabs-divider { display: inline-block; width: 1px; background: rgba(0,0,0,0.12); height: 18px; align-self: center; margin: 0 4px; flex-shrink: 0; }
+
+/* #aot-custom-tabs is a wrapper div — make it invisible to the flex layout
+   so its children sit directly in the #aot-tabs flex row */
+#aot-custom-tabs { display: contents; }
+
+/* Custom category tabs — same bottom border as built-in .aot-tab (solid, not dashed) */
+.aot-custom-tab {
+  gap: 4px;
+  border-bottom: 2px solid transparent !important;
+}
+.aot-custom-tab:hover {
+  color: #555550;
+  border-bottom-color: transparent !important;
+}
+.aot-custom-tab-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; position: relative; top: 1px; }
+.aot-custom-tab.aot-active {
+  color: var(--cat-color, #2563eb);
+  border-bottom: 2px solid var(--cat-color, #2563eb) !important;
+}
+.aot-custom-tab.aot-active .aot-custom-cnt { background: color-mix(in srgb, var(--cat-color, #2563eb) 12%, #fff); color: var(--cat-color, #2563eb); }
+
+/* Category modal */
+#aot-cat-overlay {
+  position: absolute; inset: 0; background: rgba(0,0,0,0.3);
+  display: flex; align-items: center; justify-content: center; z-index: 20; padding: 16px;
+}
+#aot-cat-overlay.aot-hidden { display: none; }
+#aot-cat-modal {
+  color: #1a1a18;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 12px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  overflow: hidden;
+}
+#aot-cat-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(0,0,0,0.09);
+  background: #fff;
+}
+#aot-cat-modal-title { font-size: 13px; font-weight: 600; }
+#aot-cat-close {
+  background: none; border: none; color: #99998f; font-size: 13px;
+  cursor: pointer; padding: 2px 5px; border-radius: 4px;
+}
+#aot-cat-close:hover { background: #f2f1ef; color: #1a1a18; }
+#aot-cat-body {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #fff;
+}
+#aot-cat-name {
+  appearance: none;
+  width: 100%;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 9px;
+  padding: 9px 11px;
+  font-size: 13px;
+  color: #1a1a18;
+  background: #f8f8f7;
+  outline: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: border-color 0.15s, background 0.15s;
+  box-sizing: border-box;
+}
+#aot-cat-name:focus { border-color: #2563eb; background: #fff; }
+.aot-cat-color-label { font-size: 11px; font-weight: 600; color: #555550; }
+#aot-cat-presets { display: flex; flex-wrap: wrap; gap: 6px; }
+.aot-cat-preset {
+  width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent;
+  cursor: pointer; transition: transform 0.1s, border-color 0.1s; padding: 0;
+}
+.aot-cat-preset:hover { transform: scale(1.15); }
+.aot-cat-preset-active { border-color: #1a1a18 !important; transform: scale(1.1); }
+#aot-cat-hex-row { display: flex; align-items: center; gap: 8px; }
+#aot-cat-swatch { display: inline-block; width: 22px; height: 22px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.12); flex-shrink: 0; }
+#aot-cat-hex {
+  appearance: none;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 9px;
+  padding: 7px 9px;
+  font-size: 12px;
+  color: #1a1a18;
+  background: #f8f8f7;
+  outline: none;
+  width: 96px;
+  font-family: monospace;
+  transition: border-color 0.15s, background 0.15s;
+}
+#aot-cat-hex:focus { border-color: #2563eb; background: #fff; }
+#aot-cat-footer {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px 14px 13px;
+  border-top: 1px solid rgba(0,0,0,0.09);
+  background: #fff;
+}
+#aot-cat-delete {
+  background: none; border: none; color: #dc2626; font-size: 12px; font-weight: 500;
+  cursor: pointer; padding: 4px 8px; border-radius: 5px; margin-right: auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+#aot-cat-delete:hover { background: #fef2f2; }
+#aot-cat-cancel,
+#aot-cat-save {
+  appearance: none;
+  min-height: 34px;
+  padding: 7px 14px;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: border-color 0.14s ease, background 0.14s ease, color 0.14s ease, transform 0.14s ease, box-shadow 0.14s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+#aot-cat-cancel {
+  background: #f8f8f7;
+  color: #555550;
+  border: 1px solid rgba(0,0,0,0.15);
+  font-size: 12px;
+  font-weight: 600;
+}
+#aot-cat-cancel:hover {
+  background: #f2f1ef;
+  color: #1a1a18;
+  border-color: #2563eb;
+  transform: translateY(-1px);
+}
+#aot-cat-save {
+  background: #2563eb;
+  color: #fff;
+  border: 1px solid transparent;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 6px 14px rgba(37,99,235,0.18);
+}
+#aot-cat-save:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(37,99,235,0.22);
+  filter: brightness(0.98);
+}
+
+/* Custom category name chips on sidebar cards — category’s chosen color */
+.aot-custom-chips { display: flex; flex-wrap: wrap; gap: 3px; margin: 2px 0; }
+.aot-custom-chip {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 20px;
+  white-space: nowrap;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--chip-color, #555550);
+  background: color-mix(in srgb, var(--chip-color, #555550) 10%, #fff);
+  border: 1px solid color-mix(in srgb, var(--chip-color, #555550) 25%, transparent);
+  line-height: 1.25;
+}
+
+/* Sidebar card redesign: quiet front, action-oriented back */
+.aot-card {
+  --aot-card-border: rgba(0,0,0,0.09);
+  --aot-card-corner: rgba(37, 99, 235, 0.14);
+  --aot-card-corner-line: rgba(37, 99, 235, 0.44);
+  --aot-card-fold-size: 24px;
+  position: relative;
+  display: block;
+  padding: 0;
+  overflow: hidden;
+  border-color: var(--aot-card-border);
+  box-shadow: -6px 0 12px rgba(0,0,0,0.07), 0 4px 8px rgba(0,0,0,0.06);
+}
+.aot-card:hover,
+.aot-card:focus-within {
+  box-shadow: -8px 0 18px rgba(0,0,0,0.1), 0 6px 12px rgba(0,0,0,0.08);
+}
+.aot-card[data-status="want"],
+.aot-card[data-status="progress"],
+.aot-card[data-status="completed"],
+.aot-card[data-status="rereading"],
+.aot-card[data-status="onhold"],
+.aot-card[data-status="dnf"],
+.aot-card[data-status="lost"] {
+  border-left-width: 1px !important;
+  border-left-color: var(--aot-card-border) !important;
+  opacity: 1;
+}
+#ao3tracker-panel:not(.aot-dark):not(.aot-sol-light) .aot-card[data-status="want"] {
+  border-left-width: 3px !important;
+  border-left-color: #7c3aed !important;
+}
+#ao3tracker-panel:not(.aot-dark):not(.aot-sol-light) .aot-card[data-status="progress"] {
+  border-left-width: 3px !important;
+  border-left-color: #0891b2 !important;
+}
+#ao3tracker-panel:not(.aot-dark):not(.aot-sol-light) .aot-card[data-status="completed"] {
+  border-left-width: 3px !important;
+  border-left-color: #059669 !important;
+}
+#ao3tracker-panel:not(.aot-dark):not(.aot-sol-light) .aot-card[data-status="rereading"] {
+  border-left-width: 3px !important;
+  border-left-color: #d97706 !important;
+}
+#ao3tracker-panel:not(.aot-dark):not(.aot-sol-light) .aot-card[data-status="onhold"] {
+  border-left-width: 3px !important;
+  border-left-color: #0ea5e9 !important;
+}
+#ao3tracker-panel:not(.aot-dark):not(.aot-sol-light) .aot-card[data-status="dnf"] {
+  border-left-width: 3px !important;
+  border-left-color: #6b7280 !important;
+}
+#ao3tracker-panel:not(.aot-dark):not(.aot-sol-light) .aot-card[data-status="lost"] {
+  border-left-width: 3px !important;
+  border-left-color: #e11d48 !important;
+}
+.aot-card-face {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 11px 12px 14px;
+  min-width: 0;
+}
+.aot-card-front {
+  min-height: 150px;
+  padding-bottom: 42px;
+}
+.aot-card-front.aot-card-front-has-wrapped-date {
+  padding-bottom: 52px;
+}
+.aot-card:not(.aot-card-flipped) .aot-card-back { display: none; }
+.aot-card.aot-card-flipped .aot-card-front { display: none; }
+.aot-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.aot-card-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+}
+.aot-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-width: 0;
+  flex: 1 1 auto;
+  padding-right: 0;
+}
+.aot-card-author {
+  font-size: 12px;
+  color: #99998f;
+  line-height: 1.45;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.aot-card-tags,
+.aot-card-pill-row,
+.aot-card-actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: flex-start;
+}
+.aot-card-pill-row .aot-custom-chips {
+  margin: 0;
+}
+.aot-card-pill-row .aot-status-badge,
+.aot-card-pill-row .aot-custom-chip,
+.aot-card-pill-row .aot-card-chapter-pill {
+  margin: 0;
+  min-height: 20px;
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+.aot-card-chapter-pill {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 20px;
+  white-space: nowrap;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #0f766e;
+  background: #ecfeff;
+  border: 1px solid rgba(15, 118, 110, 0.18);
+  border-bottom-color: rgba(15, 118, 110, 0.18) !important;
+  line-height: 1.25;
+  text-decoration: none;
+}
+.aot-card-chapter-pill:hover,
+.aot-card-chapter-pill:focus,
+.aot-card-chapter-pill:focus-visible,
+.aot-card-chapter-pill:visited {
+  text-decoration: none;
+}
+.aot-card-chapter-pill-missing {
+  color: #99998f;
+  background: #f8f8f7;
+  border-color: rgba(85, 85, 80, 0.12);
+}
+.aot-tag {
+  min-height: 20px;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  box-sizing: border-box;
+}
+.aot-tag-relationship {
+  color: #8a5f6b;
+  background: #fbf3f5;
+  border-color: rgba(173,127,141,0.18);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.aot-card-stars {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  font-size: 11px;
+  color: #f59e0b;
+  letter-spacing: 0;
+}
+.aot-card-stars-front {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+.aot-card-stars-back {
+  flex: 0 0 auto;
+  font-size: 10px;
+}
+.aot-card-stars-back .ico-star-filled,
+.aot-card-stars-back .ico-star-empty {
+  width: 10px;
+  height: 10px;
+}
+.aot-note-preview {
+  margin-top: 0;
+  max-width: none;
+  line-height: 1.45;
+  padding: 2px 28px 0 0;
+  white-space: normal;
+}
+.aot-note-preview-empty {
+  color: #99998f;
+  font-style: italic;
+}
+.aot-card-date {
+  grid-column: auto;
+  margin: 0;
+  padding-top: 0;
+  text-align: left;
+  line-height: 1.45;
+  font-size: 10px;
+  color: #99998f;
+}
+.aot-card-front .aot-card-date {
+  position: absolute;
+  left: 12px;
+  right: 150px;
+  bottom: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  column-gap: 0;
+  row-gap: 0;
+}
+.aot-card-front.aot-card-front-has-wrapped-date .aot-card-date {
+  row-gap: 1px;
+}
+.aot-card-date-added {
+  flex: 0 0 auto;
+}
+.aot-card-date-tail {
+  flex: 0 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+}
+.aot-card-date-trailing {
+  display: inline;
+}
+.aot-card-back-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-right: 0;
+}
+.aot-card-back-meta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+.aot-card-back-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #555550;
+}
+.aot-card-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.aot-card-notes-head {
+  justify-content: flex-start;
+  gap: 4px;
+}
+.aot-card-back .aot-card-section-head {
+  margin-top: 14px;
+}
+.aot-card-back .aot-card-section-head:first-of-type {
+  margin-top: 0;
+}
+.aot-card-notes-head {
+  margin-bottom: -7px;
+}
+.aot-card-edit-notes {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-image: none !important;
+  border-image: none !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+  border: none;
+  background: transparent;
+  color: #1d4ed8;
+  cursor: pointer;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1;
+  border-radius: 4px;
+  transition: color 0.14s ease, background 0.14s ease;
+}
+.aot-card-edit-notes:hover,
+.aot-card-edit-notes:focus-visible {
+  color: #1d4ed8;
+  background: rgba(37,99,235,0.08);
+  outline: none;
+}
+.aot-card-back-subtitle {
+  font-size: 11px;
+  color: #706f65;
+  line-height: 1.35;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.aot-card-summary {
+  font-size: 11px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  color: #555550;
+}
+.aot-card-summary-toggle {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin-left: 4px;
+  color: #2563eb;
+  font: inherit;
+  line-height: inherit;
+  cursor: pointer;
+  position: relative;
+  top: -3px;
+}
+.aot-card-summary-toggle:hover,
+.aot-card-summary-toggle:focus-visible {
+  text-decoration: underline;
+}
+.aot-card-summary-empty {
+  color: #99998f;
+  font-style: italic;
+}
+.aot-card-series {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.aot-card-series-title {
+  font-size: 12px;
+  line-height: 1.45;
+  color: #706f65;
+}
+.aot-card-series-link {
+  color: #2563eb;
+  text-decoration: none;
+}
+.aot-card-series-link:hover {
+  text-decoration: underline;
+}
+.aot-card-series-position {
+  font-size: 11px;
+  line-height: 1.4;
+  color: #99998f;
+}
+.aot-card-back-actions {
+  padding-right: 26px;
+}
+.aot-card-back-actions .aot-btn,
+.aot-card-remove-row .aot-btn-remove {
+  min-height: 22px;
+  padding: 3px 8px !important;
+  line-height: 1.2 !important;
+  border-radius: 999px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  white-space: nowrap;
+}
+.aot-card-back-cats {
+  padding-right: 0;
+}
+.aot-card-empty-actions {
+  font-size: 11px;
+  color: #99998f;
+  font-style: italic;
+  line-height: 1.4;
+}
+.aot-btn-add-cat {
+  background: transparent !important;
+  background-image: linear-gradient(90deg, #7c3aed, #db2777, #dc2626, #d97706, #16a34a, #0891b2, #2563eb) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  border: 1px solid rgba(124, 58, 237, 0.25) !important;
+  font-weight: 600;
+}
+.aot-btn-add-cat:hover,
+.aot-btn-add-cat:focus-visible {
+  opacity: 0.88;
+  outline: none;
+}
+/* Keep the default-mode Add Category label visible across engines. */
+.aot-btn-add-cat {
+  background: transparent !important;
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  color: #555550 !important;
+  border: 1px solid rgba(124, 58, 237, 0.25) !important;
+}
+.aot-btn-add-cat:hover,
+.aot-btn-add-cat:focus-visible {
+  color: #1a1a18 !important;
+}
+.aot-btn-back-cat {
+  background: transparent !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  color: #555550 !important;
+  min-height: 22px;
+  padding: 3px 8px !important;
+  line-height: 1.2 !important;
+  border-radius: 999px !important;
+}
+.aot-btn-back-cat.is-selected {
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+.aot-btn-back-cat:hover,
+.aot-btn-back-cat:focus-visible {
+  background: color-mix(in srgb, var(--aot-back-cat, #555550) 10%, #fff) !important;
+  border-color: color-mix(in srgb, var(--aot-back-cat, #555550) 28%, transparent) !important;
+  color: var(--aot-back-cat, #555550) !important;
+}
+.aot-card-remove-row .aot-btn-remove {
+  background: transparent !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  color: #555550 !important;
+}
+.aot-card-remove-row .aot-btn-remove:hover,
+.aot-card-remove-row .aot-btn-remove:focus-visible {
+  background: #fef2f2 !important;
+  border-color: rgba(220,38,38,0.15) !important;
+  color: #dc2626 !important;
+}
+.aot-card-back-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 14px;
+}
+.aot-card-remove-row {
+  padding-top: 0;
+}
+.aot-card-flip {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-image: none !important;
+  border-image: none !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  box-sizing: border-box !important;
+  float: none !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  color: #555550;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 0;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.2;
+  transition: color 0.16s ease, transform 0.16s ease;
+}
+.aot-card-flip-front {
+  position: absolute;
+  right: 12px;
+  bottom: 8px;
+}
+.aot-card-flip:hover,
+.aot-card-flip:focus-visible {
+  color: #1d4ed8;
+  transform: translateY(-1px);
+  outline: none;
+}
+.aot-card-flip-label {
+  white-space: nowrap;
+}
+.aot-card-flip-icon {
+  font-size: 12px;
+  line-height: 1;
+}
+
+#ao3tracker-panel.aot-dark .aot-card {
+  --aot-card-border: rgba(131,148,150,0.12);
+  --aot-card-corner: rgba(38, 139, 210, 0.18);
+  --aot-card-corner-line: rgba(147, 161, 161, 0.5);
+  box-shadow: -7px 0 15px rgba(0,0,0,0.24), 0 5px 10px rgba(0,0,0,0.2);
+}
+#ao3tracker-panel.aot-dark .aot-card:hover,
+#ao3tracker-panel.aot-dark .aot-card:focus-within {
+  box-shadow: -10px 0 20px rgba(0,0,0,0.34), 0 7px 14px rgba(0,0,0,0.24);
+}
+#ao3tracker-panel.aot-dark .aot-card-flip {
+  color: #93a1a1;
+}
+#ao3tracker-panel.aot-dark .aot-card-flip:hover,
+#ao3tracker-panel.aot-dark .aot-card-flip:focus-visible {
+  color: #2aa198;
+}
+#ao3tracker-panel.aot-dark .aot-btn-back-cat,
+#ao3tracker-panel.aot-dark .aot-card-remove-row .aot-btn-remove {
+  border-color: rgba(131,148,150,0.14) !important;
+  color: #93a1a1 !important;
+}
+#ao3tracker-panel.aot-dark .aot-btn-back-cat.is-selected {
+  box-shadow: inset 0 0 0 1px rgba(131,148,150,0.12);
+}
+#ao3tracker-panel.aot-dark .aot-btn-back-cat:hover,
+#ao3tracker-panel.aot-dark .aot-btn-back-cat:focus-visible {
+  background: color-mix(in srgb, var(--aot-back-cat, #2aa198) 14%, #073642) !important;
+  border-color: color-mix(in srgb, var(--aot-back-cat, #2aa198) 36%, transparent) !important;
+  color: var(--aot-back-cat, #2aa198) !important;
+}
+#ao3tracker-panel.aot-dark .aot-card-remove-row .aot-btn-remove:hover,
+#ao3tracker-panel.aot-dark .aot-card-remove-row .aot-btn-remove:focus-visible {
+  background: rgba(248,113,113,0.12) !important;
+  border-color: rgba(248,113,113,0.24) !important;
+  color: #f87171 !important;
+}
+#ao3tracker-panel.aot-dark .aot-card-chapter-pill {
+  color: #93a1a1 !important;
+  background: rgba(42, 161, 152, 0.14) !important;
+  border-color: rgba(42, 161, 152, 0.28) !important;
+}
+#ao3tracker-panel.aot-dark .aot-card-chapter-pill:hover,
+#ao3tracker-panel.aot-dark .aot-card-chapter-pill:focus-visible {
+  color: #2aa198 !important;
+}
+#ao3tracker-panel.aot-dark .aot-card-chapter-pill-missing {
+  color: rgba(147,161,161,0.82) !important;
+  background: rgba(88,110,117,0.18) !important;
+  border-color: rgba(131,148,150,0.18) !important;
+}
+#ao3tracker-panel.aot-dark .aot-card-edit-notes {
+  color: #2aa198;
+}
+#ao3tracker-panel.aot-dark .aot-card-edit-notes:hover,
+#ao3tracker-panel.aot-dark .aot-card-edit-notes:focus-visible {
+  color: #2aa198;
+  background: rgba(42,161,152,0.12);
+}
+#ao3tracker-panel.aot-dark .aot-card[data-status="want"],
+#ao3tracker-panel.aot-dark .aot-card[data-status="progress"],
+#ao3tracker-panel.aot-dark .aot-card[data-status="completed"],
+#ao3tracker-panel.aot-dark .aot-card[data-status="rereading"],
+#ao3tracker-panel.aot-dark .aot-card[data-status="onhold"],
+#ao3tracker-panel.aot-dark .aot-card[data-status="dnf"],
+#ao3tracker-panel.aot-dark .aot-card[data-status="lost"] {
+  border-left-width: 1px !important;
+  border-left-color: var(--aot-card-border) !important;
+}
+#ao3tracker-panel.aot-dark .aot-card-author,
+#ao3tracker-panel.aot-dark .aot-card-date,
+#ao3tracker-panel.aot-dark .aot-card-summary,
+#ao3tracker-panel.aot-dark .aot-card-summary-empty,
+#ao3tracker-panel.aot-dark .aot-card-series-title {
+  color: rgba(131,148,150,0.92) !important;
+}
+#ao3tracker-panel.aot-dark .aot-card-series-position {
+  color: rgba(147,161,161,0.72) !important;
+}
+#ao3tracker-panel.aot-dark .aot-card-series-link,
+#ao3tracker-panel.aot-dark .aot-card-series-link:visited {
+  color: #2aa198 !important;
+}
+#ao3tracker-panel.aot-dark .aot-card-summary-toggle {
+  color: #2aa198 !important;
+}
+#ao3tracker-panel.aot-dark .aot-card-back-subtitle {
+  color: #93a1a1 !important;
+}
+#ao3tracker-panel.aot-dark .aot-card-back-title {
+  color: #e3dcc2 !important;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-card {
+  --aot-card-border: rgba(88,110,117,0.18);
+  --aot-card-corner: rgba(38, 139, 210, 0.15);
+  --aot-card-corner-line: rgba(88, 110, 117, 0.38);
+  background: var(--aot-surface) !important;
+  box-shadow: -5px 0 12px rgba(88,110,117,0.09), 0 4px 8px rgba(88,110,117,0.07);
+}
+#ao3tracker-panel.aot-sol-light .aot-card:hover,
+#ao3tracker-panel.aot-sol-light .aot-card:focus-within {
+  box-shadow: -8px 0 16px rgba(88,110,117,0.13), 0 6px 11px rgba(88,110,117,0.09);
+}
+#ao3tracker-panel.aot-sol-light .aot-card-flip {
+  color: #657b83;
+}
+#ao3tracker-panel.aot-sol-light .aot-card-flip:hover,
+#ao3tracker-panel.aot-sol-light .aot-card-flip:focus-visible {
+  color: #268bd2;
+}
+#ao3tracker-panel.aot-sol-light .aot-card-series-title {
+  color: #657b83 !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-card-series-position {
+  color: #93a1a1 !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-card-series-link,
+#ao3tracker-panel.aot-sol-light .aot-card-series-link:visited {
+  color: #268bd2 !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-card-summary-toggle {
+  color: #268bd2 !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-card-actions:not(.aot-card-back-actions) .aot-btn:not(.aot-btn-remove):not(.aot-btn-labels) {
+  background: transparent !important;
+  border-color: rgba(88,110,117,0.16) !important;
+  color: #657b83 !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-card-actions:not(.aot-card-back-actions) .aot-btn:not(.aot-btn-remove):not(.aot-btn-labels):hover,
+#ao3tracker-panel.aot-sol-light .aot-card-actions:not(.aot-card-back-actions) .aot-btn:not(.aot-btn-remove):not(.aot-btn-labels):focus-visible {
+  background: rgba(88,110,117,0.08) !important;
+  border-color: rgba(88,110,117,0.24) !important;
+  color: #586e75 !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-btn-back-cat,
+#ao3tracker-panel.aot-sol-light .aot-card-remove-row .aot-btn-remove {
+  border-color: rgba(88,110,117,0.14) !important;
+  color: #657b83 !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-btn-back-cat.is-selected {
+  box-shadow: inset 0 0 0 1px rgba(88,110,117,0.1);
+}
+#ao3tracker-panel.aot-sol-light .aot-btn-back-cat:hover,
+#ao3tracker-panel.aot-sol-light .aot-btn-back-cat:focus-visible {
+  background: color-mix(in srgb, var(--aot-back-cat, #268bd2) 10%, #fdf6e3) !important;
+  border-color: color-mix(in srgb, var(--aot-back-cat, #268bd2) 28%, transparent) !important;
+  color: var(--aot-back-cat, #268bd2) !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-card-chapter-pill {
+  color: #0f766e !important;
+  background: rgba(15, 118, 110, 0.08) !important;
+  border-color: rgba(15, 118, 110, 0.16) !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-card-chapter-pill:hover,
+#ao3tracker-panel.aot-sol-light .aot-card-chapter-pill:focus-visible {
+  color: #0b5f59 !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-card-chapter-pill-missing {
+  color: #7c8b8d !important;
+  background: rgba(88,110,117,0.08) !important;
+  border-color: rgba(88,110,117,0.12) !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-card-remove-row .aot-btn-remove:hover,
+#ao3tracker-panel.aot-sol-light .aot-card-remove-row .aot-btn-remove:focus-visible {
+  background: #fef2f2 !important;
+  border-color: rgba(220,38,38,0.15) !important;
+  color: #dc2626 !important;
+}
+
+/* Last-mile hardening for notes modal controls, one by one. */
+#ao3tracker-panel #aot-notes-close {
+  all: unset !important;
+  box-sizing: border-box !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  vertical-align: middle !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 7px !important;
+  background: transparent !important;
+  background-image: none !important;
+  border-image: none !important;
+  color: #555550 !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+}
+
+#ao3tracker-panel #aot-notes-close:hover,
+#ao3tracker-panel #aot-notes-close:focus-visible {
+  background: #f2f1ef !important;
+  color: #1a1a18 !important;
+  outline: none !important;
+}
+
+#ao3tracker-panel #aot-notes-close :is(.ico, svg) {
+  width: 14px !important;
+  height: 14px !important;
+  display: block !important;
+  flex-shrink: 0 !important;
+  pointer-events: none !important;
+  filter: none !important;
+  text-shadow: none !important;
+}
+
+#ao3tracker-panel .aot-star {
+  all: unset !important;
+  box-sizing: border-box !important;
+  width: 22px !important;
+  height: 22px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  border-image: none !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  line-height: 1 !important;
+  transition: transform 0.1s ease !important;
+}
+
+#ao3tracker-panel .aot-star .ico {
+  width: 20px !important;
+  height: 20px !important;
+  color: #d1d5db !important;
+  transition: color 0.1s !important;
+  pointer-events: none !important;
+  filter: none !important;
+  text-shadow: none !important;
+}
+
+#ao3tracker-panel .aot-star:hover .ico,
+#ao3tracker-panel .aot-star.aot-star-on .ico {
+  color: #f59e0b !important;
+}
+
+#ao3tracker-panel .aot-star:hover {
+  transform: scale(1.1) !important;
+}
+
+#ao3tracker-panel #aot-clear-rating {
+  all: unset !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 2px 6px !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 4px !important;
+  background: transparent !important;
+  background-image: none !important;
+  border-image: none !important;
+  color: #99998f !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  cursor: pointer !important;
+}
+
+#ao3tracker-panel #aot-clear-rating:hover,
+#ao3tracker-panel #aot-clear-rating:focus-visible {
+  color: #dc2626 !important;
+  background: #fef2f2 !important;
+  outline: none !important;
+}
+
+#ao3tracker-panel :is(#aot-notes-cancel, #aot-notes-save) {
+  all: unset !important;
+  box-sizing: border-box !important;
+  min-height: 32px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 6px 12px !important;
+  margin: 0 !important;
+  border-radius: 8px !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  cursor: pointer !important;
+}
+
+#ao3tracker-panel #aot-notes-save {
+  background: #2563eb !important;
+  color: #fff !important;
+  border: 1px solid transparent !important;
+  font-weight: 700 !important;
+}
+
+#ao3tracker-panel #aot-notes-save:hover,
+#ao3tracker-panel #aot-notes-save:focus-visible {
+  opacity: 0.88 !important;
+  outline: none !important;
+}
+
+#ao3tracker-panel #aot-notes-cancel {
+  background: #f8f8f7 !important;
+  color: #555550 !important;
+  border: 1px solid rgba(0,0,0,0.15) !important;
+  font-weight: 600 !important;
+}
+
+#ao3tracker-panel #aot-notes-cancel:hover,
+#ao3tracker-panel #aot-notes-cancel:focus-visible {
+  background: #f2f1ef !important;
+  outline: none !important;
+}
+
+#ao3tracker-panel.aot-dark #aot-notes-close {
+  color: rgba(147, 161, 161, 0.88) !important;
+}
+
+#ao3tracker-panel.aot-dark #aot-notes-close:hover,
+#ao3tracker-panel.aot-dark #aot-notes-close:focus-visible {
+  background: var(--aot-hover) !important;
+  color: #93a1a1 !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-star .ico {
+  color: #586e75 !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-star:hover .ico,
+#ao3tracker-panel.aot-dark .aot-star.aot-star-on .ico {
+  color: #f59e0b !important;
+}
+
+#ao3tracker-panel.aot-dark #aot-clear-rating {
+  color: rgba(147, 161, 161, 0.85) !important;
+}
+
+#ao3tracker-panel.aot-dark #aot-clear-rating:hover,
+#ao3tracker-panel.aot-dark #aot-clear-rating:focus-visible {
+  color: #f87171 !important;
+  background: rgba(248, 113, 113, 0.12) !important;
+}
+
+#ao3tracker-panel.aot-dark #aot-notes-save {
+  background: #268bd2 !important;
+  color: #fff !important;
+}
+
+#ao3tracker-panel.aot-dark #aot-notes-save:hover,
+#ao3tracker-panel.aot-dark #aot-notes-save:focus-visible {
+  filter: brightness(1.06) !important;
+  opacity: 1 !important;
+}
+
+#ao3tracker-panel.aot-dark #aot-notes-cancel {
+  background: var(--aot-control) !important;
+  color: #839496 !important;
+  border-color: rgba(131, 148, 150, 0.22) !important;
+}
+
+#ao3tracker-panel.aot-dark #aot-notes-cancel:hover,
+#ao3tracker-panel.aot-dark #aot-notes-cancel:focus-visible {
+  background: var(--aot-hover) !important;
+  color: #93a1a1 !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-notes-close {
+  color: #93a1a1 !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-notes-close:hover,
+#ao3tracker-panel.aot-sol-light #aot-notes-close:focus-visible {
+  background: #eee8d5 !important;
+  color: #586e75 !important;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-star .ico {
+  color: #d3cbb9 !important;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-star:hover .ico,
+#ao3tracker-panel.aot-sol-light .aot-star.aot-star-on .ico {
+  color: #b58900 !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-clear-rating {
+  color: #93a1a1 !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-clear-rating:hover,
+#ao3tracker-panel.aot-sol-light #aot-clear-rating:focus-visible {
+  color: #dc322f !important;
+  background: rgba(220, 50, 47, 0.08) !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-notes-save {
+  background: #268bd2 !important;
+  color: #fff !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-notes-save:hover,
+#ao3tracker-panel.aot-sol-light #aot-notes-save:focus-visible {
+  filter: brightness(1.06) !important;
+  opacity: 1 !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-notes-cancel {
+  background: #eee8d5 !important;
+  color: #586e75 !important;
+  border-color: rgba(88, 110, 117, 0.22) !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-notes-cancel:hover,
+#ao3tracker-panel.aot-sol-light #aot-notes-cancel:focus-visible {
+  background: #d3cbb9 !important;
+  color: #073642 !important;
+}
+
+/* Last-mile hardening for category modal controls, one by one. */
+#ao3tracker-panel #aot-cat-close {
+  all: unset !important;
+  box-sizing: border-box !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 4px !important;
+  background: transparent !important;
+  background-image: none !important;
+  border-image: none !important;
+  color: #99998f !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+}
+
+#ao3tracker-panel #aot-cat-close:hover,
+#ao3tracker-panel #aot-cat-close:focus-visible {
+  background: #f2f1ef !important;
+  color: #1a1a18 !important;
+  outline: none !important;
+}
+
+#ao3tracker-panel #aot-cat-close :is(.ico, svg) {
+  width: 14px !important;
+  height: 14px !important;
+  display: block !important;
+  flex-shrink: 0 !important;
+  pointer-events: none !important;
+}
+
+#ao3tracker-panel #aot-cat-name {
+  all: unset !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  display: block !important;
+  padding: 9px 11px !important;
+  border: 1px solid rgba(0,0,0,0.15) !important;
+  border-radius: 9px !important;
+  background: #f8f8f7 !important;
+  color: #1a1a18 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+}
+
+#ao3tracker-panel #aot-cat-name:focus,
+#ao3tracker-panel #aot-cat-name:focus-visible {
+  border-color: #2563eb !important;
+  background: #fff !important;
+  outline: none !important;
+}
+
+#ao3tracker-panel .aot-cat-preset {
+  all: unset !important;
+  box-sizing: border-box !important;
+  width: 22px !important;
+  height: 22px !important;
+  display: inline-block !important;
+  border-radius: 50% !important;
+  background: var(--fg-cat-preset-color, transparent) !important;
+  background-image: none !important;
+  border: 2px solid transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  cursor: pointer !important;
+  transition: transform 0.1s, border-color 0.1s !important;
+}
+
+#ao3tracker-panel .aot-cat-preset:hover {
+  transform: scale(1.15) !important;
+}
+
+#ao3tracker-panel .aot-cat-preset-active {
+  border-color: #1a1a18 !important;
+  transform: scale(1.1) !important;
+}
+
+#ao3tracker-panel #aot-cat-hex {
+  all: unset !important;
+  box-sizing: border-box !important;
+  width: 96px !important;
+  display: block !important;
+  padding: 7px 9px !important;
+  border: 1px solid rgba(0,0,0,0.15) !important;
+  border-radius: 9px !important;
+  background: #f8f8f7 !important;
+  color: #1a1a18 !important;
+  font-family: monospace !important;
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+}
+
+#ao3tracker-panel #aot-cat-hex:focus,
+#ao3tracker-panel #aot-cat-hex:focus-visible {
+  border-color: #2563eb !important;
+  background: #fff !important;
+  outline: none !important;
+}
+
+#ao3tracker-panel #aot-cat-delete {
+  all: unset !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 4px 8px !important;
+  margin: 0 auto 0 0 !important;
+  border: none !important;
+  border-radius: 5px !important;
+  background: transparent !important;
+  color: #dc2626 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+  cursor: pointer !important;
+}
+
+#ao3tracker-panel #aot-cat-delete:hover,
+#ao3tracker-panel #aot-cat-delete:focus-visible {
+  background: #fef2f2 !important;
+  outline: none !important;
+}
+
+#ao3tracker-panel :is(#aot-cat-cancel, #aot-cat-save) {
+  all: unset !important;
+  box-sizing: border-box !important;
+  min-height: 34px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 7px 14px !important;
+  margin: 0 !important;
+  border-radius: 9px !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  cursor: pointer !important;
+  transition: border-color 0.14s ease, background 0.14s ease, color 0.14s ease, transform 0.14s ease, box-shadow 0.14s ease !important;
+}
+
+#ao3tracker-panel #aot-cat-cancel {
+  background: #f8f8f7 !important;
+  color: #555550 !important;
+  border: 1px solid rgba(0,0,0,0.15) !important;
+  font-weight: 600 !important;
+}
+
+#ao3tracker-panel #aot-cat-cancel:hover,
+#ao3tracker-panel #aot-cat-cancel:focus-visible {
+  background: #f2f1ef !important;
+  color: #1a1a18 !important;
+  border-color: #2563eb !important;
+  transform: translateY(-1px) !important;
+  outline: none !important;
+}
+
+#ao3tracker-panel #aot-cat-save {
+  background: #2563eb !important;
+  color: #fff !important;
+  border: 1px solid transparent !important;
+  font-weight: 700 !important;
+  box-shadow: 0 6px 14px rgba(37,99,235,0.18) !important;
+}
+
+#ao3tracker-panel #aot-cat-save:hover,
+#ao3tracker-panel #aot-cat-save:focus-visible {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 8px 18px rgba(37,99,235,0.22) !important;
+  filter: brightness(0.98) !important;
+  outline: none !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-cat-close,
+#ao3tracker-panel.aot-sol-light .aot-cat-color-label {
+  color: #657b83 !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-cat-close:hover,
+#ao3tracker-panel.aot-sol-light #aot-cat-close:focus-visible {
+  background: #eee8d5 !important;
+  color: #586e75 !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-cat-name,
+#ao3tracker-panel.aot-sol-light #aot-cat-hex {
+  background: #eee8d5 !important;
+  color: #586e75 !important;
+  border-color: rgba(88, 110, 117, 0.22) !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-cat-name:focus,
+#ao3tracker-panel.aot-sol-light #aot-cat-name:focus-visible,
+#ao3tracker-panel.aot-sol-light #aot-cat-hex:focus,
+#ao3tracker-panel.aot-sol-light #aot-cat-hex:focus-visible {
+  background: #fdf6e3 !important;
+  border-color: #268bd2 !important;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-cat-preset-active {
+  border-color: #586e75 !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-cat-delete {
+  color: #dc322f !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-cat-delete:hover,
+#ao3tracker-panel.aot-sol-light #aot-cat-delete:focus-visible {
+  background: rgba(220,50,47,0.08) !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-cat-cancel {
+  background: rgba(88,110,117,0.08) !important;
+  color: #586e75 !important;
+  border-color: rgba(88,110,117,0.18) !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-cat-cancel:hover,
+#ao3tracker-panel.aot-sol-light #aot-cat-cancel:focus-visible {
+  background: rgba(88,110,117,0.12) !important;
+  color: #073642 !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-cat-save {
+  background: #268bd2 !important;
+  color: #fdf6e3 !important;
+  border-color: #268bd2 !important;
+  box-shadow: 0 8px 18px rgba(38,139,210,0.18) !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-cat-save:hover,
+#ao3tracker-panel.aot-sol-light #aot-cat-save:focus-visible {
+  background: #1f7fbf !important;
+  border-color: #1f7fbf !important;
+  color: #fdf6e3 !important;
+}
+
+#ao3tracker-panel.aot-dark #aot-cat-close,
+#ao3tracker-panel.aot-dark .aot-cat-color-label {
+  color: rgba(147,161,161,0.82) !important;
+}
+
+#ao3tracker-panel.aot-dark #aot-cat-close:hover,
+#ao3tracker-panel.aot-dark #aot-cat-close:focus-visible {
+  background: rgba(131,148,150,0.1) !important;
+  color: #fdf6e3 !important;
+}
+
+#ao3tracker-panel.aot-dark #aot-cat-name,
+#ao3tracker-panel.aot-dark #aot-cat-hex {
+  background: #073642 !important;
+  color: #839496 !important;
+  border-color: rgba(131,148,150,0.22) !important;
+}
+
+#ao3tracker-panel.aot-dark #aot-cat-name:focus,
+#ao3tracker-panel.aot-dark #aot-cat-name:focus-visible,
+#ao3tracker-panel.aot-dark #aot-cat-hex:focus,
+#ao3tracker-panel.aot-dark #aot-cat-hex:focus-visible {
+  border-color: #268bd2 !important;
+  background: #073642 !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-cat-preset-active {
+  border-color: #fdf6e3 !important;
+}
+
+#ao3tracker-panel.aot-dark #aot-cat-cancel {
+  background: #073642 !important;
+  color: #839496 !important;
+  border-color: rgba(131,148,150,0.22) !important;
+}
+
+#ao3tracker-panel.aot-dark #aot-cat-cancel:hover,
+#ao3tracker-panel.aot-dark #aot-cat-cancel:focus-visible {
+  background: rgba(131,148,150,0.1) !important;
+  color: #fdf6e3 !important;
+}
+
+#ao3tracker-panel.aot-dark #aot-cat-save {
+  background: #268bd2 !important;
+  color: #fdf6e3 !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-card-edit-notes {
+  color: #268bd2;
+}
+#ao3tracker-panel.aot-sol-light .aot-card-edit-notes:hover,
+#ao3tracker-panel.aot-sol-light .aot-card-edit-notes:focus-visible {
+  color: #268bd2;
+  background: rgba(38,139,210,0.08);
+}
+#ao3tracker-panel.aot-sol-light .aot-card-author,
+#ao3tracker-panel.aot-sol-light .aot-card-date,
+#ao3tracker-panel.aot-sol-light .aot-card-summary,
+#ao3tracker-panel.aot-sol-light .aot-card-summary-empty {
+  color: #93a1a1 !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-card-back-subtitle {
+  color: #657b83 !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-card-back-title {
+  color: #586e75 !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-empty,
+#ao3tracker-panel.aot-sol-light .aot-card-empty-actions,
+#ao3tracker-panel.aot-sol-light .aot-card-summary-empty {
+  color: #93a1a1 !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-tag {
+  color: #51637b !important;
+  background: #f3f6fb !important;
+  border-color: rgba(125,146,173,0.18) !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-tag-relationship {
+  color: #8d5d67 !important;
+  background: #faeef0 !important;
+  border-color: rgba(173,127,141,0.18) !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-card-pill-row .aot-status-badge,
+#ao3tracker-panel.aot-sol-light .aot-card-pill-row .aot-custom-chip {
+  box-shadow: none;
+}
+#ao3tracker-panel.aot-sol-light .aot-card-front,
+#ao3tracker-panel.aot-sol-light .aot-card-back,
+#ao3tracker-panel.aot-sol-light .aot-card-face {
+  background: transparent;
+}
+#ao3tracker-panel.aot-sol-light .aot-pill {
+  background: rgba(88,110,117,0.1) !important;
+  color: #586e75 !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-status-badge {
+  box-shadow: none;
+}
+#ao3tracker-panel.aot-sol-light #aot-current-dropdown {
+  background: #fdf6e3;
+  border-color: rgba(88,110,117,0.16);
+  box-shadow: 0 10px 28px rgba(88,110,117,0.18);
+}
+#ao3tracker-panel.aot-sol-light .aot-cur-opt:not(.aot-cur-opt-cat) {
+  color: #586e75;
+}
+#ao3tracker-panel.aot-sol-light .aot-cur-opt:not(.aot-cur-opt-cat):hover:not(.aot-cur-opt-active) {
+  background: rgba(88,110,117,0.08);
+  color: #073642;
+}
+#ao3tracker-panel.aot-sol-light .aot-cur-divider,
+#ao3tracker-panel.aot-sol-light .aot-cur-custom-divider {
+  background: rgba(88,110,117,0.12);
+}
+#ao3tracker-panel.aot-sol-light .aot-cur-opt-remove {
+  color: #dc322f !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-cur-opt-remove:hover {
+  background: rgba(220,50,47,0.08) !important;
+  color: #b91c1c !important;
+}
+#ao3tracker-panel.aot-sol-light .aot-cur-opt-active {
+  color: #047857;
+  background: #ecfdf5;
+}
+#ao3tracker-panel.aot-sol-light #aot-export-dropdown,
+#ao3tracker-panel.aot-sol-light .aot-labels-dropdown {
+  background: #fdf6e3;
+  border-color: rgba(88,110,117,0.16);
+  box-shadow: 0 10px 28px rgba(88,110,117,0.18);
+}
+#ao3tracker-panel.aot-sol-light .aot-export-section,
+#ao3tracker-panel.aot-sol-light .aot-labels-empty,
+#ao3tracker-panel.aot-sol-light .aot-labels-none {
+  color: #93a1a1;
+}
+#ao3tracker-panel.aot-sol-light .aot-export-divider {
+  background: rgba(88,110,117,0.12);
+}
+#ao3tracker-panel.aot-sol-light .aot-export-opt,
+#ao3tracker-panel.aot-sol-light .aot-labels-opt {
+  color: #586e75;
+}
+#ao3tracker-panel.aot-sol-light .aot-export-opt:hover,
+#ao3tracker-panel.aot-sol-light .aot-labels-opt:hover {
+  background: rgba(88,110,117,0.08);
+  color: #073642;
+}
+#ao3tracker-panel.aot-sol-light #aot-export-btn {
+  color: #586e75;
+}
+#ao3tracker-panel.aot-sol-light #aot-fullscreen-btn {
+  color: #586e75;
+}
+#ao3tracker-panel.aot-sol-light #aot-export-btn:hover,
+#ao3tracker-panel.aot-sol-light #aot-export-btn:focus-visible,
+#ao3tracker-panel.aot-sol-light #aot-fullscreen-btn:hover,
+#ao3tracker-panel.aot-sol-light #aot-fullscreen-btn:focus-visible {
+  background: rgba(38,139,210,0.08);
+  color: #268bd2;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-new-cat-tab:hover {
+  border-color: rgba(88,110,117,0.28);
+  opacity: 0.85;
+}
+#ao3tracker-panel.aot-sol-light #aot-cat-overlay,
+#ao3tracker-panel.aot-sol-light .aot-reread-confirm-overlay {
+  background: rgba(88,110,117,0.24);
+}
+#ao3tracker-panel.aot-sol-light #aot-cat-modal,
+#ao3tracker-panel.aot-sol-light .aot-reread-confirm-modal {
+  background: #fdf6e3;
+  color: #586e75;
+  border: 1px solid rgba(88,110,117,0.16);
+  box-shadow: 0 14px 40px rgba(88,110,117,0.18);
+}
+#ao3tracker-panel.aot-sol-light #aot-cat-modal-title,
+#ao3tracker-panel.aot-sol-light .aot-reread-confirm-title {
+  color: #586e75;
+}
+#ao3tracker-panel.aot-sol-light #aot-cat-header,
+#ao3tracker-panel.aot-sol-light #aot-cat-body,
+#ao3tracker-panel.aot-sol-light #aot-cat-footer {
+  background: #fdf6e3;
+}
+#ao3tracker-panel.aot-sol-light #aot-cat-header {
+  border-bottom-color: rgba(88,110,117,0.14);
+}
+#ao3tracker-panel.aot-sol-light #aot-cat-footer {
+  border-top-color: rgba(88,110,117,0.14);
+}
+#ao3tracker-panel.aot-sol-light #aot-cat-close,
+#ao3tracker-panel.aot-sol-light .aot-reread-confirm-body,
+#ao3tracker-panel.aot-sol-light .aot-cat-color-label {
+  color: #657b83;
+}
+#ao3tracker-panel.aot-sol-light #aot-cat-close:hover {
+  background: rgba(88,110,117,0.08);
+  color: #073642;
+}
+#ao3tracker-panel.aot-sol-light #aot-cat-name,
+#ao3tracker-panel.aot-sol-light #aot-cat-hex {
+  background: #f5eed9;
+  color: #586e75;
+  border-color: rgba(88,110,117,0.18);
+}
+#ao3tracker-panel.aot-sol-light #aot-cat-name::placeholder,
+#ao3tracker-panel.aot-sol-light #aot-cat-hex::placeholder {
+  color: #93a1a1;
+}
+#ao3tracker-panel.aot-sol-light #aot-cat-name:focus,
+#ao3tracker-panel.aot-sol-light #aot-cat-hex:focus {
+  background: #fdf6e3;
+  border-color: #268bd2;
+}
+#ao3tracker-panel.aot-sol-light #aot-cat-swatch {
+  border-color: rgba(88,110,117,0.16);
+}
+#ao3tracker-panel.aot-sol-light #aot-cat-delete {
+  color: #dc322f;
+}
+#ao3tracker-panel.aot-sol-light #aot-cat-delete:hover {
+  background: rgba(220,50,47,0.08);
+}
+#ao3tracker-panel.aot-sol-light #aot-cat-cancel,
+#ao3tracker-panel.aot-sol-light .aot-reread-keep {
+  background: rgba(88,110,117,0.08);
+  color: #586e75;
+  border-color: rgba(88,110,117,0.18);
+}
+#ao3tracker-panel.aot-sol-light #aot-cat-cancel:hover,
+#ao3tracker-panel.aot-sol-light .aot-reread-keep:hover {
+  background: rgba(88,110,117,0.12);
+  color: #073642;
+}
+#ao3tracker-panel.aot-sol-light #aot-cat-save {
+  background: #268bd2;
+  color: #fdf6e3;
+  border-color: #268bd2;
+  box-shadow: 0 8px 18px rgba(38,139,210,0.18);
+}
+#ao3tracker-panel.aot-sol-light #aot-cat-save:hover,
+#ao3tracker-panel.aot-sol-light #aot-cat-save:focus-visible {
+  background: #1f7fbf;
+  border-color: #1f7fbf;
+  color: #fdf6e3;
+}
+#ao3tracker-panel.aot-dark #aot-cat-overlay,
+#ao3tracker-panel.aot-dark .aot-reread-confirm-overlay {
+  background: rgba(0,0,0,0.48);
+}
+#ao3tracker-panel.aot-dark #aot-cat-modal,
+#ao3tracker-panel.aot-dark .aot-reread-confirm-modal {
+  background: #002b36;
+  color: #839496;
+  border: 1px solid rgba(131,148,150,0.18);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.52);
+}
+#ao3tracker-panel.aot-dark #aot-cat-header,
+#ao3tracker-panel.aot-dark #aot-cat-body,
+#ao3tracker-panel.aot-dark #aot-cat-footer {
+  background: #002b36;
+  border-color: rgba(131,148,150,0.14);
+}
+#ao3tracker-panel.aot-dark #aot-cat-modal-title,
+#ao3tracker-panel.aot-dark .aot-reread-confirm-title {
+  color: #839496;
+}
+#ao3tracker-panel.aot-dark #aot-cat-close,
+#ao3tracker-panel.aot-dark .aot-reread-confirm-body,
+#ao3tracker-panel.aot-dark .aot-cat-color-label {
+  color: rgba(147,161,161,0.82);
+}
+#ao3tracker-panel.aot-dark #aot-cat-close:hover {
+  background: rgba(131,148,150,0.1);
+  color: #fdf6e3;
+}
+#ao3tracker-panel.aot-dark #aot-cat-name,
+#ao3tracker-panel.aot-dark #aot-cat-hex {
+  background: #073642;
+  color: #839496;
+  border-color: rgba(131,148,150,0.22);
+}
+#ao3tracker-panel.aot-dark #aot-cat-name:focus,
+#ao3tracker-panel.aot-dark #aot-cat-hex:focus {
+  background: #002b36;
+  border-color: #268bd2;
+}
+#ao3tracker-panel.aot-dark #aot-cat-cancel,
+#ao3tracker-panel.aot-dark .aot-reread-keep {
+  background: #073642;
+  color: #93a1a1;
+  border-color: rgba(131,148,150,0.22);
+}
+#ao3tracker-panel.aot-dark #aot-cat-cancel:hover,
+#ao3tracker-panel.aot-dark .aot-reread-keep:hover {
+  background: #586e75;
+  color: #fdf6e3;
+  border-color: rgba(38,139,210,0.35);
+}
+#ao3tracker-panel.aot-dark #aot-cat-save,
+#ao3tracker-panel.aot-dark .aot-reread-reset {
+  background: #268bd2;
+  color: #fdf6e3;
+  box-shadow: 0 8px 18px rgba(38,139,210,0.24);
+}
+#ao3tracker-panel.aot-sol-light .ao3t-badge-menu {
+  background: #fdf6e3;
+  border-color: rgba(88,110,117,0.16);
+  box-shadow: 0 10px 28px rgba(88,110,117,0.18);
+}
+#ao3tracker-panel.aot-sol-light .ao3t-badge-opt {
+  color: #586e75;
+}
+#ao3tracker-panel.aot-sol-light .ao3t-badge-opt:hover {
+  background: rgba(88,110,117,0.08);
+  color: #073642;
+}
+
+/* Labels button + dropdown on cards */
+.aot-labels-wrap { position: relative; }
+.aot-labels-dropdown {
+  display: none; flex-direction: column; position: absolute;
+  top: calc(100% + 4px); right: 0;
+  background: #fff; border: 1px solid rgba(0,0,0,0.12); border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12); z-index: 100; min-width: 160px;
+  overflow-y: auto; max-height: 240px;
+}
+.aot-labels-dropdown.open { display: flex; }
+.aot-labels-opt {
+  background: none; border: none; text-align: left; display: flex; align-items: center; gap: 6px;
+  padding: 8px 12px; font-size: 12px; font-weight: 500; color: #555550; cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; transition: background 0.1s;
+}
+.aot-labels-opt:hover { background: #f8f8f7; color: #1a1a18; }
+.aot-labels-check { width: 12px; font-size: 11px; color: #2563eb; flex-shrink: 0; }
+.aot-labels-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.aot-labels-empty { font-size: 11px; color: #99998f; padding: 10px 12px; text-align: center; }
+.aot-labels-none { border-bottom: 1px solid rgba(0,0,0,0.08); color: #99998f; font-style: italic; }
+.aot-cat-scroll-wrap { max-height: 200px; overflow-y: auto; }
+
+.aot-author-link,
+.aot-author-link:link,
+.aot-author-link:visited,
+.aot-author-link:active {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+.aot-author-link:hover {
+  color: #7c3aed;
+  text-decoration: none;
+  border-bottom-color: currentColor;
+}
+.aot-wordcount { font-size: 11px; opacity: 0.7; }
+
+/* Re-reading chapter reset confirm modal */
+.aot-reread-confirm-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999; padding: 16px;
+}
+.aot-reread-confirm-modal {
+  background: #fff; border-radius: 10px;
+  padding: 18px 16px 14px; width: 100%;
+  max-width: 360px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+}
+.aot-reread-confirm-title { font-size: 14px; font-weight: 700; color: #1a1a18; margin-bottom: 7px; line-height: 1.35; }
+.aot-reread-confirm-body { font-size: 13px; color: #555550; line-height: 1.5; margin-bottom: 14px; }
+.aot-reread-confirm-footer { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+.aot-reread-reset { background: #2563eb; color: #fff; border: none; font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: 6px; cursor: pointer; }
+.aot-reread-reset:hover { opacity: 0.88; }
+.aot-reread-keep { background: #f2f1ef; color: #555550; border: 1px solid rgba(0,0,0,0.15); font-size: 13px; font-weight: 500; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+.aot-reread-keep:hover { background: #efefed; }
+.aot-reread-reset,
+.aot-reread-keep {
+  min-height: 32px;
+  min-width: 108px;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* ─── Track? pill (untracked works on listing pages) ─────────────────────── */
+.ao3t-track-wrap {
+  display: inline-flex; position: relative;
+  align-items: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  vertical-align: bottom; margin-left: 6px;
+  line-height: 0;
+}
+
+.ao3t-track-pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: #fff; color: #2563eb;
+  border: 1px solid rgba(37,99,235,0.3);
+  padding: 1px 7px; border-radius: 20px;
+  font-size: 11px; font-weight: 600;
+  line-height: 1.6;
+  cursor: pointer; user-select: none;
+  transition: all 0.15s;
+  white-space: nowrap;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  vertical-align: middle;
+}
+.ao3t-track-pill:hover { background: #eff4ff; }
+.ao3t-track-pill .ico { width: 10px; height: 10px; flex-shrink: 0; }
+
+/* ─── Badge dropdown additions ────────────────────────────────────────────── */
+.ao3t-badge-divider {
+  height: 1px; background: rgba(0,0,0,0.08); margin: 4px 0;
+}
+
+.ao3t-badge-cat-opt {
+  display: flex; align-items: center; justify-content: flex-start; text-align: left; gap: 6px;
+}
+
+.ao3t-bd-cat-dot {
+  width: 8px; height: 8px;
+  flex-shrink: 0; display: inline-block;
+  overflow: visible;
+}
+
+.ao3t-bd-cat-dot circle {
+  vector-effect: non-scaling-stroke;
+}
+
+.ao3t-bd-cat-check {
+  font-size: 11px; font-weight: 700; color: #059669;
+  width: 12px; flex-shrink: 0; display: inline-block;
+}
+
+.ao3t-badge-cat-checked {
+  background: #f0fdf4;
+}
+.ao3t-badge-cat-checked:hover { background: #dcfce7 !important; }
+
+[data-ao3-sol-light="1"] .ao3t-badge-dropdown {
+  background: #fdf6e3;
+  border-color: rgba(88,110,117,0.18);
+  box-shadow: 0 10px 28px rgba(88,110,117,0.18);
+}
+[data-ao3-sol-light="1"] .ao3t-badge-opt:not(.ao3t-badge-cat-opt) {
+  color: #586e75;
+}
+[data-ao3-sol-light="1"] .ao3t-badge-opt:not(.ao3t-badge-cat-opt):hover {
+  background: rgba(88,110,117,0.08);
+  color: #073642;
+}
+[data-ao3-sol-light="1"] .ao3t-badge-opt-active {
+  background: rgba(38,139,210,0.12);
+  color: #268bd2;
+}
+[data-ao3-sol-light="1"] .ao3t-badge-divider {
+  background: rgba(88,110,117,0.12);
+}
+[data-ao3-sol-light="1"] .ao3t-bd-cat-dot {
+}
+
+[data-ao3-dark="1"] .ao3t-badge-dropdown {
+  background: #002b36;
+  border-color: rgba(131,148,150,0.18);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.45);
+}
+[data-ao3-dark="1"] .ao3t-badge-opt {
+  color: #93a1a1;
+}
+[data-ao3-dark="1"] .ao3t-badge-opt:hover {
+  background: rgba(147,161,161,0.08);
+  color: #fdf6e3;
+}
+[data-ao3-dark="1"] .ao3t-badge-opt-active {
+  background: rgba(38,139,210,0.18);
+  color: #2aa198;
+}
+[data-ao3-dark="1"] .ao3t-badge-divider {
+  background: rgba(131,148,150,0.14);
+}
+[data-ao3-dark="1"] .ao3t-bd-cat-dot {
+}
+
+/* Skin hardening: preserve existing tracker UI while neutralizing common AO3
+   skin overrides on a few stubborn controls. */
+#ao3tracker-panel :is(#aot-export-btn, #aot-fullscreen-btn, #aot-close, #aot-theme-toggle),
+#ao3tracker-panel :is(.aot-tabs-arrow, .aot-tab, .aot-new-cat-tab),
+#ao3tracker-panel :is(.aot-card-actions .aot-btn, .aot-card-back-actions .aot-btn, .aot-card-remove-row .aot-btn-remove, .aot-btn-back-cat, .aot-btn-add-cat),
+#ao3tracker-panel :is(.aot-card-summary-toggle, .aot-card-edit-notes, .aot-card-flip) {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-image: none !important;
+  border-image: none !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  box-sizing: border-box !important;
+}
+
+#ao3tracker-panel :is(#aot-export-btn, #aot-fullscreen-btn, #aot-close, #aot-theme-toggle) {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+}
+
+#ao3tracker-panel :is(.aot-tabs-arrow, .aot-tab, .aot-new-cat-tab) {
+  float: none !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
+}
+
+#ao3tracker-panel .aot-tab,
+#ao3tracker-panel .aot-new-cat-tab {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+#ao3tracker-panel .aot-tab-ico,
+#ao3tracker-panel .aot-new-cat-plus {
+  text-shadow: none !important;
+  filter: none !important;
+  letter-spacing: 0 !important;
+}
+
+#ao3tracker-panel :is(.aot-card-actions .aot-btn, .aot-card-back-actions .aot-btn, .aot-card-remove-row .aot-btn-remove, .aot-btn-back-cat, .aot-btn-add-cat) {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+}
+
+#ao3tracker-panel :is(#aot-export-dropdown .aot-export-opt, #aot-current-dropdown .aot-cur-opt),
+.ao3t-badge-dropdown .ao3t-badge-opt {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-image: none !important;
+  border-image: none !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  box-sizing: border-box !important;
+  display: block !important;
+  width: 100% !important;
+  float: none !important;
+  padding: 10px 14px !important;
+  line-height: 1.3 !important;
+  min-height: 34px !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+.ao3t-badge-dropdown .ao3t-badge-opt.ao3t-badge-cat-opt {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 8px !important;
+}
+
+#ao3tracker-panel #aot-current-dropdown .aot-cur-opt.aot-cur-opt-cat {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 7px !important;
+}
+
+#aot-export-btn .ico,
+#aot-fullscreen-btn .ico,
+#aot-close .ico,
+#aot-theme-toggle .ico {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+/* Last-mile hardening for the back-card pencil and flip controls.
+   These two buttons are especially vulnerable to AO3 site-skin button rules,
+   so we fully reset them here and then restate the tracker's intended styles. */
+#ao3tracker-panel .aot-card-edit-notes {
+  all: unset !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+  border: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  border-image: none !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  color: #1d4ed8 !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  border-radius: 4px !important;
+  transition: color 0.14s ease, background 0.14s ease !important;
+}
+
+#ao3tracker-panel .aot-card-edit-notes:hover,
+#ao3tracker-panel .aot-card-edit-notes:focus-visible {
+  color: #1d4ed8 !important;
+  background: rgba(37,99,235,0.08) !important;
+  outline: none !important;
+}
+
+#ao3tracker-panel .aot-card-flip {
+  all: unset !important;
+  box-sizing: border-box !important;
+  float: none !important;
+  align-self: flex-end !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+  border: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  border-image: none !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  color: #555550 !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  transition: color 0.16s ease, transform 0.16s ease !important;
+}
+
+#ao3tracker-panel .aot-card-flip:hover,
+#ao3tracker-panel .aot-card-flip:focus-visible {
+  color: #1d4ed8 !important;
+  transform: translateY(-1px) !important;
+  outline: none !important;
+}
+
+#ao3tracker-panel .aot-card-flip .aot-card-flip-label {
+  white-space: nowrap !important;
+}
+
+#ao3tracker-panel .aot-card-flip .aot-card-flip-icon {
+  font-size: 12px !important;
+  line-height: 1 !important;
+}
+
+#ao3tracker-panel .aot-card-flip-front {
+  position: absolute !important;
+  right: 12px !important;
+  bottom: 8px !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-card-flip {
+  color: #93a1a1 !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-card-flip:hover,
+#ao3tracker-panel.aot-dark .aot-card-flip:focus-visible {
+  color: #2aa198 !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-card-edit-notes {
+  color: #2aa198 !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-card-edit-notes:hover,
+#ao3tracker-panel.aot-dark .aot-card-edit-notes:focus-visible {
+  color: #2aa198 !important;
+  background: rgba(42,161,152,0.12) !important;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-card-flip {
+  color: #657b83 !important;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-card-flip:hover,
+#ao3tracker-panel.aot-sol-light .aot-card-flip:focus-visible {
+  color: #268bd2 !important;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-card-edit-notes {
+  color: #268bd2 !important;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-card-edit-notes:hover,
+#ao3tracker-panel.aot-sol-light .aot-card-edit-notes:focus-visible {
+  color: #268bd2 !important;
+  background: rgba(38,139,210,0.08) !important;
+}
+
+/* Last-mile hardening for the top-right sidebar icon buttons only. */
+#ao3tracker-panel :is(#aot-export-btn, #aot-fullscreen-btn, #aot-close, #aot-theme-toggle) {
+  all: unset !important;
+  box-sizing: border-box !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  flex-shrink: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 7px !important;
+  background: transparent !important;
+  background-image: none !important;
+  border-image: none !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  text-indent: 0 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
+#ao3tracker-panel #aot-close {
+  color: #555550 !important;
+  transition: all 0.12s !important;
+}
+
+#ao3tracker-panel #aot-close:hover {
+  background: #f2f1ef !important;
+  color: #1a1a18 !important;
+}
+
+#ao3tracker-panel :is(#aot-export-btn, #aot-fullscreen-btn) {
+  color: #555550 !important;
+  transition: all 0.12s !important;
+}
+
+#ao3tracker-panel :is(#aot-export-btn, #aot-fullscreen-btn):hover {
+  background: rgba(37, 99, 235, 0.08) !important;
+  color: #2563eb !important;
+}
+
+#ao3tracker-panel #aot-export-btn:focus-visible,
+#ao3tracker-panel #aot-fullscreen-btn:focus-visible {
+  background: rgba(37, 99, 235, 0.1) !important;
+  color: #2563eb !important;
+  box-shadow: 0 0 0 2px rgba(37,99,235,0.35) !important;
+}
+
+#ao3tracker-panel #aot-theme-toggle {
+  color: #555550 !important;
+  transition: all 0.15s !important;
+}
+
+#ao3tracker-panel #aot-theme-toggle:hover {
+  background: #f2f1ef !important;
+  color: #1a1a18 !important;
+}
+
+#ao3tracker-panel #aot-theme-toggle:focus,
+#ao3tracker-panel #aot-theme-toggle:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+#ao3tracker-panel :is(#aot-export-btn, #aot-fullscreen-btn, #aot-close, #aot-theme-toggle) :is(.ico, svg) {
+  width: 14px !important;
+  height: 14px !important;
+  display: block !important;
+  flex-shrink: 0 !important;
+  vertical-align: middle !important;
+  pointer-events: none !important;
+  filter: none !important;
+  text-shadow: none !important;
+}
+
+#ao3tracker-panel #aot-theme-toggle .aot-theme-ico {
+  display: none !important;
+  width: 14px !important;
+  height: 14px !important;
+}
+
+#ao3tracker-panel:not(.aot-dark):not(.aot-sol-light) #aot-theme-toggle .aot-theme-ico-sunset {
+  display: block !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-theme-toggle .aot-theme-ico-moon {
+  display: block !important;
+}
+
+#ao3tracker-panel.aot-dark #aot-theme-toggle .aot-theme-ico-sun {
+  display: block !important;
+}
+
+#ao3tracker-panel #aot-fullscreen-btn .aot-window-icon {
+  width: 15px !important;
+  height: 15px !important;
+  display: block !important;
+  object-fit: contain !important;
+  opacity: 0.78 !important;
+  filter:
+    drop-shadow(0 0 0 currentColor)
+    drop-shadow(0.2px 0 0 currentColor)
+    drop-shadow(-0.2px 0 0 currentColor) !important;
+  user-select: none !important;
+  -webkit-user-drag: none !important;
+}
+
+#ao3tracker-panel #aot-fullscreen-btn:hover .aot-window-icon,
+#ao3tracker-panel #aot-fullscreen-btn:focus-visible .aot-window-icon {
+  opacity: 1 !important;
+}
+
+#ao3tracker-panel.aot-dark #aot-close {
+  color: rgba(147,161,161,0.75) !important;
+}
+
+#ao3tracker-panel.aot-dark #aot-close:hover {
+  background: rgba(147,161,161,0.08) !important;
+  color: #839496 !important;
+}
+
+#ao3tracker-panel.aot-dark :is(#aot-export-btn, #aot-fullscreen-btn, #aot-theme-toggle) {
+  color: rgba(131,148,150,0.88) !important;
+}
+
+#ao3tracker-panel.aot-dark :is(#aot-export-btn, #aot-fullscreen-btn, #aot-theme-toggle):hover {
+  background: rgba(147,161,161,0.1) !important;
+  color: #839496 !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-close {
+  color: #586e75 !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-close:hover {
+  background: var(--aot-hover) !important;
+  color: #586e75 !important;
+}
+
+#ao3tracker-panel.aot-sol-light :is(#aot-export-btn, #aot-fullscreen-btn, #aot-theme-toggle) {
+  color: #586e75 !important;
+}
+
+#ao3tracker-panel.aot-sol-light :is(#aot-export-btn, #aot-fullscreen-btn):hover,
+#ao3tracker-panel.aot-sol-light :is(#aot-export-btn, #aot-fullscreen-btn):focus-visible,
+#ao3tracker-panel.aot-sol-light #aot-theme-toggle:hover {
+  background: rgba(38,139,210,0.08) !important;
+  color: #268bd2 !important;
+}
+
+/* Last-mile hardening for sidebar tabs, paired with explicit arrow positioning
+   so the horizontal scroll controls cannot get shoved out of place. */
+#ao3tracker-panel #aot-tabs-wrap {
+  position: relative !important;
+  border-bottom: 1px solid rgba(0,0,0,0.09) !important;
+  background: #fff !important;
+  flex-shrink: 0 !important;
+  min-height: 35px !important;
+}
+
+#ao3tracker-panel #aot-tabs {
+  display: flex !important;
+  align-items: stretch !important;
+  overflow-x: auto !important;
+  background: #fff !important;
+  padding: 0 24px !important;
+  scrollbar-width: none !important;
+  min-height: 35px !important;
+}
+
+#ao3tracker-panel #aot-tabs::-webkit-scrollbar {
+  display: none !important;
+}
+
+#ao3tracker-panel .aot-tabs-arrow {
+  all: unset !important;
+  position: absolute !important;
+  top: 50% !important;
+  bottom: auto !important;
+  width: 24px !important;
+  height: calc(100% - 1px) !important;
+  z-index: 2 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  background: none !important;
+  color: #555550 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  box-sizing: border-box !important;
+  cursor: pointer !important;
+  transform: translateY(-50%) !important;
+}
+
+#ao3tracker-panel .aot-tabs-arrow:hover {
+  color: #2563eb !important;
+}
+
+#ao3tracker-panel .aot-tabs-arrow-left {
+  left: 0 !important;
+  right: auto !important;
+  background: linear-gradient(to right, #fff 60%, transparent) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+#ao3tracker-panel .aot-tabs-arrow-right {
+  right: 0 !important;
+  left: auto !important;
+  background: linear-gradient(to left, #fff 60%, transparent) !important;
+}
+
+#ao3tracker-panel #aot-tabs-wrap.can-scroll-left .aot-tabs-arrow-left {
+  opacity: 1 !important;
+  pointer-events: all !important;
+}
+
+#ao3tracker-panel #aot-tabs-wrap.can-scroll-right .aot-tabs-arrow-right {
+  opacity: 1 !important;
+  pointer-events: all !important;
+}
+
+#ao3tracker-panel #aot-tabs-wrap:not(.can-scroll-right) .aot-tabs-arrow-right {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+#ao3tracker-panel :is(.aot-tab, .aot-new-cat-tab) {
+  all: unset !important;
+  box-sizing: border-box !important;
+  flex-shrink: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 3px !important;
+  padding: 0 10px !important;
+  min-height: 35px !important;
+  border: none !important;
+  background: none !important;
+  color: #99998f !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  cursor: pointer !important;
+  border-bottom: 2px solid transparent !important;
+  position: relative !important;
+  top: 0 !important;
+  white-space: nowrap !important;
+  align-self: stretch !important;
+  vertical-align: middle !important;
+  transition: all 0.15s !important;
+}
+
+#ao3tracker-panel .aot-tab:hover {
+  color: #555550 !important;
+}
+
+#ao3tracker-panel .aot-tab:focus,
+#ao3tracker-panel .aot-tab:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+#ao3tracker-panel .aot-tab.aot-active {
+  color: #2563eb !important;
+  border-bottom-color: #2563eb !important;
+}
+
+#ao3tracker-panel .aot-tab-ico,
+#ao3tracker-panel .aot-new-cat-plus {
+  display: inline-flex !important;
+  align-items: center !important;
+  text-shadow: none !important;
+  filter: none !important;
+  letter-spacing: 0 !important;
+}
+
+#ao3tracker-panel .aot-tab-ico {
+  margin-right: 3px !important;
+  position: relative !important;
+  top: 1px !important;
+}
+
+#ao3tracker-panel .aot-tab-ico .ico {
+  width: 12px !important;
+  height: 12px !important;
+}
+
+#ao3tracker-panel .aot-cnt {
+  background: #f2f1ef !important;
+  color: #99998f !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  padding: 1px 4px !important;
+  border-radius: 8px !important;
+  min-width: 14px !important;
+  text-align: center !important;
+  position: relative !important;
+  left: 1px !important;
+  top: 0.5px !important;
+}
+
+#ao3tracker-panel .aot-tab.aot-active .aot-cnt {
+  background: #eff4ff !important;
+  color: #1d4ed8 !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-cnt {
+  background: rgba(131,148,150,0.06) !important;
+  color: rgba(131,148,150,0.72) !important;
+}
+
+#ao3tracker-panel.aot-dark #aot-tabs-wrap,
+#ao3tracker-panel.aot-dark #aot-tabs {
+  background: var(--aot-panel) !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-tab {
+  color: rgba(147,161,161,0.82) !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-tab:hover {
+  color: #839496 !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-tab.aot-active {
+  color: #268bd2 !important;
+  border-bottom-color: #268bd2 !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-tabs-arrow-left {
+  background: linear-gradient(to right, var(--aot-panel) 60%, transparent) !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-tabs-arrow-right {
+  background: linear-gradient(to left, var(--aot-panel) 60%, transparent) !important;
+}
+
+#ao3tracker-panel.aot-sol-light #aot-tabs-wrap,
+#ao3tracker-panel.aot-sol-light #aot-tabs {
+  background: var(--aot-panel) !important;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-tab {
+  color: #93a1a1 !important;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-tab:hover {
+  color: #586e75 !important;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-tab.aot-active {
+  color: #268bd2 !important;
+  border-bottom-color: #268bd2 !important;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-tabs-arrow-left {
+  background: linear-gradient(to right, var(--aot-panel) 60%, transparent) !important;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-tabs-arrow-right {
+  background: linear-gradient(to left, var(--aot-panel) 60%, transparent) !important;
+}
+
+/* Last-mile hardening for the back-card "Move work to" and "Add work to"
+   badges only. Keep the remove badge on its existing path since it already
+   looks right. */
+#ao3tracker-panel .aot-card-back-actions :is(.aot-btn-back-cat, .aot-btn-add-cat) {
+  all: unset !important;
+  box-sizing: border-box !important;
+  min-height: 22px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+  padding: 3px 8px !important;
+  margin: 0 !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  background: transparent !important;
+  background-image: none !important;
+  border-image: none !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  cursor: pointer !important;
+}
+
+#ao3tracker-panel .aot-card-back-actions .aot-btn-add-cat {
+  color: #555550 !important;
+  border-color: rgba(124, 58, 237, 0.25) !important;
+}
+
+#ao3tracker-panel .aot-card-back-actions .aot-btn-add-cat:hover,
+#ao3tracker-panel .aot-card-back-actions .aot-btn-add-cat:focus-visible {
+  color: #1a1a18 !important;
+  opacity: 0.88 !important;
+  outline: none !important;
+}
+
+#ao3tracker-panel .aot-card-back-actions .aot-btn-back-cat {
+  color: #555550 !important;
+}
+
+#ao3tracker-panel .aot-card-back-actions .aot-btn-back-cat.is-selected {
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06) !important;
+}
+
+#ao3tracker-panel .aot-card-back-actions .aot-btn-back-cat:hover,
+#ao3tracker-panel .aot-card-back-actions .aot-btn-back-cat:focus-visible {
+  background: color-mix(in srgb, var(--aot-back-cat, #555550) 10%, #fff) !important;
+  border-color: color-mix(in srgb, var(--aot-back-cat, #555550) 28%, transparent) !important;
+  color: var(--aot-back-cat, #555550) !important;
+  outline: none !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-card-back-actions .aot-btn-add-cat {
+  color: #93a1a1 !important;
+  border-color: rgba(131,148,150,0.14) !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-card-back-actions .aot-btn-add-cat:hover,
+#ao3tracker-panel.aot-dark .aot-card-back-actions .aot-btn-add-cat:focus-visible {
+  color: #839496 !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-card-back-actions .aot-btn-back-cat {
+  color: #93a1a1 !important;
+  border-color: rgba(131,148,150,0.14) !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-card-back-actions .aot-btn-back-cat.is-selected {
+  box-shadow: inset 0 0 0 1px rgba(131,148,150,0.12) !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-card-back-actions .aot-btn-back-cat:hover,
+#ao3tracker-panel.aot-dark .aot-card-back-actions .aot-btn-back-cat:focus-visible {
+  background: color-mix(in srgb, var(--aot-back-cat, #2aa198) 14%, #073642) !important;
+  border-color: color-mix(in srgb, var(--aot-back-cat, #2aa198) 36%, transparent) !important;
+  color: var(--aot-back-cat, #2aa198) !important;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-card-back-actions .aot-btn-add-cat {
+  color: #657b83 !important;
+  border-color: rgba(88,110,117,0.16) !important;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-card-back-actions .aot-btn-add-cat:hover,
+#ao3tracker-panel.aot-sol-light .aot-card-back-actions .aot-btn-add-cat:focus-visible {
+  color: #586e75 !important;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-card-back-actions .aot-btn-back-cat {
+  color: #657b83 !important;
+  border-color: rgba(88,110,117,0.14) !important;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-card-back-actions .aot-btn-back-cat.is-selected {
+  box-shadow: inset 0 0 0 1px rgba(88,110,117,0.1) !important;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-card-back-actions .aot-btn-back-cat:hover,
+#ao3tracker-panel.aot-sol-light .aot-card-back-actions .aot-btn-back-cat:focus-visible {
+  background: color-mix(in srgb, var(--aot-back-cat, #268bd2) 10%, #fdf6e3) !important;
+  border-color: color-mix(in srgb, var(--aot-back-cat, #268bd2) 28%, transparent) !important;
+  color: var(--aot-back-cat, #268bd2) !important;
+}
+
+/* Last-mile hardening for the "Move Work To" status-action pills. */
+#ao3tracker-panel .aot-card-back-actions > .aot-btn:not(.aot-btn-back-cat):not(.aot-btn-add-cat):not(.aot-btn-remove) {
+  all: unset !important;
+  box-sizing: border-box !important;
+  min-height: 22px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+  padding: 3px 8px !important;
+  margin: 0 !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(0,0,0,0.09) !important;
+  background: transparent !important;
+  background-image: none !important;
+  border-image: none !important;
+  color: #555550 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  cursor: pointer !important;
+  transition: all 0.12s !important;
+}
+
+#ao3tracker-panel .aot-card-back-actions > .aot-btn:not(.aot-btn-back-cat):not(.aot-btn-add-cat):not(.aot-btn-remove):hover {
+  background: rgba(0,0,0,0.045) !important;
+  color: #1a1a18 !important;
+  border-color: rgba(0,0,0,0.16) !important;
+}
+
+#ao3tracker-panel .aot-card-back-actions > .aot-btn.aot-btn-progress {
+  color: #0e7490 !important;
+  background: transparent !important;
+  border-color: rgba(8,145,178,0.2) !important;
+}
+
+#ao3tracker-panel .aot-card-back-actions > .aot-btn.aot-btn-completed {
+  color: #047857 !important;
+  background: transparent !important;
+  border-color: rgba(5,150,105,0.2) !important;
+}
+
+#ao3tracker-panel .aot-card-back-actions > .aot-btn.aot-btn-rereading {
+  color: #b45309 !important;
+  background: transparent !important;
+  border-color: rgba(217,119,6,0.2) !important;
+}
+
+#ao3tracker-panel .aot-card-back-actions > .aot-btn.aot-btn-onhold {
+  color: #0369a1 !important;
+  background: transparent !important;
+  border-color: rgba(14,165,233,0.2) !important;
+}
+
+#ao3tracker-panel .aot-card-back-actions > .aot-btn.aot-btn-dnf {
+  color: #4b5563 !important;
+  background: transparent !important;
+  border-color: rgba(107,114,128,0.2) !important;
+}
+
+#ao3tracker-panel .aot-card-back-actions > .aot-btn.aot-btn-restore {
+  color: #be123c !important;
+  background: transparent !important;
+  border-color: rgba(225,29,72,0.2) !important;
+}
+
+#ao3tracker-panel .aot-card-back-actions > .aot-btn.aot-btn-progress:hover,
+#ao3tracker-panel .aot-card-back-actions > .aot-btn.aot-btn-progress:focus-visible {
+  color: #0e7490 !important;
+  background: rgba(8,145,178,0.08) !important;
+  border-color: rgba(8,145,178,0.2) !important;
+}
+
+#ao3tracker-panel .aot-card-back-actions > .aot-btn.aot-btn-completed:hover,
+#ao3tracker-panel .aot-card-back-actions > .aot-btn.aot-btn-completed:focus-visible {
+  color: #047857 !important;
+  background: rgba(5,150,105,0.08) !important;
+  border-color: rgba(5,150,105,0.2) !important;
+}
+
+#ao3tracker-panel .aot-card-back-actions > .aot-btn.aot-btn-rereading:hover,
+#ao3tracker-panel .aot-card-back-actions > .aot-btn.aot-btn-rereading:focus-visible {
+  color: #b45309 !important;
+  background: rgba(217,119,6,0.08) !important;
+  border-color: rgba(217,119,6,0.2) !important;
+}
+
+#ao3tracker-panel .aot-card-back-actions > .aot-btn.aot-btn-onhold:hover,
+#ao3tracker-panel .aot-card-back-actions > .aot-btn.aot-btn-onhold:focus-visible {
+  color: #0369a1 !important;
+  background: rgba(14,165,233,0.08) !important;
+  border-color: rgba(14,165,233,0.2) !important;
+}
+
+#ao3tracker-panel .aot-card-back-actions > .aot-btn.aot-btn-dnf:hover,
+#ao3tracker-panel .aot-card-back-actions > .aot-btn.aot-btn-dnf:focus-visible {
+  color: #4b5563 !important;
+  background: rgba(107,114,128,0.08) !important;
+  border-color: rgba(107,114,128,0.2) !important;
+}
+
+#ao3tracker-panel .aot-card-back-actions > .aot-btn.aot-btn-restore:hover,
+#ao3tracker-panel .aot-card-back-actions > .aot-btn.aot-btn-restore:focus-visible {
+  color: #be123c !important;
+  background: rgba(225,29,72,0.08) !important;
+  border-color: rgba(225,29,72,0.2) !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-card-back-actions > .aot-btn:not(.aot-btn-back-cat):not(.aot-btn-add-cat):not(.aot-btn-remove) {
+  color: #93a1a1 !important;
+  border-color: rgba(131,148,150,0.14) !important;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-card-back-actions > .aot-btn:not(.aot-btn-back-cat):not(.aot-btn-add-cat):not(.aot-btn-remove) {
+  color: #657b83 !important;
+  border-color: rgba(88,110,117,0.14) !important;
+}
+
+/* Last-mile hardening for the bottom-left Remove Work pill. */
+#ao3tracker-panel .aot-card-remove-row .aot-btn-remove {
+  all: unset !important;
+  box-sizing: border-box !important;
+  min-height: 22px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+  padding: 3px 8px !important;
+  margin: 0 !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  background: transparent !important;
+  background-image: none !important;
+  border-image: none !important;
+  color: #555550 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  cursor: pointer !important;
+}
+
+#ao3tracker-panel .aot-card-remove-row .aot-btn-remove:hover,
+#ao3tracker-panel .aot-card-remove-row .aot-btn-remove:focus-visible {
+  background: #fef2f2 !important;
+  border-color: rgba(220,38,38,0.15) !important;
+  color: #dc2626 !important;
+  outline: none !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-card-remove-row .aot-btn-remove {
+  border-color: rgba(131,148,150,0.14) !important;
+  color: #93a1a1 !important;
+}
+
+#ao3tracker-panel.aot-dark .aot-card-remove-row .aot-btn-remove:hover,
+#ao3tracker-panel.aot-dark .aot-card-remove-row .aot-btn-remove:focus-visible {
+  background: rgba(220,38,38,0.12) !important;
+  border-color: rgba(220,38,38,0.22) !important;
+  color: #f87171 !important;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-card-remove-row .aot-btn-remove {
+  border-color: rgba(88,110,117,0.14) !important;
+  color: #657b83 !important;
+}
+
+#ao3tracker-panel.aot-sol-light .aot-card-remove-row .aot-btn-remove:hover,
+#ao3tracker-panel.aot-sol-light .aot-card-remove-row .aot-btn-remove:focus-visible {
+  background: #fef2f2 !important;
+  border-color: rgba(220,38,38,0.15) !important;
+  color: #dc2626 !important;
+}
+
+/* Last-mile hardening for the current-work "+ Add" button in the AO3 sidebar. */
+#ao3tracker-panel #aot-current-add-btn {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-image: none !important;
+  border-image: none !important;
+  box-sizing: border-box !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  white-space: nowrap !important;
+  min-height: 30px !important;
+  padding: 6px 11px !important;
+  border-radius: 7px !important;
+  cursor: pointer !important;
+}
+
+#ao3tracker-panel #aot-current-add-btn::before,
+#ao3tracker-panel #aot-current-add-btn::after {
+  text-shadow: none !important;
+  filter: none !important;
+}
